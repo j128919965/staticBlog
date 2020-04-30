@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>二分三连</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+    </head>
+
+    <body>
+    <div>
+    <table>
+    <tr><td><b>创建时间：</b></td><td><i>2020/04/29 22:53</i></td></tr>
+    <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+    </table>
+    </div>
+
+<h1 id="-">二分三连</h1>
+<p>二分查找是一种很常见的查找思路，一般情况下，<strong>只要有序，就可以用二分查找</strong>。</p>
+<h4 id="-">基础二分</h4>
+<pre><code class="lang-java">public int search(int[] nums, int target) {
+    int lo = 0, hi = nums.length - 1, mid = 0;
+    while (lo &lt;= hi) {
+        mid = lo + (hi - lo) / 2;
+        if (nums[mid] == target) {
+            return mid;
+        }
+        if (nums[mid] &lt; target) {
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return -1;
+}
+</code></pre>
+<p>在一个有序数组（递增）中查找一个target的方法，从中间分开，然后如果target小于中间点，那target就在左边。把右边界移动到中间点左边一个位置，把数组的范围逐步减小，最终的时间复杂度为O(logn)</p>
+<p>注意的是，更新<code>lo</code>和<code>hi</code>的时候，因为<code>mid</code>那个位置已经比较过了，所以更新为<code>mid+1</code>和<code>mid-1</code>。<br>再一个是由于如果更新为mid的话，在数组范围只有两个数的时候可能会造成死循环。</p>
+<p><code>mid = lo + (hi - lo) / 2;</code>是为了防止lo+hi超出int范围。</p>
+<h4 id="-">进阶：搜索旋转排序数组</h4>
+<blockquote>
+<p>假设按照升序排序的数组在预先未知的某个点上进行了旋转。</p>
+<p>( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。</p>
+<p>搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。</p>
+<p>你可以假设数组中不存在重复的元素。</p>
+<p>你的算法时间复杂度必须是 O(log n) 级别。</p>
+<p>示例 1:</p>
+<p>输入: nums = [4,5,6,7,0,1,2], target = 0<br>输出: 4<br>示例 2:</p>
+<p>输入: nums = [4,5,6,7,0,1,2], target = 3<br>输出: -1</p>
+</blockquote>
+<p>这道题该怎么做呢？首先挨个搜索肯定是可以的，但是时间复杂度不够。<br>那 这种题还可以用二分么？答案是 可以的。</p>
+<p>对于这样的数组，我们无法直接判断target在mid的哪一侧的。我们能判断的只有 mid在哪一段。</p>
+<ul>
+<li>什么哪一段？</li></ul>
+<p>我们可以知道，这个数组是由两部分组成的，两段单调递增的数组。较长的递增数组既有可能在左半段，也有可能在右半段。<br>通过mid和lo的关系，我们可以知道mid在哪半段：<br>比如下面的代码：</p>
+<pre><code>[4,5,6,7,8,9,1,2,3]
+//九个数中mid是8 , 8 &gt; 4， 即可得出mid在左半段。
+
+[7,8,9,1,2,3，4,5,6]
+//九个数中mid是2 , 2 &lt; 7， 即可得出mid在右半段。
+</code></pre><p>知道mid在哪半段后，就可以通过target和mid以及两端的关系，判断出target在哪一端了。</p>
+<p>代码如下：</p>
+<pre><code class="lang-java">public int search(int[] nums, int target) {
+
+    int low = 0,high = nums.length-1;
+    while(low&lt;=high){
+        int mid = (low+high)/2;
+        if(nums[mid]==target){
+            return mid;
+        }
+        //mid在右半部分
+        if(nums[mid]&lt;nums[low]){
+            if(target&gt;nums[mid]&amp;&amp;target&lt;=nums[high]){
+                low = mid+1;
+            }else{
+                high=mid-1;
+            }
+        }else{//mid在左半部分
+            if(target&lt;nums[mid]&amp;&amp;target&gt;=nums[low]){
+                high = mid-1;
+            }else {
+                low = mid+1;
+            }
+        }
+    }
+    return -1;
+}
+</code></pre>
+<h4 id="-">山脉数组查找目标值</h4>
+<blockquote>
+<p>给你一个 山脉数组 mountainArr，请你返回能够使得 mountainArr.get(index) 等于 target 最小 的下标 index 值。</p>
+<p>如果不存在这样的下标 index，就请返回 -1。</p>
+<p>何为山脉数组？如果数组 A 是一个山脉数组的话，那它满足如下条件：</p>
+<p>首先，A.length &gt;= 3</p>
+<p>其次，在 0 &lt; i &lt; A.length - 1 条件下，存在 i 使得：</p>
+<p>A[0] &lt; A[1] &lt; ... A[i-1] &lt; A[i]<br>A[i] &gt; A[i+1] &gt; ... &gt; A[A.length - 1]</p>
+</blockquote>
+<p>首先我们可以知道的是，这数组依然是只有可以分为两半的，其中一半是升序，一半是降序。<br>前文说过，只要是有序，那就可以使用二分查找。</p>
+<p>对于这种数组，我们只要知道最高点的index，就可以通过这个点来把数组拆成两半，左半边使用升序的二分查找，右半边使用降序的二分查找。</p>
+<p>有了思路就好办了，首先的问题就是如何找到最高点。</p>
+<p>答案还是二分。对于一个点，如果他左边的数比他大，那么最高点一定在他左边。通过这样的思路我们可以找到那个点。</p>
+<p>代码：</p>
+<pre><code>class Solution {
+    public int findInMountainArray(int target, MountainArray mountainArr) {
+        // 先找到峰顶索引 peakIdx
+        int lo = 0, hi = mountainArr.length() - 1;
+        //找到只剩两个为止
+        while (lo + 1 &lt; hi) {
+            int mid = lo + (hi - lo) / 2;
+            int midVal = mountainArr.get(mid);
+            //如果比左边那个小，证明最大值在左边那部分
+            if (midVal &gt; mountainArr.get(mid - 1)) {
+                lo = mid;
+            } else {
+                hi = mid;
+            } 
+        }
+        //找出最大值所在的为止
+        int peakIdx = mountainArr.get(lo) &gt; mountainArr.get(hi)? lo: hi;
+
+        // 根据峰顶将山脉数组分为「升序数组」和「降序数组」两段，分别进行二分查找
+        int idx = binSearch(mountainArr, 0, peakIdx, target, true);
+        return idx != -1? idx: binSearch(mountainArr, peakIdx + 1, mountainArr.length() - 1, target, false);
+    }
+
+    /**
+    * 二分查找
+    * @parm asc 升序还是降序搜索
+    */
+    private int binSearch(MountainArray mountainArr, int lo, int hi, int target, boolean asc) {
+        while (lo &lt;= hi) {
+            int mid = lo + (hi - lo) / 2;
+            int midVal = mountainArr.get(mid);
+
+            if (midVal == target) {
+                return mid;
+            }
+            if (midVal &lt; target) {
+                lo = asc? mid + 1: lo;
+                hi = asc? hi: mid - 1;
+            } else {
+                hi = asc? mid - 1: hi;
+                lo = asc? lo: mid + 1;
+            }
+        }
+        return -1;
+    }
+}
+</code></pre>
+
+
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>37、死锁</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/md.css">
+  </head>
+
+  <body>
+  <div>
+  <table>
+  <tr><td><b>创建时间：</b></td><td><i>2020/04/26 16:05</i></td></tr>
+  <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+  </table>
+  </div>
+
+
+  <h2 id="-">死锁特征</h2>
+  <p>死锁可能出现 如果<strong>四个条件同时成立</strong></p>
+  <ul>
+  <li>互斥：在一个时间只能有一个进程使用资源</li><li>持有并等待：进程保持至少一个资源正在等待获取其他进程持有的额外资源。</li><li>无抢占：一个资源只能被进程自愿释放，进程以及完成了他的任务之后。</li><li>循环等待：存在等待进程集合{p0，p1，，，，pn}，p0正在等待p1所占用的资源，p1正在等待p2占用的资源。。。。pn-1在等待pn占用的资源，pn正在等待p0占用的资源。（即为存在环）</li></ul>
+  <p><img src="37img/1.png" alt=""></p>
+  
+
+  </body>
+</html>

@@ -1,0 +1,164 @@
+<html>
+<head>
+  <title>5、操作系统的连续内存分配</title>
+  <basefont face="微软雅黑" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="YXBJ Windows/601568 (zh-CN, DDL); Windows/10.0.0 (Win64); EDAMVersion=V2;"/>
+  <meta name="content-class" content="yinxiang.markdown"/>
+  <style>
+    body, td {
+      font-family: 微软雅黑;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="586"/>
+<h1>5、操作系统的连续内存分配</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2020/2/2 15:13</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/2/17 14:19</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>188mkzgr086</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div><span><div style="font-size: 14px; margin: 0; padding: 0; width: 100%;"><h1 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 41px; border-bottom: 3px double #999; color: #000; margin-top: 14px;">内存碎片与分区的动态分配</h1>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">内存碎片问题</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">内存空间不能被利用</h4>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">外部碎片</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">在分配单员间的未使用内存</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">内部碎片</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">在分配单员中的未使用内存</li>
+</ul>
+</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">简单的内存管理方法</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">当一个程序准许运行在内存中时，分配一个连续的区间</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分配一个连续的区间给运行的程序以访问数据</li>
+</ul>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">操作系统需要知道哪些空间是被占用了的，哪些空间是空闲的。</p>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">三种内存分配的算法</h3>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">第一匹配分配（first fit）</h4>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">直接使用第一个满足大小的空闲块分配给应用程序</p>
+<h5 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 16px; color: #333;">基本原理&amp;实现</h5>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">需求：</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">按地址空间排序的空闲块列表</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分配需要寻找一个合适的分区</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">重分配需要检查，看看是否自由分区可以合并于相邻的自由分区</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">优缺点：</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">优点：
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">简单</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">易于产生更大空间块，向着地址空间的结尾</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">劣势：
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">外部碎片（随着算法的运行加剧）</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">不确定性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">最优适配算法（Best Fit）</h4>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">寻找最适合的空闲内存块（比分配请求的力度大，但是差值最小）</p>
+<h5 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 16px; color: #333;">基本原理&amp;实现</h5>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">为了避免分割大空闲块</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">为了最小化外部碎片的尺寸</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">需求：</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">按尺寸排序的空闲块列表</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分配需要寻找一个合适的分区</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">重分配需要检查，看看是否自由分区可以合并于相邻的自由分区</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">优缺点：</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">优点：
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">避免拆散大的空闲块</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">当大部分分配是小尺寸的时候非常有效</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">外部碎片的尺寸最小化</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">比较简单</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">劣势：
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">外部碎片，易产生大量没用的微小碎片</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">重分配慢</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">最差适配算法（Worst Fit）</h4>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">寻找最不适合的空闲内存块（比分配请求的力度大，差值最大）</p>
+<h5 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 16px; color: #333;">基本原理&amp;实现</h5>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">为了避免有太多微小的碎片</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">需求：</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">按尺寸排序的空闲块列表</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分配很快</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">重分配需要检查，看看是否自由分区可以合并于相邻的自由分区</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">优缺点</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">优势
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">假如分配是中等尺寸效果较好</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">劣势
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">重分配慢</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">外部碎片</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">易于破碎大的空闲块以致大分区无法被分配</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;"></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">三者各有优劣</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">应用程序的请求是随机产生的，没有一种分配算法可以满足所有需求</li>
+</ul>
+</div><center style="display:none !important;visibility:collapse !important;height:0 !important;white-space:nowrap;width:100%;overflow:hidden">%23%20%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87%E4%B8%8E%E5%88%86%E5%8C%BA%E7%9A%84%E5%8A%A8%E6%80%81%E5%88%86%E9%85%8D%0A%0A%23%23%23%20%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87%E9%97%AE%E9%A2%98%0A%0A*%20%23%23%23%23%20%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E4%B8%8D%E8%83%BD%E8%A2%AB%E5%88%A9%E7%94%A8%0A*%20%23%23%23%23%20%E5%A4%96%E9%83%A8%E7%A2%8E%E7%89%87%0A%20%20%20%20*%20%E5%9C%A8%E5%88%86%E9%85%8D%E5%8D%95%E5%91%98%E9%97%B4%E7%9A%84%E6%9C%AA%E4%BD%BF%E7%94%A8%E5%86%85%E5%AD%98%0A*%20%23%23%23%23%20%E5%86%85%E9%83%A8%E7%A2%8E%E7%89%87%0A%20%20%20%20*%20%E5%9C%A8%E5%88%86%E9%85%8D%E5%8D%95%E5%91%98%E4%B8%AD%E7%9A%84%E6%9C%AA%E4%BD%BF%E7%94%A8%E5%86%85%E5%AD%98%0A%0A%23%23%23%20%E7%AE%80%E5%8D%95%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%96%B9%E6%B3%95%0A%0A*%20%E5%BD%93%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%87%86%E8%AE%B8%E8%BF%90%E8%A1%8C%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E6%97%B6%EF%BC%8C%E5%88%86%E9%85%8D%E4%B8%80%E4%B8%AA%E8%BF%9E%E7%BB%AD%E7%9A%84%E5%8C%BA%E9%97%B4%0A*%20%E5%88%86%E9%85%8D%E4%B8%80%E4%B8%AA%E8%BF%9E%E7%BB%AD%E7%9A%84%E5%8C%BA%E9%97%B4%E7%BB%99%E8%BF%90%E8%A1%8C%E7%9A%84%E7%A8%8B%E5%BA%8F%E4%BB%A5%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%0A%0A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E5%93%AA%E4%BA%9B%E7%A9%BA%E9%97%B4%E6%98%AF%E8%A2%AB%E5%8D%A0%E7%94%A8%E4%BA%86%E7%9A%84%EF%BC%8C%E5%93%AA%E4%BA%9B%E7%A9%BA%E9%97%B4%E6%98%AF%E7%A9%BA%E9%97%B2%E7%9A%84%E3%80%82%0A%0A***%0A%0A%23%23%23%20%E4%B8%89%E7%A7%8D%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E7%AE%97%E6%B3%95%0A%0A%23%23%23%23%20%E7%AC%AC%E4%B8%80%E5%8C%B9%E9%85%8D%E5%88%86%E9%85%8D%EF%BC%88first%20fit%EF%BC%89%0A%0A%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%BB%A1%E8%B6%B3%E5%A4%A7%E5%B0%8F%E7%9A%84%E7%A9%BA%E9%97%B2%E5%9D%97%E5%88%86%E9%85%8D%E7%BB%99%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%0A%0A%23%23%23%23%23%20%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%26%E5%AE%9E%E7%8E%B0%0A*%20%E9%9C%80%E6%B1%82%EF%BC%9A%0A%20%20%20%20*%20%E6%8C%89%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E6%8E%92%E5%BA%8F%E7%9A%84%E7%A9%BA%E9%97%B2%E5%9D%97%E5%88%97%E8%A1%A8%0A%20%20%20%20*%20%E5%88%86%E9%85%8D%E9%9C%80%E8%A6%81%E5%AF%BB%E6%89%BE%E4%B8%80%E4%B8%AA%E5%90%88%E9%80%82%E7%9A%84%E5%88%86%E5%8C%BA%0A%20%20%20%20*%20%E9%87%8D%E5%88%86%E9%85%8D%E9%9C%80%E8%A6%81%E6%A3%80%E6%9F%A5%EF%BC%8C%E7%9C%8B%E7%9C%8B%E6%98%AF%E5%90%A6%E8%87%AA%E7%94%B1%E5%88%86%E5%8C%BA%E5%8F%AF%E4%BB%A5%E5%90%88%E5%B9%B6%E4%BA%8E%E7%9B%B8%E9%82%BB%E7%9A%84%E8%87%AA%E7%94%B1%E5%88%86%E5%8C%BA%0A%0A*%20%E4%BC%98%E7%BC%BA%E7%82%B9%EF%BC%9A%0A%20%20%20%20*%20%E4%BC%98%E7%82%B9%EF%BC%9A%0A%20%20%20%20%20%20%20%20*%20%E7%AE%80%E5%8D%95%0A%20%20%20%20%20%20%20%20*%20%E6%98%93%E4%BA%8E%E4%BA%A7%E7%94%9F%E6%9B%B4%E5%A4%A7%E7%A9%BA%E9%97%B4%E5%9D%97%EF%BC%8C%E5%90%91%E7%9D%80%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E7%9A%84%E7%BB%93%E5%B0%BE%0A%20%20%20%20*%20%E5%8A%A3%E5%8A%BF%EF%BC%9A%0A%20%20%20%20%20%20%20%20*%20%E5%A4%96%E9%83%A8%E7%A2%8E%E7%89%87%EF%BC%88%E9%9A%8F%E7%9D%80%E7%AE%97%E6%B3%95%E7%9A%84%E8%BF%90%E8%A1%8C%E5%8A%A0%E5%89%A7%EF%BC%89%0A%20%20%20%20%20%20%20%20*%20%E4%B8%8D%E7%A1%AE%E5%AE%9A%E6%80%A7%0A%0A***%0A%0A%23%23%23%23%20%E6%9C%80%E4%BC%98%E9%80%82%E9%85%8D%E7%AE%97%E6%B3%95%EF%BC%88Best%20Fit%EF%BC%89%0A%0A%E5%AF%BB%E6%89%BE%E6%9C%80%E9%80%82%E5%90%88%E7%9A%84%E7%A9%BA%E9%97%B2%E5%86%85%E5%AD%98%E5%9D%97%EF%BC%88%E6%AF%94%E5%88%86%E9%85%8D%E8%AF%B7%E6%B1%82%E7%9A%84%E5%8A%9B%E5%BA%A6%E5%A4%A7%EF%BC%8C%E4%BD%86%E6%98%AF%E5%B7%AE%E5%80%BC%E6%9C%80%E5%B0%8F%EF%BC%89%0A%0A%23%23%23%23%23%20%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%26%E5%AE%9E%E7%8E%B0%0A*%20%E4%B8%BA%E4%BA%86%E9%81%BF%E5%85%8D%E5%88%86%E5%89%B2%E5%A4%A7%E7%A9%BA%E9%97%B2%E5%9D%97%0A*%20%E4%B8%BA%E4%BA%86%E6%9C%80%E5%B0%8F%E5%8C%96%E5%A4%96%E9%83%A8%E7%A2%8E%E7%89%87%E7%9A%84%E5%B0%BA%E5%AF%B8%0A*%20%E9%9C%80%E6%B1%82%EF%BC%9A%0A%20%20%20%20*%20%E6%8C%89%E5%B0%BA%E5%AF%B8%E6%8E%92%E5%BA%8F%E7%9A%84%E7%A9%BA%E9%97%B2%E5%9D%97%E5%88%97%E8%A1%A8%0A%20%20%20%20*%20%E5%88%86%E9%85%8D%E9%9C%80%E8%A6%81%E5%AF%BB%E6%89%BE%E4%B8%80%E4%B8%AA%E5%90%88%E9%80%82%E7%9A%84%E5%88%86%E5%8C%BA%0A%20%20%20%20*%20%E9%87%8D%E5%88%86%E9%85%8D%E9%9C%80%E8%A6%81%E6%A3%80%E6%9F%A5%EF%BC%8C%E7%9C%8B%E7%9C%8B%E6%98%AF%E5%90%A6%E8%87%AA%E7%94%B1%E5%88%86%E5%8C%BA%E5%8F%AF%E4%BB%A5%E5%90%88%E5%B9%B6%E4%BA%8E%E7%9B%B8%E9%82%BB%E7%9A%84%E8%87%AA%E7%94%B1%E5%88%86%E5%8C%BA%0A%0A*%20%E4%BC%98%E7%BC%BA%E7%82%B9%EF%BC%9A%0A%20%20%20%20*%20%E4%BC%98%E7%82%B9%EF%BC%9A%0A%20%20%20%20%20%20%20%20*%20%E9%81%BF%E5%85%8D%E6%8B%86%E6%95%A3%E5%A4%A7%E7%9A%84%E7%A9%BA%E9%97%B2%E5%9D%97%0A%20%20%20%20%20%20%20%20*%20%E5%BD%93%E5%A4%A7%E9%83%A8%E5%88%86%E5%88%86%E9%85%8D%E6%98%AF%E5%B0%8F%E5%B0%BA%E5%AF%B8%E7%9A%84%E6%97%B6%E5%80%99%E9%9D%9E%E5%B8%B8%E6%9C%89%E6%95%88%0A%20%20%20%20%20%20%20%20*%20%E5%A4%96%E9%83%A8%E7%A2%8E%E7%89%87%E7%9A%84%E5%B0%BA%E5%AF%B8%E6%9C%80%E5%B0%8F%E5%8C%96%0A%20%20%20%20%20%20%20%20*%20%E6%AF%94%E8%BE%83%E7%AE%80%E5%8D%95%0A%20%20%20%20*%20%E5%8A%A3%E5%8A%BF%EF%BC%9A%0A%20%20%20%20%20%20%20%20*%20%E5%A4%96%E9%83%A8%E7%A2%8E%E7%89%87%EF%BC%8C%E6%98%93%E4%BA%A7%E7%94%9F%E5%A4%A7%E9%87%8F%E6%B2%A1%E7%94%A8%E7%9A%84%E5%BE%AE%E5%B0%8F%E7%A2%8E%E7%89%87%0A%20%20%20%20%20%20%20%20*%20%E9%87%8D%E5%88%86%E9%85%8D%E6%85%A2%0A%0A***%0A%0A%23%23%23%23%20%E6%9C%80%E5%B7%AE%E9%80%82%E9%85%8D%E7%AE%97%E6%B3%95%EF%BC%88Worst%20Fit%EF%BC%89%0A%0A%E5%AF%BB%E6%89%BE%E6%9C%80%E4%B8%8D%E9%80%82%E5%90%88%E7%9A%84%E7%A9%BA%E9%97%B2%E5%86%85%E5%AD%98%E5%9D%97%EF%BC%88%E6%AF%94%E5%88%86%E9%85%8D%E8%AF%B7%E6%B1%82%E7%9A%84%E5%8A%9B%E5%BA%A6%E5%A4%A7%EF%BC%8C%E5%B7%AE%E5%80%BC%E6%9C%80%E5%A4%A7%EF%BC%89%0A%0A%23%23%23%23%23%20%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%26%E5%AE%9E%E7%8E%B0%0A*%20%E4%B8%BA%E4%BA%86%E9%81%BF%E5%85%8D%E6%9C%89%E5%A4%AA%E5%A4%9A%E5%BE%AE%E5%B0%8F%E7%9A%84%E7%A2%8E%E7%89%87%0A*%20%E9%9C%80%E6%B1%82%EF%BC%9A%0A%20%20%20%20*%20%E6%8C%89%E5%B0%BA%E5%AF%B8%E6%8E%92%E5%BA%8F%E7%9A%84%E7%A9%BA%E9%97%B2%E5%9D%97%E5%88%97%E8%A1%A8%0A%20%20%20%20*%20%E5%88%86%E9%85%8D%E5%BE%88%E5%BF%AB%0A%20%20%20%20*%20%E9%87%8D%E5%88%86%E9%85%8D%E9%9C%80%E8%A6%81%E6%A3%80%E6%9F%A5%EF%BC%8C%E7%9C%8B%E7%9C%8B%E6%98%AF%E5%90%A6%E8%87%AA%E7%94%B1%E5%88%86%E5%8C%BA%E5%8F%AF%E4%BB%A5%E5%90%88%E5%B9%B6%E4%BA%8E%E7%9B%B8%E9%82%BB%E7%9A%84%E8%87%AA%E7%94%B1%E5%88%86%E5%8C%BA%0A%0A*%20%E4%BC%98%E7%BC%BA%E7%82%B9%0A%20%20%20%20*%20%E4%BC%98%E5%8A%BF%0A%20%20%20%20%20%20%20%20*%20%E5%81%87%E5%A6%82%E5%88%86%E9%85%8D%E6%98%AF%E4%B8%AD%E7%AD%89%E5%B0%BA%E5%AF%B8%E6%95%88%E6%9E%9C%E8%BE%83%E5%A5%BD%0A%20%20%20%20*%20%E5%8A%A3%E5%8A%BF%0A%20%20%20%20%20%20%20%20*%20%E9%87%8D%E5%88%86%E9%85%8D%E6%85%A2%0A%20%20%20%20%20%20%20%20*%20%E5%A4%96%E9%83%A8%E7%A2%8E%E7%89%87%0A%20%20%20%20%20%20%20%20*%20%E6%98%93%E4%BA%8E%E7%A0%B4%E7%A2%8E%E5%A4%A7%E7%9A%84%E7%A9%BA%E9%97%B2%E5%9D%97%E4%BB%A5%E8%87%B4%E5%A4%A7%E5%88%86%E5%8C%BA%E6%97%A0%E6%B3%95%E8%A2%AB%E5%88%86%E9%85%8D%0A%20%20%20%20%20%20%20%20*%20%0A***%0A%20%20%20%20%20%20%20%0A%0A*%20%E4%B8%89%E8%80%85%E5%90%84%E6%9C%89%E4%BC%98%E5%8A%A3%0A*%20%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%98%AF%E9%9A%8F%E6%9C%BA%E4%BA%A7%E7%94%9F%E7%9A%84%EF%BC%8C%E6%B2%A1%E6%9C%89%E4%B8%80%E7%A7%8D%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95%E5%8F%AF%E4%BB%A5%E6%BB%A1%E8%B6%B3%E6%89%80%E6%9C%89%E9%9C%80%E6%B1%82</center></span>
+</div></body></html> 

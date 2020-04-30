@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>42、信号、管道、消息队列和共享内存</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+    </head>
+
+    <body>
+    <div>
+    <table>
+    <tr><td><b>创建时间：</b></td><td><i>2020/04/27 17:46</i></td></tr>
+    <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+    </table>
+    </div>
+
+<h1 id="-">信号、管道、消息队列和共享内存</h1>
+<h4 id="-">队列容量问题</h4>
+<ul>
+<li>0容量 —— 发送方必须等待接收方（阻塞）</li><li>有限容量 —— 如果队列满，那发送方必须等待接收方（更接近实际情况）</li><li>无线容量 —— 发送方不需要等待</li></ul>
+<h2 id="-">信号</h2>
+<ul>
+<li>signal（信号）<ul>
+<li>软件中断通知事件处理</li><li>Example：SIGFPE,SIGKILL,SIGUSRI,SIGSTOP,SIGCONT</li></ul>
+</li><li>接收到信号时干什么<ul>
+<li>Catch：制定信号处理函数被调用</li><li>Ignore：依靠操作系统的默认操作<ul>
+<li>Example：Abort,memory dump,suspend or resume process</li></ul>
+</li><li>Mask：闭塞信号因此不会传送<ul>
+<li>可能是暂时的（当处理同样类型的信号）</li></ul>
+</li></ul>
+</li><li>特点<ul>
+<li>不能传输要交换的任何数据</li><li>但是效率很高</li></ul>
+</li></ul>
+<h4 id="-">实现方法：</h4>
+<p>写一个handler，发给操作系统用作系统调用<br>运行的时候收到信号的时候，响应信号前，提前做好准备，把程序的堆栈进行修改，把接下来运行的程序改成信号处理函数的入口，再把原来的入口放在信号处理函数后面。<br><img src="42img/1.png" alt=""></p>
+<h2 id="-">管道</h2>
+<h4 id="-">管道用来数据交换</h4>
+<ul>
+<li>子进程从父进程继承文件描述符<ul>
+<li>file descriptor 0 stdin,1 std out,2 stderr</li></ul>
+</li><li><p>进程不知道（或者不关心）从键盘，文件，程序读取或写入到终端，文件，程序。<br><img src="42img/2.png" alt=""> </p>
+</li><li><p>shell:</p>
+<ul>
+<li>创建管道</li><li>为ls创建一个进程，设置stdout为管道写端</li><li>为more创建一个进程，设置stdin为管道读端</li></ul>
+</li><li>缺点：无法按照一定的结构来设置数据（或许可以，但比较复杂）</li></ul>
+<h2 id="-">消息队列</h2>
+<ul>
+<li>消息队列按FIFO来管理消息<ul>
+<li>message：作为一个字节序列存储</li><li>Message Queue：消息数组</li><li>FIFO￥FILO configuration</li></ul>
+</li></ul>
+<h2 id="-">共享内存</h2>
+<ul>
+<li>进程<ul>
+<li>每个进程都有字节的私有地址空间</li><li>在每个地址空间内，明确的设置了共享内存段</li></ul>
+</li><li>优点<ul>
+<li>快速、方便地共享数据</li></ul>
+</li><li>不足<ul>
+<li>必须同步数据访问</li></ul>
+</li></ul>
+<h4 id="-">实现和特点：</h4>
+<ul>
+<li>把同一块物理内存映射到不同的进程的地址空间里</li><li>一个进程写另外一个进程立即可见</li><li>没有系统调用干预</li><li>没有数据复制</li><li>不提供公布<ul>
+<li>由程序员提供同步</li></ul>
+</li></ul>
+
+
+    </body>
+</html>

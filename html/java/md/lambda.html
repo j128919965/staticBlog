@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>java8中使用lambda表达式</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/4/19 10:18</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/4/19 15:11</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="java8-lambda-">java8中使用lambda表达式</h1>
+<blockquote>
+<p>java8中增加了函数接口(funtionalinterface)，lambda表达式和方法引用(method reference)，使得创建函数对象(function object)变得十分容易。</p>
+</blockquote>
+<h4 id="-">传统的方式</h4>
+<p>有这么一个类，用来描述学生的学号以及成绩。</p>
+<pre><code class="lang-java">public class Stu {
+    String name;
+    String id;
+    int point;
+}
+</code></pre>
+<p>有一个List存储了一些stu对象，需要对这些学生按照成绩排序。<br>在以往的做法中，要么给<strong>Stu实现comarable接口</strong>，要么就是按照下面这个方式:</p>
+<pre><code class="lang-java">stuList.sort(new Comparator&lt;Stu&gt;() {
+    @Override
+    public int compare(Stu o1, Stu o2) {
+        return o1.point - o2.point;
+    }
+});
+</code></pre>
+<p><strong>sort方法需要一个<code>函数对象</code></strong>,用来帮助list完成排序的功能。上面的例子中使用了<code>匿名类</code>来<br><code>Comparator</code>是一个泛型接口，它有很多功能，其中一个就是对两个对象进行比较。在sort方法的源码中我们可以看到，底层采用的是<code>merge sort</code>也就是归并排序，在mergesorrt中，有这样的代码</p>
+<pre><code class="lang-java">//c是comparable对象
+for (int j=i; j&gt;low &amp;&amp; c.compare(dest[j-1], dest[j])&gt;0; j--)
+                    swap(dest, j, j-1);
+</code></pre>
+<p>这样就看明白了，sort方法内部的比较是依赖于一个comparable对象的compare方法来实现比较的。这种方法满足了设计模式中的“策略模式”，匿名类则是为sort提供了策略。</p>
+<h4 id="lambda-">lambda表达式</h4>
+<p>但是这种写法着实有点难看，也比较繁琐。<br>在java8中，我们再也不用写这样繁杂的代码了，刚刚的代码可以用接下来的一行来解决：</p>
+<pre><code class="lang-java">stuList.sort((o1, o2) -&gt; o1.point - o2.point);
+</code></pre>
+<p>纳尼！！好方便的写法！！这个就是使用了<code>lambda表达式</code><br>在java8中，有这样的一种观念：“带有单个抽象方法的接口是特殊的，需要单独对待。”这些接口现在被称为<strong>“函数式接口”</strong>(<code>functional interface</code>),java允许利用lambda表达式创建这些接口的实例。</p>
+<p>lambda表达式的语法很简单：格式如下： </p>
+<pre><code class="lang-java">(parameters) -&gt; expression
+或
+(parameters) -&gt;{ statements; }
+</code></pre>
+<p>lambda表达式有多种表达的写法，可以参考下面的几个例子：</p>
+<pre><code class="lang-java">// 1. 不需要参数,返回值为 5  
+() -&gt; 5  
+
+// 2. 接收一个参数(数字类型),返回其2倍的值  
+x -&gt; 2 * x  
+
+// 3. 接受2个参数(数字),并返回他们的差值  
+(x, y) -&gt; x – y  
+
+// 4. 接收2个int型整数,返回他们的和  
+(int x, int y) -&gt; x + y  
+
+// 5. 接受一个 string 对象,并在控制台打印,不返回任何值(看起来像是返回void)  
+(String s) -&gt; System.out.print(s)
+// 也可以这么写
+s -&gt; System.out.print(s)
+</code></pre>
+<p>注意，在上面的Stu排序代码中，lambda的类型（Comparator<Stu>），参数类型（Stu，Stu），返回值类型（int）都没有出现在代码中。编译器使用类型推导来自动判断。除了极少数的情况，编译器完全可以推断出它们的类型。<br>因此，在使用lambda表达式的时候，<strong>放心的把所有的lambda参数类型都删掉吧</strong>。</p>
+<h4 id="-">注意</h4>
+<p><strong>一定要明确一个概念</strong>，lambda表达式的出现是为了简化开发，但是也会带来不利的地方：</p>
+<p><strong>Lambda没有名称和文档；如果一个计算本身不是自描述的，或者超出了几行，那就不要使用lambda</strong>。对于lambda表达式来说，一到三行是比较合适的长度，超出了四行及以上，那它对于程序的可读性就会造成比较大的损害。</p>
+<p>而且，<strong>lambda无法获得对自身的引用</strong>，也就是说，lambda中使用this，指向的是外层的对象，而非lambda对象，虽然通常这个正是开发时想要的，但是如果想获得匿名类实例的引用，那就必须使用匿名类。</p>
+<p>总而言之，lambda是创建小函数对象的非常好的方式。有需要使用小函数对象的地方，完全可以考虑换成lambda。</p>
+<h4 id="-">方法引用</h4>
+<p>和匿名类比起来，lambda的优势就是更简洁。但是可能有时候有这种情况，你写的lambda表达式，已经有别的方法实现过了，或者只是调用一个已经实现了的方法。</p>
+<p>java8中，我们除了可以使用lambda，还可以直接引用方法。<br>比如说下面这个例子：<br>这段代码是用来保持从任意键到Integer值的一个映射。如果这个值为该键的实例数目，那么这段程序就是一个多集合的实现。<br>这个代码片段的作用是，当这个键不在映射中时，将数字1和键关联起来，或者当这个键已经存在，就负责递增该关键值：</p>
+<pre><code class="lang-java">map.merge(key,1,(count,incr)-&gt;count+incr);
+</code></pre>
+<p>在这个表达式中，实际上已经比较简洁了。但是还有一些冗余代码。参数count和incr并没有什么写出来的价值，但是却挺长的。<br>实际上，这段lambda的意思就是返回两个参数的合。在标准库里，本身就有这样的方法（<code>Integer.sum(int a,int b)</code>）</p>
+<p>我们只需要传一个对方法的引用，就完全可以完成我们要的功能：</p>
+<pre><code class="lang-java">map.merge(key,1,Integer::sum);
+</code></pre>
+<p>方法所带的参数越多，方法引用消除的样板代码就越多。但是在一些lambda中，参数名可能会提供有用的信息，是的可维护性更强，可读性也更强。</p>
+<p><strong>只要是方法引用能做的事情，就没有lambda不能做的</strong>。这两者的根本目的都是让代码更简洁，如果使用方法引用的代码比lambda还长，那完全没有必要使用方法引用。</p>
+<p>许多方法引用都指向静态方法，但其中有四种没有这么做。其中两个是 有限制和无限制的实例方法引用。在有限制的引用中，接收对象是在方法引用中指定的。有限制的引用本质上类似于静态引用：函数对象与被引用方法带有相同的参数。在无限制的引用中，接收对象是在运用函数对象时，通过在该方法的声明函数前面额外添加一个参数来指定的，无限制的引用经常使用在流管道（Stream）中，作为映射和过滤函数。最后，还有两种构造器引用，分别针对类和数组。构造器引用相当于工厂对象。</p>
+<p>没看懂没关系，慢慢使用，尝试，熟能生巧。</p>
+<p>总之，只要能简化代码，就使用方法引用，如果不能使代码更加简洁，那就还用lambda就好了。</p>
+
+</body>
+</html>

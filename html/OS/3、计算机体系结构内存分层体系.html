@@ -1,0 +1,73 @@
+<html>
+<head>
+  <title>3、计算机体系结构/内存分层体系</title>
+  <basefont face="微软雅黑" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="YXBJ Windows/601568 (zh-CN, DDL); Windows/10.0.0 (Win64); EDAMVersion=V2;"/>
+  <meta name="content-class" content="yinxiang.markdown"/>
+  <style>
+    body, td {
+      font-family: 微软雅黑;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="593"/>
+<h1>3、计算机体系结构/内存分层体系</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2020/1/19 19:45</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/2/2 15:13</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>188mkzgr086</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div><span><div style="font-size: 14px; margin: 0; padding: 0; width: 100%;"><h1 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 41px; border-bottom: 3px double #999; color: #000; margin-top: 14px;">计算机体系结构/内存分层体系</h1>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">计算机体系结构</h3>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="3、计算机体系结构内存分层体系_files/Image.png" type="image/png" data-filename="Image.png"/></p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">计算机的体系结构主要包含三大块内容：<br/>
+<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">CPU</code> <code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">内存</code> <code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">IO</code></p>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">内存的分层体系</h3>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">内存的层次结构：<br/>
+<img src="3、计算机体系结构内存分层体系_files/Image [1].png" type="image/png" data-filename="Image.png"/><br/>
+cpu可以访问的指令/数据所处的位置可以是上图所示的四个部分</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">寄存器</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">cache</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">主存</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">磁盘（虚拟内存）</li>
+</ul>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">寄存器</code>和<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">cache</code>是cpu内部的,操作系统无法直接进行管理,速度很快,但空间很小</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">主存</code>也叫物理内存,主要存放操作系统本身和运行的代码,比<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">寄存器</code>和<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">cache</code>大很多,但没有那么快<br/>
+一掉电 数据就没了</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">磁盘</code>大很多,但是速度要慢很多</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">整体形成类似金字塔的层次结构</p>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">操作系统完成的事情</h3>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">四个重点完成的目标</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">抽象 逻辑地址空间</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">保护 独立地址空间</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">共享 访问相同内存</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">虚拟化 更多的地址空间<br/>
+(主存,硬盘是物理地址空间,而程序运行时看到的则是逻辑地址空间)</li>
+</ul>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">在操作系统中管理内存的不同方法</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">程序重定位</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分段</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分页</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">虚存管理</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">按需分页虚拟内存</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">实现高度依赖于硬件</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">必须知道内存架构</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">MMU(内存管理单元): 硬件组件负责处理CPU的内存访问请求CPU</li>
+</ul>
+</div><center style="display:none !important;visibility:collapse !important;height:0 !important;white-space:nowrap;width:100%;overflow:hidden">%23%20%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%2F%E5%86%85%E5%AD%98%E5%88%86%E5%B1%82%E4%BD%93%E7%B3%BB%0A%0A%23%23%23%20%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%0A%0A!%5Ba7ec6e311c2b6d6ca0aa27d0b927b54a.png%5D(en-resource%3A%2F%2Fdatabase%2F1170%3A0)%0A%0A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%BB%E8%A6%81%E5%8C%85%E5%90%AB%E4%B8%89%E5%A4%A7%E5%9D%97%E5%86%85%E5%AE%B9%EF%BC%9A%0A%60CPU%60%20%60%E5%86%85%E5%AD%98%60%20%60IO%60%0A***%0A%23%23%23%20%E5%86%85%E5%AD%98%E7%9A%84%E5%88%86%E5%B1%82%E4%BD%93%E7%B3%BB%0A%E5%86%85%E5%AD%98%E7%9A%84%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%EF%BC%9A%0A!%5B7442abbf2e3b74fafe77b4a87bc09164.png%5D(en-resource%3A%2F%2Fdatabase%2F1172%3A0)%0Acpu%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE%E7%9A%84%E6%8C%87%E4%BB%A4%2F%E6%95%B0%E6%8D%AE%E6%89%80%E5%A4%84%E7%9A%84%E4%BD%8D%E7%BD%AE%E5%8F%AF%E4%BB%A5%E6%98%AF%E4%B8%8A%E5%9B%BE%E6%89%80%E7%A4%BA%E7%9A%84%E5%9B%9B%E4%B8%AA%E9%83%A8%E5%88%86%0A*%20%E5%AF%84%E5%AD%98%E5%99%A8%0A*%20cache%0A*%20%E4%B8%BB%E5%AD%98%0A*%20%E7%A3%81%E7%9B%98%EF%BC%88%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%EF%BC%89%0A%0A%60%E5%AF%84%E5%AD%98%E5%99%A8%60%E5%92%8C%60cache%60%E6%98%AFcpu%E5%86%85%E9%83%A8%E7%9A%84%2C%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%97%A0%E6%B3%95%E7%9B%B4%E6%8E%A5%E8%BF%9B%E8%A1%8C%E7%AE%A1%E7%90%86%2C%E9%80%9F%E5%BA%A6%E5%BE%88%E5%BF%AB%2C%E4%BD%86%E7%A9%BA%E9%97%B4%E5%BE%88%E5%B0%8F%0A%0A%60%E4%B8%BB%E5%AD%98%60%E4%B9%9F%E5%8F%AB%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%2C%E4%B8%BB%E8%A6%81%E5%AD%98%E6%94%BE%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%9C%AC%E8%BA%AB%E5%92%8C%E8%BF%90%E8%A1%8C%E7%9A%84%E4%BB%A3%E7%A0%81%2C%E6%AF%94%60%E5%AF%84%E5%AD%98%E5%99%A8%60%E5%92%8C%60cache%60%E5%A4%A7%E5%BE%88%E5%A4%9A%2C%E4%BD%86%E6%B2%A1%E6%9C%89%E9%82%A3%E4%B9%88%E5%BF%AB%0A%E4%B8%80%E6%8E%89%E7%94%B5%20%E6%95%B0%E6%8D%AE%E5%B0%B1%E6%B2%A1%E4%BA%86%0A%0A%60%E7%A3%81%E7%9B%98%60%E5%A4%A7%E5%BE%88%E5%A4%9A%2C%E4%BD%86%E6%98%AF%E9%80%9F%E5%BA%A6%E8%A6%81%E6%85%A2%E5%BE%88%E5%A4%9A%0A%0A%E6%95%B4%E4%BD%93%E5%BD%A2%E6%88%90%E7%B1%BB%E4%BC%BC%E9%87%91%E5%AD%97%E5%A1%94%E7%9A%84%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%0A%0A***%0A%23%23%23%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%8C%E6%88%90%E7%9A%84%E4%BA%8B%E6%83%85%0A%0A%23%23%23%23%20%E5%9B%9B%E4%B8%AA%E9%87%8D%E7%82%B9%E5%AE%8C%E6%88%90%E7%9A%84%E7%9B%AE%E6%A0%87%0A*%20%E6%8A%BD%E8%B1%A1%20%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A*%20%E4%BF%9D%E6%8A%A4%20%E7%8B%AC%E7%AB%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A*%20%E5%85%B1%E4%BA%AB%20%E8%AE%BF%E9%97%AE%E7%9B%B8%E5%90%8C%E5%86%85%E5%AD%98%0A*%20%E8%99%9A%E6%8B%9F%E5%8C%96%20%E6%9B%B4%E5%A4%9A%E7%9A%84%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A(%E4%B8%BB%E5%AD%98%2C%E7%A1%AC%E7%9B%98%E6%98%AF%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%2C%E8%80%8C%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9C%8B%E5%88%B0%E7%9A%84%E5%88%99%E6%98%AF%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4)%0A***%0A%23%23%23%20%E5%9C%A8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E7%9A%84%E4%B8%8D%E5%90%8C%E6%96%B9%E6%B3%95%0A*%20%E7%A8%8B%E5%BA%8F%E9%87%8D%E5%AE%9A%E4%BD%8D%0A*%20%E5%88%86%E6%AE%B5%0A*%20%E5%88%86%E9%A1%B5%0A*%20%E8%99%9A%E5%AD%98%E7%AE%A1%E7%90%86%0A*%20%E6%8C%89%E9%9C%80%E5%88%86%E9%A1%B5%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%0A%23%23%23%20%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%BA%A6%E4%BE%9D%E8%B5%96%E4%BA%8E%E7%A1%AC%E4%BB%B6%0A*%20%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E5%86%85%E5%AD%98%E6%9E%B6%E6%9E%84%0A*%20MMU(%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%8D%95%E5%85%83)%3A%20%E7%A1%AC%E4%BB%B6%E7%BB%84%E4%BB%B6%E8%B4%9F%E8%B4%A3%E5%A4%84%E7%90%86CPU%E7%9A%84%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82CPU</center></span>
+</div></body></html> 

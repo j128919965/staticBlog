@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>大数乘法</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../css/md.css">
+  </head>
+
+  <body>
+  <div>
+  <table>
+  <tr><td><b>创建时间：</b></td><td><i>2020/04/26 23:55</i></td></tr>
+  <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+  </table>
+  </div>
+
+
+  <h1 id="-">大数乘法</h1>
+  <p>思路：一般情况下，如果两个数的位数太高，是不可以直接用乘法计算的。<br>可以采用拆分的思路：</p>
+  <p>这样我们可以表达为：有位数为n的两个大数x和y，<br><code>x=a∗10^(n/2) +b</code><br><code>y=c∗10^(n/2) +d</code></p>
+  <p><code>x∗y=(a∗10^(n/2)+b)∗(c∗10^(n/2)+d)</code><br>进一步化简为：<br><code>x∗y=a∗c∗10^n +(a∗d+b∗c)∗10^(n/2) +bd</code></p>
+  <p>比如说<code>x=1234*y=5678</code>，把5678拆分成<code>a=56，b=78</code>,两部分，把1234拆分成<code>c=12，d=34</code>两部分。</p>
+  <p>如果拆开的数字还大，那么就继续往下拆。</p>
+  <p>编码实现如下：</p>
+  <pre><code class="lang-java">public static long mul(long num1, long num2){
+      //递归终止条件
+      if(num1 &lt; 10 || num2 &lt; 10) return num1 * num2;
+  
+      // 计算拆分长度
+      int size1 = String.valueOf(num1).length();
+      int size2 = String.valueOf(num2).length();
+      int halfN = Math.max(size1, size2) / 2;
+  
+      /* 拆分为a, b, c, d */
+      long a = Long.valueOf(String.valueOf(num1).substring(0, size1 - halfN));
+      long b = Long.valueOf(String.valueOf(num1).substring(size1 - halfN));
+      long c = Long.valueOf(String.valueOf(num2).substring(0, size2 - halfN));
+      long d = Long.valueOf(String.valueOf(num2).substring(size2 - halfN));
+  
+      //防止拆开的数依然很大，这里使用递归进行计算。
+      long z2 = mul(a, c);
+      long z0 = mul(b, d);
+      long z1 = mul((a + b), (c + d)) - z0 - z2;
+  
+      return (long)(z2 * Math.pow(10, (2*halfN)) + z1 * Math.pow(10, halfN) + z0);
+  }
+  </code></pre>
+  <p>测试结果：</p>
+  <pre><code class="lang-java">in：
+  System.out.println(mul(123456,789456));
+  out：
+  97463079936
+  </code></pre>
+  <p>这个其实缺陷还挺大，这个demo我是理解了，但是还没能写出更通用高效的代码。。加油！</p>
+  <p>下次更新会写一个完整的自己实现的简单BigInteger类，将会更新在java分区。</p>
+  
+
+  </body>
+</html>

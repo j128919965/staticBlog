@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>读者——写者问题</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/4/15 10:18</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/4/15 20:31</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="-">经典同步问题</h1>
+<h2 id="-">读者-写者问题</h2>
+<ul>
+<li>动机<ul>
+<li>共享数据的访问</li></ul>
+</li><li>两种类型的使用者<ul>
+<li>读者：不需要修改数据</li><li>写者：读取和修改数据</li></ul>
+</li><li>问题约束：<ul>
+<li>同一时间有多个读者，但是只能有一个写者</li><li>当没有写者时，读者才能访问数据</li><li>当没有读者和写者时，写者才能访问数据</li><li>在任何时候只能有一个线程可以操作共享变量</li></ul>
+</li></ul>
+<h4 id="-">分析</h4>
+<ul>
+<li>多个并发线进程的数据集共享<ul>
+<li>读者——只读，不执行任何更新</li><li>写者——可以读取和更</li></ul>
+</li><li>共享数据：<ul>
+<li>数据集</li><li>信号量CountMutex初始化为1</li><li>信号量WriteMutex初始化为1</li><li>整数Rcount初始化为0；</li></ul>
+</li></ul>
+<p>使用信号量编码<br>(读者优先，（只要有读者存在，那后面的读者就会被接纳）)<br>（容易导致写者饥饿）</p>
+<ul>
+<li>reader：</li><li><pre><code>if(Rcoun == 0)
+  sem_wait(WriteMutex);
+++Rcount;
+sem_post(CountMutex);
+read;
+sem_wait(CountMutex)
+--Rcount;
+if(Rcount == 0){
+  sem_post(WriteMutex);}
+</code></pre></li><li><p>writer：</p>
+</li><li><pre><code>sem_wait(WriteMutex);
+read;
+sem_post(WriteMutex);
+</code></pre></li></ul>
+
+
+</body>
+</html>

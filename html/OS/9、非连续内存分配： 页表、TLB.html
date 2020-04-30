@@ -1,0 +1,86 @@
+<html>
+<head>
+  <title>9、非连续内存分配： 页表、TLB</title>
+  <basefont face="微软雅黑" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="YXBJ Windows/601568 (zh-CN, DDL); Windows/10.0.0 (Win64); EDAMVersion=V2;"/>
+  <meta name="content-class" content="yinxiang.markdown"/>
+  <style>
+    body, td {
+      font-family: 微软雅黑;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="560"/>
+<h1>9、非连续内存分配： 页表、TLB</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2020/2/19 13:42</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/2/24 17:02</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>188mkzgr086</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div><span><div style="font-size: 14px; margin: 0; padding: 0; width: 100%;"><h1 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 41px; border-bottom: 3px double #999; color: #000; margin-top: 14px;">页表、TLB</h1>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">页表</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">页表概述</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">转换后备缓冲区</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">二级/多级 页表</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">反向页表</li>
+</ul>
+</li>
+</ul>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">每一个页实际上就是一个大数组<br/>
+页表的索引也就是 页号<br/>
+对应的项的内容是 帧号<br/>
+除去帧号外，页表项中还有几个bit标志位<br/>
+<img src="9、非连续内存分配： 页表、TLB_files/Image.png" type="image/png" data-filename="Image.png"/><br/>
+这些bit有特殊的用途，比如说可以表示这个页表项是否合法（对应的物理页是否存在）<br/>
+也可以代表这个页的读写情况</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">例子：<br/>
+<img src="9、非连续内存分配： 页表、TLB_files/Image [1].png" type="image/png" data-filename="Image.png"/></p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">页表机制的问题</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">空间代价 页表可能非常大
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">64位机器如果每页1024字节，那么一个页表的大小将会是多少？ 2^54</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">空间不够，甚至都放不下</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">时间开销：访问一个内存单员需要两次访问
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">一次用于访问页表项</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">一次用于访问数据</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">如何处理？（大部分的计算问题通过某些方式解决）
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">缓存（Caching）</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">间接（Indirection）访问</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">解决时间问题</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">Translate Look-aside Buffer(TLB)
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">TLB使用a's'sociative memory实现，可以快速访问（但是大小很小）</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">CPU在寻址时，先访问TLB，如果TLB命中，物理页号可以很快被获取</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">如果没有命中，对应的表项更新到TLB中</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">这样可以尽量避免对页表的访问<br/>
+<img src="9、非连续内存分配： 页表、TLB_files/Image [2].png" type="image/png" data-filename="Image.png"/></li>
+</ul>
+</li>
+</ul>
+</div><center style="display:none !important;visibility:collapse !important;height:0 !important;white-space:nowrap;width:100%;overflow:hidden">%23%20%20%E9%A1%B5%E8%A1%A8%E3%80%81TLB%0A*%20%20%23%23%23%20%E9%A1%B5%E8%A1%A8%0A%20%20%20%20*%20%20%E9%A1%B5%E8%A1%A8%E6%A6%82%E8%BF%B0%0A%20%20%20%20*%20%20%E8%BD%AC%E6%8D%A2%E5%90%8E%E5%A4%87%E7%BC%93%E5%86%B2%E5%8C%BA%0A%20%20%20%20*%20%20%E4%BA%8C%E7%BA%A7%2F%E5%A4%9A%E7%BA%A7%20%E9%A1%B5%E8%A1%A8%0A%20%20%20%20*%20%20%E5%8F%8D%E5%90%91%E9%A1%B5%E8%A1%A8%0A%20%20%0A%20%20%0A%E6%AF%8F%E4%B8%80%E4%B8%AA%E9%A1%B5%E5%AE%9E%E9%99%85%E4%B8%8A%E5%B0%B1%E6%98%AF%E4%B8%80%E4%B8%AA%E5%A4%A7%E6%95%B0%E7%BB%84%0A%E9%A1%B5%E8%A1%A8%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B9%9F%E5%B0%B1%E6%98%AF%20%E9%A1%B5%E5%8F%B7%0A%E5%AF%B9%E5%BA%94%E7%9A%84%E9%A1%B9%E7%9A%84%E5%86%85%E5%AE%B9%E6%98%AF%20%E5%B8%A7%E5%8F%B7%0A%E9%99%A4%E5%8E%BB%E5%B8%A7%E5%8F%B7%E5%A4%96%EF%BC%8C%E9%A1%B5%E8%A1%A8%E9%A1%B9%E4%B8%AD%E8%BF%98%E6%9C%89%E5%87%A0%E4%B8%AAbit%E6%A0%87%E5%BF%97%E4%BD%8D%0A!%5B816a9e555b90fcbebe97376ed32511de.png%5D(en-resource%3A%2F%2Fdatabase%2F1918%3A1)%0A%E8%BF%99%E4%BA%9Bbit%E6%9C%89%E7%89%B9%E6%AE%8A%E7%9A%84%E7%94%A8%E9%80%94%EF%BC%8C%E6%AF%94%E5%A6%82%E8%AF%B4%E5%8F%AF%E4%BB%A5%E8%A1%A8%E7%A4%BA%E8%BF%99%E4%B8%AA%E9%A1%B5%E8%A1%A8%E9%A1%B9%E6%98%AF%E5%90%A6%E5%90%88%E6%B3%95%EF%BC%88%E5%AF%B9%E5%BA%94%E7%9A%84%E7%89%A9%E7%90%86%E9%A1%B5%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%89%0A%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%BB%A3%E8%A1%A8%E8%BF%99%E4%B8%AA%E9%A1%B5%E7%9A%84%E8%AF%BB%E5%86%99%E6%83%85%E5%86%B5%0A%0A%E4%BE%8B%E5%AD%90%EF%BC%9A%0A!%5B9315a07ee614dde34b84d4776a07abc0.png%5D(en-resource%3A%2F%2Fdatabase%2F1920%3A1)%0A%0A*%20%23%23%23%20%E9%A1%B5%E8%A1%A8%E6%9C%BA%E5%88%B6%E7%9A%84%E9%97%AE%E9%A2%98%0A%20%20%20%20*%20%E7%A9%BA%E9%97%B4%E4%BB%A3%E4%BB%B7%20%E9%A1%B5%E8%A1%A8%E5%8F%AF%E8%83%BD%E9%9D%9E%E5%B8%B8%E5%A4%A7%0A%20%20%20%20%20%20%20%20*%2064%E4%BD%8D%E6%9C%BA%E5%99%A8%E5%A6%82%E6%9E%9C%E6%AF%8F%E9%A1%B51024%E5%AD%97%E8%8A%82%EF%BC%8C%E9%82%A3%E4%B9%88%E4%B8%80%E4%B8%AA%E9%A1%B5%E8%A1%A8%E7%9A%84%E5%A4%A7%E5%B0%8F%E5%B0%86%E4%BC%9A%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F%202%5E54%0A%20%20%20%20%20%20%20%20*%20%E7%A9%BA%E9%97%B4%E4%B8%8D%E5%A4%9F%EF%BC%8C%E7%94%9A%E8%87%B3%E9%83%BD%E6%94%BE%E4%B8%8D%E4%B8%8B%0A%20%20%20%20*%20%E6%97%B6%E9%97%B4%E5%BC%80%E9%94%80%EF%BC%9A%E8%AE%BF%E9%97%AE%E4%B8%80%E4%B8%AA%E5%86%85%E5%AD%98%E5%8D%95%E5%91%98%E9%9C%80%E8%A6%81%E4%B8%A4%E6%AC%A1%E8%AE%BF%E9%97%AE%0A%20%20%20%20%20%20%20%20*%20%E4%B8%80%E6%AC%A1%E7%94%A8%E4%BA%8E%E8%AE%BF%E9%97%AE%E9%A1%B5%E8%A1%A8%E9%A1%B9%0A%20%20%20%20%20%20%20%20*%20%E4%B8%80%E6%AC%A1%E7%94%A8%E4%BA%8E%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%0A%20%20%20%20*%20%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%EF%BC%9F%EF%BC%88%E5%A4%A7%E9%83%A8%E5%88%86%E7%9A%84%E8%AE%A1%E7%AE%97%E9%97%AE%E9%A2%98%E9%80%9A%E8%BF%87%E6%9F%90%E4%BA%9B%E6%96%B9%E5%BC%8F%E8%A7%A3%E5%86%B3%EF%BC%89%0A%20%20%20%20%20%20%20%20*%20%E7%BC%93%E5%AD%98%EF%BC%88Caching%EF%BC%89%0A%20%20%20%20%20%20%20%20*%20%E9%97%B4%E6%8E%A5%EF%BC%88Indirection%EF%BC%89%E8%AE%BF%E9%97%AE%0A%0A%20%23%23%23%20%E8%A7%A3%E5%86%B3%E6%97%B6%E9%97%B4%E9%97%AE%E9%A2%98%0A*%20Translate%20Look-aside%20Buffer(TLB)%0A%20%20%20%20*%20TLB%E4%BD%BF%E7%94%A8a's'sociative%20memory%E5%AE%9E%E7%8E%B0%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%BF%AB%E9%80%9F%E8%AE%BF%E9%97%AE%EF%BC%88%E4%BD%86%E6%98%AF%E5%A4%A7%E5%B0%8F%E5%BE%88%E5%B0%8F%EF%BC%89%0A%20%20%20%20*%20CPU%E5%9C%A8%E5%AF%BB%E5%9D%80%E6%97%B6%EF%BC%8C%E5%85%88%E8%AE%BF%E9%97%AETLB%EF%BC%8C%E5%A6%82%E6%9E%9CTLB%E5%91%BD%E4%B8%AD%EF%BC%8C%E7%89%A9%E7%90%86%E9%A1%B5%E5%8F%B7%E5%8F%AF%E4%BB%A5%E5%BE%88%E5%BF%AB%E8%A2%AB%E8%8E%B7%E5%8F%96%0A%20%20%20%20*%20%E5%A6%82%E6%9E%9C%E6%B2%A1%E6%9C%89%E5%91%BD%E4%B8%AD%EF%BC%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E8%A1%A8%E9%A1%B9%E6%9B%B4%E6%96%B0%E5%88%B0TLB%E4%B8%AD%0A%20%20%20%20*%20%E8%BF%99%E6%A0%B7%E5%8F%AF%E4%BB%A5%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%E5%AF%B9%E9%A1%B5%E8%A1%A8%E7%9A%84%E8%AE%BF%E9%97%AE%0A%20%20%20%20!%5B9d3ccd3838cc0b2f3c92798bf8dcc602.png%5D(en-resource%3A%2F%2Fdatabase%2F1922%3A1)%0A%20%20%20%20</center></span>
+</div></body></html> 

@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>分治法求循环赛事日程表</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+    <table>
+        <tr><td><b>创建时间：</b></td><td><i>2020/4/13 20:10</i></td></tr>
+        <tr><td><b>更新时间：</b></td><td><i>2020/4/13 20:10</i></td></tr>
+        <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+        </table>
+</div>
+
+<h1 id="-">分治法求循环赛事日程表</h1>
+<blockquote>
+<p>有编号为1-n的n个运动员（n = 2^k），他们要和其余的每个人都比赛一场<br>每一组比赛之间不互相影响<br>每天只能比赛一场<br>请输出一份他们的比赛日常表</p>
+</blockquote>
+<p>这道题可以先调整一下思路，把和自己比赛也算进去。<br>如果在计算每个人的时候，都要把剩下的所有人都考虑进去，那么毫无疑问复杂度会高到离谱。<br>换一种思路：<br>而且每组人之间的比赛不影响别人的比赛，所以可以1和2比，3和4比，他们之间其实是互不影响的。<br>比如：<br>1 2<br>2 1<br>上面这四个数字代表，第一天1和1比，2和2比，第二天1和2比，2和1比。<br>3 4<br>4 3<br>上面这四个数字代表，第一天3和3比，4和4比，第二天3和4比，4和3比。<br>怎么样？是不是发现它们这两组之间其实是互不影响的？<br>到第三天怎么办？很简单，移动复制成这个样子：<br>1 2 3 4<br>2 1 4 3<br>3 4 1 2<br>4 3 2 1<br>你会发现，其实这么一看，他们之间还是达到了不互相影响，再仔细观察结构，会发现这个结构实际上和上面只有两个人的时候一样。<br>为什么呢？这么打比方：1和2约定好，他俩之间的事自己解决，从现在开始俩人就是连体婴儿，需要这个连体婴儿打比赛的时候，就打两场，1和2轮流来。3和4也这么约定。这样一来，就把4个人的问题简化成了两个连体婴儿之间的问题了。</p>
+<p>从这个继续往下看，就算扩大到更大的数量级，都可以简化到这个子问题。<br>而且这道题并不像n皇后问题那样需要求解出全部的排列<br>因此这个问题就很简单了：<br>看代码：<br>（代码参考网络）</p>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+using namespace std; 
+void GameTable(int k, int a[100][100]);
+void PrintTable(int k, int a[100][100]); 
+int main()
+{
+    int date[100][100];  //日程表数组 
+    int k;
+    cout &lt;&lt; &quot;请输入K的值：&quot; ;
+    cin &gt;&gt; k;
+    cout &lt;&lt; &quot;日程表如下：&quot; &lt;&lt; endl;
+    GameTable(k, date);
+    PrintTable(k, date);
+    return 0;
+} 
+void GameTable(int k, int a[100][100])
+{
+    //求解2个选手比赛日程，得到左上角元素
+    a[1][1] = 1; a[1][2] = 2;
+    a[2][1] = 2; a[2][2] = 1;
+    if(k&gt;1)
+        for(int t=1;t&lt;k;t++)
+        {
+            //左下角
+            for(int i=1+pow(2.0,t);i&lt;=pow(2.0,t+1);i++)
+            {
+                for(int j=1;j&lt;=pow(2.0,t);j++)
+                {
+                    a[i][j] = a[i-(int)pow(2.0,t)][j] + (int)pow(2.0,t);
+                }
+            }
+            //右上角
+            for(int i=1;i&lt;=pow(2.0,t);i++)
+            {
+                for(int j=1+pow(2.0,t);j&lt;=pow(2.0,t+1);j++)
+                {
+                    a[i][j] = a[i][j-(int)pow(2.0,t)] + (int)pow(2.0,t);
+                }
+            }
+            //右下角
+            for(int i=1+pow(2.0,t);i&lt;=pow(2.0,t+1);i++)
+            {
+                for(int j=1+pow(2.0,t);j&lt;=pow(2.0,t+1);j++)
+                {
+                    a[i][j] = a[i-(int)pow(2.0,t)][j-(int)pow(2.0,t)];
+                }
+            }
+
+        }
+    else    ;
+}
+void PrintTable(int k, int a[100][100])
+{
+    double n = pow(2.0, k);
+    for (int i = 1; i &lt;= n; i++)
+    {
+        for (int j = 1; j &lt;= n; j++)
+        {
+            cout &lt;&lt; a[i][j] &lt;&lt; &quot;　 &quot;;
+        }
+        cout &lt;&lt; endl&lt;&lt;endl;
+    }
+}
+</code></pre><p>运行结果：</p>
+<pre><code>请输入K的值：3
+日程表如下：
+1　 2　 3　 4　 5　 6　 7　 8　
+
+2　 1　 4　 3　 6　 5　 8　 7　
+
+3　 4　 1　 2　 7　 8　 5　 6　
+
+4　 3　 2　 1　 8　 7　 6　 5　
+
+5　 6　 7　 8　 1　 2　 3　 4　
+
+6　 5　 8　 7　 2　 1　 4　 3　
+
+7　 8　 5　 6　 3　 4　 1　 2　
+
+8　 7　 6　 5　 4　 3　 2　 1　
+</code></pre>
+
+
+
+</body>
+</html>
+

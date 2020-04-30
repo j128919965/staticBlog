@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>27、实时调度</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/md.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    
+<div>
+    <table>
+    <tr><td><b>创建时间：</b></td><td><i>2020/3/30 16:36</i></td></tr>
+    <tr><td><b>更新时间：</b></td><td><i>2020/4/6 16:35</i></td></tr>
+    <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+    </table>
+    </div>
+<h1 id="-">实时调度</h1>
+<h3 id="-">实时系统</h3>
+<ul>
+<li>定义<ul>
+<li>正确性依赖于其时间和功能两方面的一种操作系统</li></ul>
+</li><li>性能指标<ul>
+<li>时间约束的及时性</li><li>速度和平均性能相对不重要</li></ul>
+</li><li>主要特性<ul>
+<li>时间约束和可预测性</li></ul>
+</li></ul>
+<h4 id="-">实时系统的类型</h4>
+<ul>
+<li>强实时系统<ul>
+<li>需要在保证的时间内完成重要的任务，必须完成</li></ul>
+</li><li>弱实时系统<ul>
+<li>要求重要的进程的优先级更高，尽量完成，并非必须</li></ul>
+</li></ul>
+<h3 id="-">任务（工作单元）</h3>
+<p>一次计算，一次文件读取，一次信息传递等等</p>
+<ul>
+<li><p>属性</p>
+<ul>
+<li>取得进展所需要的资源</li><li>定时参数<br><img src="27、实时调度_files/Image.png" alt="9d3e36181201d780613176abf4c5fea4.png"></li></ul>
+</li><li><p>周期任务</p>
+<ul>
+<li>任务有规律地重复</li><li>周期p=inter-release time（0&lt;p）</li><li>执行时间e= 最大执行时间（0&lt;e&lt;p）</li><li>使用率U = e/p</li></ul>
+</li></ul>
+<p><img src="27、实时调度_files/Image [1].png" alt="aed3ca55dadd2b7ba2de11c5dc7f4a13.png"></p>
+<h4 id="-">时限</h4>
+<ul>
+<li>硬时限<ul>
+<li>如果错过最后期限，后果很严重</li><li>必须验证：最差情况也能满足时限</li><li><strong>保证确定性</strong></li></ul>
+</li><li>软时限<ul>
+<li>理想情况下，时限应该被最大满足，如果有时限没有被满足，那么就降低需求</li><li>尽可能满足</li></ul>
+</li></ul>
+<h3 id="-deadline-">表示一个实时系统是否可以满足deadline要求</h3>
+<ul>
+<li>决定实时任务的执行顺序</li><li>静态优先级调度</li><li>动态优先级调度</li></ul>
+<h3 id="-">实时系统中的调度算法</h3>
+<ul>
+<li>RM 速率单调调度<ul>
+<li>最佳静态优先级</li><li>通过周期安排</li><li>周期越短，优先级越高</li><li>执行周期最短的任务</li></ul>
+</li><li>EDF 最早期限调度<ul>
+<li>最佳动态优先级</li><li>通过deadline安排</li><li>deadline越早，优先级越高</li><li>执行deadline最早的任务</li></ul>
+</li></ul>
+
+</body>
+</html>
+

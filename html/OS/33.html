@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>33、信号量的实现</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/4/12 17:19</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/4/12 17:19</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="-">信号量的实现</h1>
+<h3 id="-">使用硬件原语</h3>
+<ul>
+<li>禁用中断</li><li>原子指令</li></ul>
+<h3 id="-">类似锁</h3>
+<p>例如：使用“禁用中断”</p>
+<h3 id="-">一种实现方法</h3>
+<pre><code>class Semaphore{
+  int sem;
+  WaitQueue q;
+}
+
+Semaphore::P(){
+  sem--;
+  if(sem&lt;0){
+    Add this thread t to q;
+    block(t);
+  }
+}
+Semaphore::V(){
+  sem++;
+  if(sem&lt;=0){
+    Remove a thread t form q;
+    wakeup(t);
+  }
+}
+</code></pre><h3 id="-">特点</h3>
+<ul>
+<li>信号量的双用途<ul>
+<li>互斥和条件同步</li><li>但等待条件是独立的互斥</li></ul>
+</li><li>读/开发代码比较困难<ul>
+<li>程序员必须非常精通信号量</li></ul>
+</li><li>容易出错<ul>
+<li>使用的信号量已经被另一个线程占用</li><li>忘记释放信号量</li></ul>
+</li><li>不能处理死锁问题</li></ul>
+
+
+</body>
+</html>

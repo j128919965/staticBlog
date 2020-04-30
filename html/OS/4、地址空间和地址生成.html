@@ -1,0 +1,57 @@
+<html>
+<head>
+  <title>4、地址空间和地址生成</title>
+  <basefont face="微软雅黑" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="YXBJ Windows/601568 (zh-CN, DDL); Windows/10.0.0 (Win64); EDAMVersion=V2;"/>
+  <meta name="content-class" content="yinxiang.markdown"/>
+  <style>
+    body, td {
+      font-family: 微软雅黑;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="590"/>
+<h1>4、地址空间和地址生成</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2020/1/19 20:29</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/2/2 15:13</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>188mkzgr086</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div><span><div style="font-size: 14px; margin: 0; padding: 0; width: 100%;"><h1 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 41px; border-bottom: 3px double #999; color: #000; margin-top: 14px;">地址空间和地址生成</h1>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">地址空间定义</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">物理地址空间</h4>
+硬件支持的地址空间<br/>
+起始地址0,到地址MAXsys</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">逻辑地址空间</h4>
+一个运行的程序所拥有的内存范围<br/>
+起始地址0,到地址MAXprog<br/>
+最终映射到物理地址空间</li>
+</ul>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">地址生成</h3>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">逻辑地址</h4>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="4、地址空间和地址生成_files/Image.png" type="image/png" data-filename="Image.png"/><br/>
+程序代码经过编译后,编译成汇编程序.地址还是在符号中体现(变量名,函数名)</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">汇编程序经过汇编器 , 变成 .o 程序,这些程序的起始地址都是从0开始的,符号会转换为相应的地址,是一个相对从0开始的连续地址空间</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">linker把多个.o程序链接成一个程序,其中不同的.o程序的地址都做了全局的分布.</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">最后放在硬盘中的程序会经过 loader 会把应用程序的地址进行偏移分配</p>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">物理地址</h4>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="4、地址空间和地址生成_files/Image [1].png" type="image/png" data-filename="Image.png"/><br/>
+OS中有一个MMU,MMU中有一块区域表示逻辑地址和物理地址的映射关系</p>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">地址安全检查</h3>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">OS必须确保每个程序可以有效访问的地址空间(起始地址+长度)<br/>
+超出该区域则是不可访问<br/>
+cpu在执行某条指令时,OS会查询一个map来查询这个逻辑地址是否满足区域限制<br/>
+如果不满足,则会抛出一个memory访问异常,让操作系统进行处理</p>
+</div><center style="display:none !important;visibility:collapse !important;height:0 !important;white-space:nowrap;width:100%;overflow:hidden">%23%20%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%92%8C%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%0A%23%23%23%20%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%AE%9A%E4%B9%89%0A*%20%23%23%23%23%20%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A%20%20%20%20%E7%A1%AC%E4%BB%B6%E6%94%AF%E6%8C%81%E7%9A%84%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A%20%20%20%20%E8%B5%B7%E5%A7%8B%E5%9C%B0%E5%9D%800%2C%E5%88%B0%E5%9C%B0%E5%9D%80MAXsys%0A*%20%23%23%23%23%20%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A%20%20%20%20%E4%B8%80%E4%B8%AA%E8%BF%90%E8%A1%8C%E7%9A%84%E7%A8%8B%E5%BA%8F%E6%89%80%E6%8B%A5%E6%9C%89%E7%9A%84%E5%86%85%E5%AD%98%E8%8C%83%E5%9B%B4%0A%20%20%20%20%E8%B5%B7%E5%A7%8B%E5%9C%B0%E5%9D%800%2C%E5%88%B0%E5%9C%B0%E5%9D%80MAXprog%0A%20%20%20%20%E6%9C%80%E7%BB%88%E6%98%A0%E5%B0%84%E5%88%B0%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A***%0A%23%23%23%20%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%0A%0A%23%23%23%23%20%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%0A%0A!%5Bd2b15dfd0e6dce1ab81d1e17c832cb6d.png%5D(en-resource%3A%2F%2Fdatabase%2F1276%3A0)%0A%E7%A8%8B%E5%BA%8F%E4%BB%A3%E7%A0%81%E7%BB%8F%E8%BF%87%E7%BC%96%E8%AF%91%E5%90%8E%2C%E7%BC%96%E8%AF%91%E6%88%90%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F.%E5%9C%B0%E5%9D%80%E8%BF%98%E6%98%AF%E5%9C%A8%E7%AC%A6%E5%8F%B7%E4%B8%AD%E4%BD%93%E7%8E%B0(%E5%8F%98%E9%87%8F%E5%90%8D%2C%E5%87%BD%E6%95%B0%E5%90%8D)%0A%0A%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F%E7%BB%8F%E8%BF%87%E6%B1%87%E7%BC%96%E5%99%A8%20%2C%20%E5%8F%98%E6%88%90%20.o%20%E7%A8%8B%E5%BA%8F%2C%E8%BF%99%E4%BA%9B%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%B5%B7%E5%A7%8B%E5%9C%B0%E5%9D%80%E9%83%BD%E6%98%AF%E4%BB%8E0%E5%BC%80%E5%A7%8B%E7%9A%84%2C%E7%AC%A6%E5%8F%B7%E4%BC%9A%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%9B%B8%E5%BA%94%E7%9A%84%E5%9C%B0%E5%9D%80%2C%E6%98%AF%E4%B8%80%E4%B8%AA%E7%9B%B8%E5%AF%B9%E4%BB%8E0%E5%BC%80%E5%A7%8B%E7%9A%84%E8%BF%9E%E7%BB%AD%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A%0Alinker%E6%8A%8A%E5%A4%9A%E4%B8%AA.o%E7%A8%8B%E5%BA%8F%E9%93%BE%E6%8E%A5%E6%88%90%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%2C%E5%85%B6%E4%B8%AD%E4%B8%8D%E5%90%8C%E7%9A%84.o%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9C%B0%E5%9D%80%E9%83%BD%E5%81%9A%E4%BA%86%E5%85%A8%E5%B1%80%E7%9A%84%E5%88%86%E5%B8%83.%0A%0A%E6%9C%80%E5%90%8E%E6%94%BE%E5%9C%A8%E7%A1%AC%E7%9B%98%E4%B8%AD%E7%9A%84%E7%A8%8B%E5%BA%8F%E4%BC%9A%E7%BB%8F%E8%BF%87%20loader%20%E4%BC%9A%E6%8A%8A%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%9C%B0%E5%9D%80%E8%BF%9B%E8%A1%8C%E5%81%8F%E7%A7%BB%E5%88%86%E9%85%8D%0A%23%23%23%23%20%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%0A!%5Baa577339081399244213e78081f45365.png%5D(en-resource%3A%2F%2Fdatabase%2F1278%3A0)%0AOS%E4%B8%AD%E6%9C%89%E4%B8%80%E4%B8%AAMMU%2CMMU%E4%B8%AD%E6%9C%89%E4%B8%80%E5%9D%97%E5%8C%BA%E5%9F%9F%E8%A1%A8%E7%A4%BA%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E5%92%8C%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%9A%84%E6%98%A0%E5%B0%84%E5%85%B3%E7%B3%BB%0A%0A%23%23%23%20%E5%9C%B0%E5%9D%80%E5%AE%89%E5%85%A8%E6%A3%80%E6%9F%A5%0A%0AOS%E5%BF%85%E9%A1%BB%E7%A1%AE%E4%BF%9D%E6%AF%8F%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%8F%AF%E4%BB%A5%E6%9C%89%E6%95%88%E8%AE%BF%E9%97%AE%E7%9A%84%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4(%E8%B5%B7%E5%A7%8B%E5%9C%B0%E5%9D%80%2B%E9%95%BF%E5%BA%A6)%0A%E8%B6%85%E5%87%BA%E8%AF%A5%E5%8C%BA%E5%9F%9F%E5%88%99%E6%98%AF%E4%B8%8D%E5%8F%AF%E8%AE%BF%E9%97%AE%0Acpu%E5%9C%A8%E6%89%A7%E8%A1%8C%E6%9F%90%E6%9D%A1%E6%8C%87%E4%BB%A4%E6%97%B6%2COS%E4%BC%9A%E6%9F%A5%E8%AF%A2%E4%B8%80%E4%B8%AAmap%E6%9D%A5%E6%9F%A5%E8%AF%A2%E8%BF%99%E4%B8%AA%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E6%98%AF%E5%90%A6%E6%BB%A1%E8%B6%B3%E5%8C%BA%E5%9F%9F%E9%99%90%E5%88%B6%0A%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%BB%A1%E8%B6%B3%2C%E5%88%99%E4%BC%9A%E6%8A%9B%E5%87%BA%E4%B8%80%E4%B8%AAmemory%E8%AE%BF%E9%97%AE%E5%BC%82%E5%B8%B8%2C%E8%AE%A9%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%9B%E8%A1%8C%E5%A4%84%E7%90%86</center></span>
+</div></body></html> 

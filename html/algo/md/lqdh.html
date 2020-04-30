@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>零钱兑换问题（贪心,DP）</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/4/7 21:45</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/4/7 22:53</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="-dp-">零钱兑换问题（贪心,DP）</h1>
+<p><a href="https://leetcode-cn.com/problems/coin-change/">leetcode链接</a></p>
+<blockquote>
+<p>题目描述：<br>给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。</p>
+<p>示例 1:<br>输入: coins = [1, 2, 5], amount = 11<br>输出: 3<br>解释: 11 = 5 + 5 + 1</p>
+<p>示例 2:<br>输入: coins = [2], amount = 3<br>输出: -1<br>说明:<br>你可以认为每种硬币的数量是无限的。</p>
+</blockquote>
+<p>这道题有两种思路，我采用的是贪心的思路。</p>
+<h3 id="-">贪心</h3>
+<p>先把货币排个序。<br>一般情况人在花钱的时候，肯定先用大钞票，没人买100块的东西会用100张一元钞票。<br>从最大的货币开始一次拿完，剩下的部分再从前面少的货币拿。<br>如果拿着拿着发现正好凑齐了，那就看看当前拿的货币数量是不是比记录值小。如果小的话就更新它。<br>比如说这个例子：<br><code>int[] conis = {1,9,10};int amount = 28</code><br>先拿<strong>2张10元</strong>的，剩下<strong>8元</strong>。此时的8元作为新的amount，带着当前的 <strong>数量2</strong> 和 <strong>货币的索引3</strong> 递归调用<br>先拿<strong>0张9元</strong>的，剩下<strong>8元</strong>。此时的8元作为新的amount，带着当前的 <strong>数量2</strong> 和 <strong>货币的索引2</strong> 递归调用<br>先拿<strong>4张2元</strong>的，剩下<strong>0元</strong>。这时候发现拿完了，则更新4+2。<br>返回上一层递归，已经达到0张9元了，继续返回上一层递归。<br>这时候：<br>先拿<strong>1张10元</strong>的，剩下<strong>18元</strong>。此时的18元作为新的amount，带着当前的 <strong>数量1</strong> 和 <strong>货币的索引3</strong> 递归调用<br>先拿<strong>2张9元</strong>的，剩下<strong>0元</strong>。这时候发现拿完了，则更新1+2，发现比原来的值6小，于是把它更新。<br>按这个思路递归调用，就可以计算出来钞票数量的最小值了。</p>
+<pre><code class="lang-java">
+class Solution {
+    //对象的属性，用于记录最小值
+    int ans  = Integer.MAX_VALUE;
+    //驱动
+    public int coinChange(int[] coins, int amount) {
+        //需要先排序
+        Arrays.sort(coins);
+        charge(coins,coins.length-1,amount,0);
+        //如果一直没更新最小值，那就返回-1
+        return ans==Integer.MAX_VALUE?-1:ans;
+    }
+    void charge(int[] coins,int in,int amount,int count){
+        //如果到此时正好凑够了，就更新并返回
+        if(amount==0){
+            ans = Math.min(count,ans);
+            return;
+        }
+        //当遍历到这个地方如果没能在上一步更新，那么就是不可行，返回上一层继续
+        if (in==-1)return;
+        int max_size = amount/coins[in];
+        //如果i+count已经大于当前最小值了，那么接下来的遍历肯定不会比这个小了
+        //直接返回就好了
+        for (int i = max_size; i &gt;= 0&amp;&amp;i+count&lt;=ans; i--) {
+            charge(coins,in-1,amount-i*coins[in],count+i);
+        }
+    }
+}
+</code></pre>
+<blockquote>
+<p><strong>这种解法的思路可以理解为自顶向下</strong></p>
+<p>啥叫「自顶向下」？是从上向下延伸，是从一个规模较大的原问题比如说 in=conis.length-1开始，向下逐渐分解规模，直到amount=0或者in==-1触底，然后逐层返回答案，这就叫「自顶向下」。</p>
+</blockquote>
+<h3 id="dp">DP</h3>
+<blockquote>
+<p>有关dp的问题，这位神仙给出了一个总结，大家可以看看他的文章，写的真的很棒<br><a href="https://leetcode-cn.com/problems/coin-change/solution/dong-tai-gui-hua-tao-lu-xiang-jie-by-wei-lai-bu-ke/">文章链接</a></p>
+</blockquote>
+<p>想求 amount = 11 时的最少硬币数（原问题），如果你知道凑出 amount = 10 的最少硬币数（子问题），你只需要把子问题的答案加一（再选一枚面值为 1 的硬币）就是原问题的答案，因为硬币的数量是没有限制的，不存在相互影响的情况。</p>
+<p>当剩下的钱为0的时候，那么就不需要用货币了。<br>因为是求最小值，所以每次都要初始化为Integer.MAX_VALUE</p>
+<p>另外要避免递归调用的时候太多重复计算，我们用一个数组来把计算过的值缓存起来。</p>
+<pre><code class="lang-java">
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] dict = new int[amount+1];
+        return dp(amount,coins,dict);
+    }
+    int dp(int n,int[] coins,int[] dict){
+        //总金额==0，所需硬币数量为 0
+        if (n==0)
+            return 0;
+        //当目标金额小于 0 时，无解，返回 -1
+        if (n&lt;0){
+            return -1;
+        }
+        if(dict[n]!=0){
+            return dict[n];
+        }
+        int res = Integer.MAX_VALUE;
+        for(int coin:coins){
+            int subproblem = dp(n - coin,coins,dict);
+            if(subproblem==-1)continue;
+            res = Math.min(res,1+subproblem);
+        }
+        dict[n] = res==Integer.MAX_VALUE?-1:res;
+        return dict[n];
+    }
+}
+</code></pre>
+<p>路漫漫其修远兮，提高还有很长的路要走。<br>用羊哥的一句话就是：每天进步一点点，peace！！</p>
+
+
+</body>
+</html>

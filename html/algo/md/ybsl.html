@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>硬币数量（dp）</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+
+
+<body>
+    <div><table>
+        <tr><td><b>创建时间：</b></td><td><i>2020/4/23 19:45</i></td></tr>
+        <tr><td><b>更新时间：</b></td><td><i>2020/4/23 21:15</i></td></tr>
+        <tr><td><b>作者：</b></td><td><i>lzr</i></td>
+        </tr>
+    </table></div>
+    <h1> 硬币问题</h1>
+    <blockquote><p>
+    硬币。给定数量不限的硬币，币值为25分、10分、5分和1分，编写代码计算n分有几种表示法。(结果可能会很大，你需要将结果模上1000000007)<br>
+    示例1:  <br>
+    输入: n = 5<br>
+    输出：2<br>
+    解释: 有两种方式可以凑成总金额:<br>
+    5=5<br>
+    5=1+1+1+1+1<br>
+    示例2:<br>
+    输入: n = 10<br>
+    输出：4<br>
+    解释: 有四种方式可以凑成总金额:<br>
+    10=10<br>
+    10=5+5<br>
+    10=5+1+1+1+1+1<br>
+    10=1+1+1+1+1+1+1+1+1+1</p></blockquote>
+    <p>这道题大家想必一眼就能看出来可以用动态规划做，因为它很明显的可以转化为子问题来求解。那么这道题的问题就在于，状态转移方程怎么求解。</p>
+    <p>先定义dp数组，并且设置基本情况：
+    <pre><code>int[] dp = new int[n+1];
+    //0个硬币时只有一种情况
+    dp[0] = 1;
+    </code></pre></p>
+
+    <p>接下来思考状态转移：<br>
+        当我们有0-4个硬币时，就只有一种方法，全拿一元硬币。<br>
+        5-9个硬币时，比如说6的时候，我们可以把它拆成两部分，<br>
+        5+1，5可以有1+1+1+1+1和5两种方法，而剩下的就只有一种。总共两种解法。</p>
+
+    <p>总共有四种硬币，我们遍历每一种硬币<code>for(int coin:coins)</code>，这样考虑：<br />
+        对于<code>for(int i=1;i<=n;i++>)</code>中的每一个i，我们拿一个这样的硬币coin，那当前剩下的就是i-code，那<code>dp[i] = dp[i] + dp[i-code]</code>。
+    </p>
+
+    <blockquote>
+        <p>
+            coin = 1:<br>
+            前面5种情况数：dp[1,5] = [1,1,1,1,1];<br>
+
+            dp[6] += (dp[6 - coin] => dp[5] => 1);<br>
+            即拿到coin(1)的情况有一种 :<br>
+            coin(1,1,1,1,1) + coin(1);
+
+            coin = 5:<br>
+            前面5种情况数：dp[1,5] = [1,1,1,1,2];<br>
+
+            dp[6] += (dp[6 - coin] => dp[1] => 1);<br>
+            即拿到coin（5）的情况有一种:<br>
+            coin(1) + coin(5);
+        </p>
+    </blockquote>
+
+    最后上代码：
+    <pre>
+        <code>
+class Solution {
+    public int waysToChange(int n) {
+        
+        int[] dp = new int[n + 1];
+        
+        int[] coins = new int[]{1,5,10,25};
+        
+        
+        //刚好可以用一个硬币凑成的情况，是一种情况
+        // while i == coin :
+        //dp[i] = dp[i - coin] => dp[0]
+        dp[0] = 1;
+        
+        /**
+        * dp方程：dp[i] += dp[i - coin];
+        */
+        
+        for(int coin : coins) {
+            for(int i = coin; i <= n; i++) {
+                dp[i] = (dp[i] + dp[i - coin]) % 1000000007;
+            }
+        }
+        
+        return dp[n];
+    }
+}</code>
+    </pre>
+
+</body>
+</html>
+

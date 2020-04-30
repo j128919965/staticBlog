@@ -1,0 +1,111 @@
+<html>
+<head>
+  <title>2、中断、异常和系统调用处理机制</title>
+  <basefont face="微软雅黑" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="YXBJ Windows/601568 (zh-CN, DDL); Windows/10.0.0 (Win64); EDAMVersion=V2;"/>
+  <meta name="content-class" content="yinxiang.markdown"/>
+  <style>
+    body, td {
+      font-family: 微软雅黑;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="598"/>
+<h1>2、中断、异常和系统调用处理机制</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2020/1/18 15:32</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/1/18 23:02</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>188mkzgr086</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div><span><div style="font-size: 14px; margin: 0; padding: 0; width: 100%;"><h1 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 41px; border-bottom: 3px double #999; color: #000; margin-top: 14px;">中断、异常和系统调用处理机制</h1>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">中断</h3>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">硬件设置中断标记【CPU初始化  】</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">将内部、外部事件设置中断标记</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">中断事件的ID<br/>
+发生异常时，记录异常编号+对应地址</li>
+</ul>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">软件（OS）</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">保存当前处理状态</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">中断服务处理程序</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">清除中断标记</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">恢复之前保存的处理状态</li>
+</ul>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">异常</h3>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">硬件：创建异常ID</h4>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">OS:</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">保存现场</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">异常处理</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">杀死产生了异常的程序</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">重新执行异常指令</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<p style="line-height: 160%; box-sizing: content-box; color: #333; margin: 0;">恢复现场</p>
+</li>
+</ul>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">系统调用</h3>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="2、中断、异常和系统调用处理机制_files/Image.png" type="image/png" data-filename="Image.png"/></p>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">程序访问主要是通过高层次的API接口，而不是直接进行系统调用</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">通常情况下，与每个系统调用相关的序号
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">系统调用接口根据这些序号来维护表的索引</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">系统调用接口调用内核态中预期的系统调用
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">并返回系统调用的状态和其他任何返回值</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">用户不需要知道系统调用是如何实现的
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">只需要了解API和了解操作系统将什么作为返回结果</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">操作系统接口的细节大部分都隐藏在API中</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">通过运行程序支持的库来管理（用包含编译器的库来创建函数集）</li>
+</ul>
+</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">状态转换</h3>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">用户态</h4>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">应用程序在执行的过程中cpu处于的一个特权级的状态，优先级特别低，<br/>
+只能受限的访问内存，且不允许访问外围设备，占用cpu的能力被剥夺，cpu资源可以被其他程序获取。</p>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">内核态</h4>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">cpu可以访问内存的所有数据，包括外围设备，例如硬盘，网卡，cpu也可以将自己从一个程序切换到另一个程序。</p>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">状态转换</h4>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">应用程序直接或间接访问系统的系统调用接口<br/>
+触发从用户态转换到内核态，使得控制权从app到OS<br/>
+状态转换是有代价的，成本比函数调用高很多，这也是操作系统为了安全而付出的代价</p>
+<hr style="line-height: 160%; box-sizing: content-box; border-top: 1px solid #eee; margin: 16px 0;"/>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">代价小结</h3>
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">跨越操作系统边界的开销</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">在执行时间的开销上超过程序调用</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">开销：
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">建立中断/异常/系统调用与对应服务<br/>
+例程映射关系和初始化开销</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">建立内核堆栈</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">验证参数</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">内核态映射到用户态的地址空间，更新页面映射权限</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">内核态独立地址空间 TLB</li>
+</ul>
+</li>
+</ul>
+</div><center style="display:none !important;visibility:collapse !important;height:0 !important;white-space:nowrap;width:100%;overflow:hidden">%23%20%E4%B8%AD%E6%96%AD%E3%80%81%E5%BC%82%E5%B8%B8%E5%92%8C%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6%0A%0A%23%23%23%20%E4%B8%AD%E6%96%AD%0A%23%23%23%23%20%E7%A1%AC%E4%BB%B6%E8%AE%BE%E7%BD%AE%E4%B8%AD%E6%96%AD%E6%A0%87%E8%AE%B0%E3%80%90CPU%E5%88%9D%E5%A7%8B%E5%8C%96%20%20%E3%80%91%0A*%20%E5%B0%86%E5%86%85%E9%83%A8%E3%80%81%E5%A4%96%E9%83%A8%E4%BA%8B%E4%BB%B6%E8%AE%BE%E7%BD%AE%E4%B8%AD%E6%96%AD%E6%A0%87%E8%AE%B0%0A*%20%E4%B8%AD%E6%96%AD%E4%BA%8B%E4%BB%B6%E7%9A%84ID%0A%E5%8F%91%E7%94%9F%E5%BC%82%E5%B8%B8%E6%97%B6%EF%BC%8C%E8%AE%B0%E5%BD%95%E5%BC%82%E5%B8%B8%E7%BC%96%E5%8F%B7%2B%E5%AF%B9%E5%BA%94%E5%9C%B0%E5%9D%80%0A%0A%23%23%23%23%20%E8%BD%AF%E4%BB%B6%EF%BC%88OS%EF%BC%89%0A*%20%E4%BF%9D%E5%AD%98%E5%BD%93%E5%89%8D%E5%A4%84%E7%90%86%E7%8A%B6%E6%80%81%0A*%20%E4%B8%AD%E6%96%AD%E6%9C%8D%E5%8A%A1%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F%0A*%20%E6%B8%85%E9%99%A4%E4%B8%AD%E6%96%AD%E6%A0%87%E8%AE%B0%0A*%20%E6%81%A2%E5%A4%8D%E4%B9%8B%E5%89%8D%E4%BF%9D%E5%AD%98%E7%9A%84%E5%A4%84%E7%90%86%E7%8A%B6%E6%80%81%0A%0A***%0A%23%23%23%20%E5%BC%82%E5%B8%B8%0A%23%23%23%23%20%E7%A1%AC%E4%BB%B6%EF%BC%9A%E5%88%9B%E5%BB%BA%E5%BC%82%E5%B8%B8ID%0A%23%23%23%23%20OS%3A%0A*%20%E4%BF%9D%E5%AD%98%E7%8E%B0%E5%9C%BA%0A%0A*%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%20%0A%20%20%20%20*%20%E6%9D%80%E6%AD%BB%E4%BA%A7%E7%94%9F%E4%BA%86%E5%BC%82%E5%B8%B8%E7%9A%84%E7%A8%8B%E5%BA%8F%0A%20%20%20%20*%20%E9%87%8D%E6%96%B0%E6%89%A7%E8%A1%8C%E5%BC%82%E5%B8%B8%E6%8C%87%E4%BB%A4%0A*%20%E6%81%A2%E5%A4%8D%E7%8E%B0%E5%9C%BA%0A%0A***%0A%23%23%23%20%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%0A!%5Bff7da23930d17c511acfdd6ca0e45853.png%5D(en-resource%3A%2F%2Fdatabase%2F961%3A1)%0A%0A%23%23%23%23%20%E7%A8%8B%E5%BA%8F%E8%AE%BF%E9%97%AE%E4%B8%BB%E8%A6%81%E6%98%AF%E9%80%9A%E8%BF%87%E9%AB%98%E5%B1%82%E6%AC%A1%E7%9A%84API%E6%8E%A5%E5%8F%A3%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E7%9B%B4%E6%8E%A5%E8%BF%9B%E8%A1%8C%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%0A%0A*%20%E9%80%9A%E5%B8%B8%E6%83%85%E5%86%B5%E4%B8%8B%EF%BC%8C%E4%B8%8E%E6%AF%8F%E4%B8%AA%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E7%9B%B8%E5%85%B3%E7%9A%84%E5%BA%8F%E5%8F%B7%0A%20%20%20%20*%20%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E6%8E%A5%E5%8F%A3%E6%A0%B9%E6%8D%AE%E8%BF%99%E4%BA%9B%E5%BA%8F%E5%8F%B7%E6%9D%A5%E7%BB%B4%E6%8A%A4%E8%A1%A8%E7%9A%84%E7%B4%A2%E5%BC%95%0A*%20%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8%E5%86%85%E6%A0%B8%E6%80%81%E4%B8%AD%E9%A2%84%E6%9C%9F%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%0A%20%20%20%20*%20%E5%B9%B6%E8%BF%94%E5%9B%9E%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E7%9A%84%E7%8A%B6%E6%80%81%E5%92%8C%E5%85%B6%E4%BB%96%E4%BB%BB%E4%BD%95%E8%BF%94%E5%9B%9E%E5%80%BC%0A*%20%E7%94%A8%E6%88%B7%E4%B8%8D%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84%0A%20%20%20%20*%20%E5%8F%AA%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3API%E5%92%8C%E4%BA%86%E8%A7%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%B0%86%E4%BB%80%E4%B9%88%E4%BD%9C%E4%B8%BA%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%0A%20%20%20%20*%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%8E%A5%E5%8F%A3%E7%9A%84%E7%BB%86%E8%8A%82%E5%A4%A7%E9%83%A8%E5%88%86%E9%83%BD%E9%9A%90%E8%97%8F%E5%9C%A8API%E4%B8%AD%0A%20%20%20%20*%20%E9%80%9A%E8%BF%87%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%94%AF%E6%8C%81%E7%9A%84%E5%BA%93%E6%9D%A5%E7%AE%A1%E7%90%86%EF%BC%88%E7%94%A8%E5%8C%85%E5%90%AB%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%BA%93%E6%9D%A5%E5%88%9B%E5%BB%BA%E5%87%BD%E6%95%B0%E9%9B%86%EF%BC%89%0A%0A%23%23%23%20%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%0A%0A%23%23%23%23%20%E7%94%A8%E6%88%B7%E6%80%81%0A%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%9C%A8%E6%89%A7%E8%A1%8C%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%ADcpu%E5%A4%84%E4%BA%8E%E7%9A%84%E4%B8%80%E4%B8%AA%E7%89%B9%E6%9D%83%E7%BA%A7%E7%9A%84%E7%8A%B6%E6%80%81%EF%BC%8C%E4%BC%98%E5%85%88%E7%BA%A7%E7%89%B9%E5%88%AB%E4%BD%8E%EF%BC%8C%0A%E5%8F%AA%E8%83%BD%E5%8F%97%E9%99%90%E7%9A%84%E8%AE%BF%E9%97%AE%E5%86%85%E5%AD%98%EF%BC%8C%E4%B8%94%E4%B8%8D%E5%85%81%E8%AE%B8%E8%AE%BF%E9%97%AE%E5%A4%96%E5%9B%B4%E8%AE%BE%E5%A4%87%EF%BC%8C%E5%8D%A0%E7%94%A8cpu%E7%9A%84%E8%83%BD%E5%8A%9B%E8%A2%AB%E5%89%A5%E5%A4%BA%EF%BC%8Ccpu%E8%B5%84%E6%BA%90%E5%8F%AF%E4%BB%A5%E8%A2%AB%E5%85%B6%E4%BB%96%E7%A8%8B%E5%BA%8F%E8%8E%B7%E5%8F%96%E3%80%82%0A%23%23%23%23%20%E5%86%85%E6%A0%B8%E6%80%81%0Acpu%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE%E5%86%85%E5%AD%98%E7%9A%84%E6%89%80%E6%9C%89%E6%95%B0%E6%8D%AE%EF%BC%8C%E5%8C%85%E6%8B%AC%E5%A4%96%E5%9B%B4%E8%AE%BE%E5%A4%87%EF%BC%8C%E4%BE%8B%E5%A6%82%E7%A1%AC%E7%9B%98%EF%BC%8C%E7%BD%91%E5%8D%A1%EF%BC%8Ccpu%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%B0%86%E8%87%AA%E5%B7%B1%E4%BB%8E%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%88%87%E6%8D%A2%E5%88%B0%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E3%80%82%0A%0A%23%23%23%23%20%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%0A%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9B%B4%E6%8E%A5%E6%88%96%E9%97%B4%E6%8E%A5%E8%AE%BF%E9%97%AE%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E6%8E%A5%E5%8F%A3%0A%E8%A7%A6%E5%8F%91%E4%BB%8E%E7%94%A8%E6%88%B7%E6%80%81%E8%BD%AC%E6%8D%A2%E5%88%B0%E5%86%85%E6%A0%B8%E6%80%81%EF%BC%8C%E4%BD%BF%E5%BE%97%E6%8E%A7%E5%88%B6%E6%9D%83%E4%BB%8Eapp%E5%88%B0OS%0A%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2%E6%98%AF%E6%9C%89%E4%BB%A3%E4%BB%B7%E7%9A%84%EF%BC%8C%E6%88%90%E6%9C%AC%E6%AF%94%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E9%AB%98%E5%BE%88%E5%A4%9A%EF%BC%8C%E8%BF%99%E4%B9%9F%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%BA%E4%BA%86%E5%AE%89%E5%85%A8%E8%80%8C%E4%BB%98%E5%87%BA%E7%9A%84%E4%BB%A3%E4%BB%B7%0A***%0A%23%23%23%20%E4%BB%A3%E4%BB%B7%E5%B0%8F%E7%BB%93%0A%23%23%23%23%20%E8%B7%A8%E8%B6%8A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BE%B9%E7%95%8C%E7%9A%84%E5%BC%80%E9%94%80%0A*%20%E5%9C%A8%E6%89%A7%E8%A1%8C%E6%97%B6%E9%97%B4%E7%9A%84%E5%BC%80%E9%94%80%E4%B8%8A%E8%B6%85%E8%BF%87%E7%A8%8B%E5%BA%8F%E8%B0%83%E7%94%A8%0A*%20%E5%BC%80%E9%94%80%EF%BC%9A%0A%20%20%20%20*%20%E5%BB%BA%E7%AB%8B%E4%B8%AD%E6%96%AD%2F%E5%BC%82%E5%B8%B8%2F%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E4%B8%8E%E5%AF%B9%E5%BA%94%E6%9C%8D%E5%8A%A1%0A%20%20%20%20%E4%BE%8B%E7%A8%8B%E6%98%A0%E5%B0%84%E5%85%B3%E7%B3%BB%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E5%BC%80%E9%94%80%0A%20%20%20%20*%20%E5%BB%BA%E7%AB%8B%E5%86%85%E6%A0%B8%E5%A0%86%E6%A0%88%0A%20%20%20%20*%20%E9%AA%8C%E8%AF%81%E5%8F%82%E6%95%B0%0A%20%20%20%20*%20%E5%86%85%E6%A0%B8%E6%80%81%E6%98%A0%E5%B0%84%E5%88%B0%E7%94%A8%E6%88%B7%E6%80%81%E7%9A%84%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%8C%E6%9B%B4%E6%96%B0%E9%A1%B5%E9%9D%A2%E6%98%A0%E5%B0%84%E6%9D%83%E9%99%90%0A%20%20%20%20*%20%E5%86%85%E6%A0%B8%E6%80%81%E7%8B%AC%E7%AB%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%20TLB%20</center></span>
+</div></body></html> 

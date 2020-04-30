@@ -1,0 +1,95 @@
+<html>
+<head>
+  <title>16、进程的定义、组成和特点</title>
+  <basefont face="微软雅黑" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="YXBJ Windows/601568 (zh-CN, DDL); Windows/10.0.0 (Win64); EDAMVersion=V2;"/>
+  <meta name="content-class" content="yinxiang.markdown"/>
+  <style>
+    body, td {
+      font-family: 微软雅黑;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="544"/>
+<h1>16、进程的定义、组成和特点</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2020/3/15 16:58</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/3/16 15:35</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>188mkzgr086</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div><span><div style="font-size: 14px; margin: 0; padding: 0; width: 100%;"><h1 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 41px; border-bottom: 3px double #999; color: #000; margin-top: 14px;">进程的定义、组成和特点</h1>
+<ol style="line-height: 160%; box-sizing: content-box; display: block; padding-left: 30px; margin: 6px 0 10px; color: #333; list-style-type: decimal;">
+<li style="line-height: 160%; box-sizing: content-box;">
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">进程（process）描述</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box;">
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">进程状态（state）</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box;">
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">线程（thread）</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box;">
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">进程间通信（inter-process communication）</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box;">
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">进程互斥与同步</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box;">
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">死锁（deadlock）</p>
+</li>
+<li style="line-height: 160%; box-sizing: content-box;">
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">进程描述</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">进程定义</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">进程的组成</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">进程的特点</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">进程控制结构</li>
+</ul>
+</li>
+</ol>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">定义：</h3>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">一个具有一定独立功能的程序在一个数据集合上的一次动态执行过程</p>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">组成：</h3>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">一个进程应该包括：</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">程序的代码；</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">程序处理的数据</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">程序计数器中的值，执行下一条运行的指令</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">一组通用的寄存器的当前值，堆、栈</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">一组系统资源（如打开的文件）</li>
+</ul>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">总之，进程包含了正在运行的一个程序的所有状态信息</p>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">进程与程序的联系</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">程序时产生进程的基础</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">程序的每次运行构成不同的进程</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">进程时程序功能的体现</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">通过多次执行，一个程序可对应多个进程；通过调用关系，一个进程可包括多个程序。</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">进程和程序的区别</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">进程是动态的，程序是静态的；程序是有序代码的集合；进程是程序的执行，进程有核心态/用户态</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">进程是暂时的，程序是永久的；进程是一个状态变化的过程，程序可长久保存</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">进程与程序的组成不同：进程的组成包括程序、数据和进程控制块（即进程状态信息）</li>
+</ul>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="16、进程的定义、组成和特点_files/Image.png" type="image/png" data-filename="Image.png"/></p>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">进程的特点</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">动态性：可动态创建、结束</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">并发性：进程可以被独立调度并占用处理及运行：并发并行</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">独立性：不同进程的工作互不影响</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">制约性：因访问共享数据/资源或进程间同步而产生制约</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">程序 = 算法+数据结构</h3>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">描述进程的数据结构：进程控制块<br/>
+（Process control block，PCB）<br/>
+操作系统为每一个进程都维护了一个pcb，用来保存与该进程有关的各种状态信息</p>
+</div><center style="display:none !important;visibility:collapse !important;height:0 !important;white-space:nowrap;width:100%;overflow:hidden">%23%20%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%9A%E4%B9%89%E3%80%81%E7%BB%84%E6%88%90%E5%92%8C%E7%89%B9%E7%82%B9%0A%0A1.%20%E8%BF%9B%E7%A8%8B%EF%BC%88process%EF%BC%89%E6%8F%8F%E8%BF%B0%0A2.%20%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%EF%BC%88state%EF%BC%89%0A3.%20%E7%BA%BF%E7%A8%8B%EF%BC%88thread%EF%BC%89%0A4.%20%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%88inter-process%20communication%EF%BC%89%0A5.%20%E8%BF%9B%E7%A8%8B%E4%BA%92%E6%96%A5%E4%B8%8E%E5%90%8C%E6%AD%A5%0A6.%20%E6%AD%BB%E9%94%81%EF%BC%88deadlock%EF%BC%89%0A%0A1.%20%E8%BF%9B%E7%A8%8B%E6%8F%8F%E8%BF%B0%0A%20%20%20%20*%20%E8%BF%9B%E7%A8%8B%E5%AE%9A%E4%B9%89%0A%20%20%20%20*%20%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%BB%84%E6%88%90%0A%20%20%20%20*%20%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%89%B9%E7%82%B9%0A%20%20%20%20*%20%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84%0A%0A%23%23%23%20%E5%AE%9A%E4%B9%89%EF%BC%9A%0A%E4%B8%80%E4%B8%AA%E5%85%B7%E6%9C%89%E4%B8%80%E5%AE%9A%E7%8B%AC%E7%AB%8B%E5%8A%9F%E8%83%BD%E7%9A%84%E7%A8%8B%E5%BA%8F%E5%9C%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88%E4%B8%8A%E7%9A%84%E4%B8%80%E6%AC%A1%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%0A%0A%23%23%23%20%E7%BB%84%E6%88%90%EF%BC%9A%0A%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%E5%BA%94%E8%AF%A5%E5%8C%85%E6%8B%AC%EF%BC%9A%0A%0A*%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%BB%A3%E7%A0%81%EF%BC%9B%0A*%20%E7%A8%8B%E5%BA%8F%E5%A4%84%E7%90%86%E7%9A%84%E6%95%B0%E6%8D%AE%0A*%20%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8%E4%B8%AD%E7%9A%84%E5%80%BC%EF%BC%8C%E6%89%A7%E8%A1%8C%E4%B8%8B%E4%B8%80%E6%9D%A1%E8%BF%90%E8%A1%8C%E7%9A%84%E6%8C%87%E4%BB%A4%0A*%20%E4%B8%80%E7%BB%84%E9%80%9A%E7%94%A8%E7%9A%84%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84%E5%BD%93%E5%89%8D%E5%80%BC%EF%BC%8C%E5%A0%86%E3%80%81%E6%A0%88%0A*%20%E4%B8%80%E7%BB%84%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%EF%BC%88%E5%A6%82%E6%89%93%E5%BC%80%E7%9A%84%E6%96%87%E4%BB%B6%EF%BC%89%0A%0A%E6%80%BB%E4%B9%8B%EF%BC%8C%E8%BF%9B%E7%A8%8B%E5%8C%85%E5%90%AB%E4%BA%86%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%80%E6%9C%89%E7%8A%B6%E6%80%81%E4%BF%A1%E6%81%AF%0A%0A%23%23%23%20%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%81%94%E7%B3%BB%0A*%20%E7%A8%8B%E5%BA%8F%E6%97%B6%E4%BA%A7%E7%94%9F%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%A1%80%0A*%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%AF%8F%E6%AC%A1%E8%BF%90%E8%A1%8C%E6%9E%84%E6%88%90%E4%B8%8D%E5%90%8C%E7%9A%84%E8%BF%9B%E7%A8%8B%0A*%20%E8%BF%9B%E7%A8%8B%E6%97%B6%E7%A8%8B%E5%BA%8F%E5%8A%9F%E8%83%BD%E7%9A%84%E4%BD%93%E7%8E%B0%0A*%20%E9%80%9A%E8%BF%87%E5%A4%9A%E6%AC%A1%E6%89%A7%E8%A1%8C%EF%BC%8C%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%8F%AF%E5%AF%B9%E5%BA%94%E5%A4%9A%E4%B8%AA%E8%BF%9B%E7%A8%8B%EF%BC%9B%E9%80%9A%E8%BF%87%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB%EF%BC%8C%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%E5%8F%AF%E5%8C%85%E6%8B%AC%E5%A4%9A%E4%B8%AA%E7%A8%8B%E5%BA%8F%E3%80%82%0A%0A%23%23%23%20%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8C%BA%E5%88%AB%0A*%20%E8%BF%9B%E7%A8%8B%E6%98%AF%E5%8A%A8%E6%80%81%E7%9A%84%EF%BC%8C%E7%A8%8B%E5%BA%8F%E6%98%AF%E9%9D%99%E6%80%81%E7%9A%84%EF%BC%9B%E7%A8%8B%E5%BA%8F%E6%98%AF%E6%9C%89%E5%BA%8F%E4%BB%A3%E7%A0%81%E7%9A%84%E9%9B%86%E5%90%88%EF%BC%9B%E8%BF%9B%E7%A8%8B%E6%98%AF%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%A7%E8%A1%8C%EF%BC%8C%E8%BF%9B%E7%A8%8B%E6%9C%89%E6%A0%B8%E5%BF%83%E6%80%81%2F%E7%94%A8%E6%88%B7%E6%80%81%0A*%20%E8%BF%9B%E7%A8%8B%E6%98%AF%E6%9A%82%E6%97%B6%E7%9A%84%EF%BC%8C%E7%A8%8B%E5%BA%8F%E6%98%AF%E6%B0%B8%E4%B9%85%E7%9A%84%EF%BC%9B%E8%BF%9B%E7%A8%8B%E6%98%AF%E4%B8%80%E4%B8%AA%E7%8A%B6%E6%80%81%E5%8F%98%E5%8C%96%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%8C%E7%A8%8B%E5%BA%8F%E5%8F%AF%E9%95%BF%E4%B9%85%E4%BF%9D%E5%AD%98%0A*%20%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BB%84%E6%88%90%E4%B8%8D%E5%90%8C%EF%BC%9A%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%BB%84%E6%88%90%E5%8C%85%E6%8B%AC%E7%A8%8B%E5%BA%8F%E3%80%81%E6%95%B0%E6%8D%AE%E5%92%8C%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6%E5%9D%97%EF%BC%88%E5%8D%B3%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E4%BF%A1%E6%81%AF%EF%BC%89%0A%0A!%5Bcc9afe24f8919e001ca534d49eaa31cf.png%5D(en-resource%3A%2F%2Fdatabase%2F2982%3A1)%0A%0A%23%23%23%20%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%89%B9%E7%82%B9%0A%0A*%20%E5%8A%A8%E6%80%81%E6%80%A7%EF%BC%9A%E5%8F%AF%E5%8A%A8%E6%80%81%E5%88%9B%E5%BB%BA%E3%80%81%E7%BB%93%E6%9D%9F%0A*%20%E5%B9%B6%E5%8F%91%E6%80%A7%EF%BC%9A%E8%BF%9B%E7%A8%8B%E5%8F%AF%E4%BB%A5%E8%A2%AB%E7%8B%AC%E7%AB%8B%E8%B0%83%E5%BA%A6%E5%B9%B6%E5%8D%A0%E7%94%A8%E5%A4%84%E7%90%86%E5%8F%8A%E8%BF%90%E8%A1%8C%EF%BC%9A%E5%B9%B6%E5%8F%91%E5%B9%B6%E8%A1%8C%0A*%20%E7%8B%AC%E7%AB%8B%E6%80%A7%EF%BC%9A%E4%B8%8D%E5%90%8C%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%B7%A5%E4%BD%9C%E4%BA%92%E4%B8%8D%E5%BD%B1%E5%93%8D%0A*%20%E5%88%B6%E7%BA%A6%E6%80%A7%EF%BC%9A%E5%9B%A0%E8%AE%BF%E9%97%AE%E5%85%B1%E4%BA%AB%E6%95%B0%E6%8D%AE%2F%E8%B5%84%E6%BA%90%E6%88%96%E8%BF%9B%E7%A8%8B%E9%97%B4%E5%90%8C%E6%AD%A5%E8%80%8C%E4%BA%A7%E7%94%9F%E5%88%B6%E7%BA%A6%0A%0A%23%23%23%20%E7%A8%8B%E5%BA%8F%20%3D%20%E7%AE%97%E6%B3%95%2B%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%0A%E6%8F%8F%E8%BF%B0%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6%E5%9D%97%0A%EF%BC%88Process%20control%20block%EF%BC%8CPCB%EF%BC%89%0A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%BA%E6%AF%8F%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%E9%83%BD%E7%BB%B4%E6%8A%A4%E4%BA%86%E4%B8%80%E4%B8%AApcb%EF%BC%8C%E7%94%A8%E6%9D%A5%E4%BF%9D%E5%AD%98%E4%B8%8E%E8%AF%A5%E8%BF%9B%E7%A8%8B%E6%9C%89%E5%85%B3%E7%9A%84%E5%90%84%E7%A7%8D%E7%8A%B6%E6%80%81%E4%BF%A1%E6%81%AF%0A%0A</center></span>
+</div></body></html> 

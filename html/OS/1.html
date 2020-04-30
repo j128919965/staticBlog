@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>1</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="../css/md.css" rel="stylesheet" type="text/css">
+    <!-- <link href="../css/md2.css" rel="stylesheet" type="text/css"> -->
+    </style>
+</head>
+
+<body>
+    <div>
+        <table>
+          <tr>
+            <td><b>创建时间：</b></td>
+            <td><i>2020/1/17 20:36</i></td>
+          </tr>
+          <tr>
+            <td><b>更新时间：</b></td>
+            <td><i>2020/1/18 22:58</i></td>
+          </tr>
+          <tr>
+            <td><b>作者：</b></td>
+            <td><i>lzr</i></td>
+          </tr>
+        </table>
+      </div>
+    <h1 id="-">操作系统的启动</h1>
+    <p>计算机启动后，最基本的三个部分
+        <code>cpu ,内存, io</code><br><code>os</code>存放于<code>disk</code>中<br><code>BIOS</code>：检查外设，加载相应的软件<br><code>Bootloader</code>
+        ：加载OS<br><img src="database/1_1.png" alt="pic 1"></p>
+    <hr>
+    <h3 id="-">加电后的操作：</h3>
+    <h4 id="1-">1、自检</h4>
+    <p>（BIOS）检查显卡驱动，键盘鼠标，（初始化检查）</p>
+    <h4 id="2-bootloader-">2、将Bootloader从硬盘加载到内存中去</h4>
+    <p><code>Bootloader</code> 一般放在硬盘的第一个主引导扇区<br><code>Bootloader</code> 再将<code>OS</code>加载到内存中</p>
+    <blockquote>
+        <p>例：在x86中，bootloader将会被放在内存中的0x7c00连续向上512个字节<br>（如图所示）<br><img src="database/1_2.png" alt="pic 2"></p></p>
+    </blockquote>
+    <h4 id="3-os">3、加载OS</h4>
+    <p><code>Bootloader</code> 将操作系统的代码和数据从磁盘加载到内存中<br>将cpu的控制权交给OS，实际上是跳转到操作系统的起始地址</p>
+    <hr>
+    <h3 id="-">操作系统与设备和程序交互</h3>
+    <h4 id="-">定义</h4>
+    <h5 id="-">系统调用（来源于应用程序）：</h5>
+    <p>应用程序主动向操作系统发出服务请求</p>
+    <h5 id="-">异常（来源于不良的应用程序）：</h5>
+    <p>非法指令或其他坏的处理状态（如 内存出错）</p>
+    <h5 id="-">中断（来源于外设）：</h5>
+    <p>来自不同的硬件设备的计时器和网络的中断</p>
+    <hr>
+    <h3 id="-">为什么应用程序不能直接访问外设？</h3>
+    <h4 id="1-">1、在计算机系统中，内核是被信任的第三方</h4>
+    <p>操作系统是一个特殊的软件，他和应用程序最大的不同在于拥有对整个计算机系统的控制权，是一个可信任的软件。应用程序不可信任，操作系统可以提供一个安全的服务。应用程序直接访问外设，很容易造成整个计算机系统的崩溃</p>
+    <h4 id="2-">2、可以给上层应用提供简单一致的接口</h4>
+    <p>可以使得上层应用不需要关心底下这些外设的不同的细节，来针对不同的外设实现不一样的细节，这样会开发效率非常低。操作系统可以屏蔽底层外设的复杂性和差异性，给上层提供一个很简单的接口，让应用程序可以更加通用和可移植</p>
+    <hr>
+    <h3 id="-">中断，异常，系统调用之间有什么特点和差异</h3>
+    <p><img src="database/1_3.png" alt="pic 3"></p>
+    <h4 id="1-">1、源头不同</h4>
+    <ul>
+        <li>中断：外设</li>
+        <li>异常：应用程序意想不到的行为</li>
+        <li>系统调用：应用程序请求操作提供服务</li>
+    </ul>
+    <h4 id="2-">2、处理时间</h4>
+    <ul>
+        <li>中断：异步</li>
+        <li>异常：同步</li>
+        <li>系统调用：异步或同步（发出请求：同步 返回点：都有可能）</li>
+    </ul>
+    <h4 id="3-">3、响应</h4>
+    <ul>
+        <li>中断：打断应用程序的执行，持续，对应用程序是透明的</li>
+        <li>异常：杀死或重新执行指令，想不到的应用程序指令</li>
+        <li>系统调用：等待和持续</li>
+    </ul>
+
+</body>
+
+</html>

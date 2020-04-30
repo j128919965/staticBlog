@@ -1,0 +1,86 @@
+<html>
+<head>
+  <title>8、非连续内存分配： 分页</title>
+  <basefont face="微软雅黑" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="YXBJ Windows/601568 (zh-CN, DDL); Windows/10.0.0 (Win64); EDAMVersion=V2;"/>
+  <meta name="content-class" content="yinxiang.markdown"/>
+  <style>
+    body, td {
+      font-family: 微软雅黑;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="582"/>
+<h1>8、非连续内存分配： 分页</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2020/2/17 14:52</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/2/17 15:22</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>188mkzgr086</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div><span><div style="font-size: 14px; margin: 0; padding: 0; width: 100%;"><h1 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 41px; border-bottom: 3px double #999; color: #000; margin-top: 14px;">非连续内存分配： 分页</h1>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">分页</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分页地址方案</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">页寻址方案</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">分段和分页的主要区别：</h3>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">段的尺寸在分段机制里是可变的，而页帧或页的大小是不变的</p>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">划分物理内存至固定大小的帧</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">大小是2的幂，e.g. 512,1024</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">逻辑的页和物理的页大小是一样的</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">页帧（frame）物理页</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">页（page）是逻辑页</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">建立方案，转换逻辑地址为物理地址（pages to frames）</h4>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">MMU/TLB</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">页表</li>
+</ul>
+</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">帧</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">物理内存被分割为大小相等的帧</li>
+</ul>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">一个内存物理地址是一个二元组（f,o）<br/>
+f 帧号（F 位，共有 2^F 个帧）<br/>
+o 帧内偏移（S位，每帧有2^S个字节）<br/>
+物理地址=(2^S) * f + o</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="8、非连续内存分配： 分页_files/Image.png" type="image/png" data-filename="Image.png"/><img src="8、非连续内存分配： 分页_files/Image [1].png" type="image/png" data-filename="Image.png"/></p>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">页</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">一个程序的逻辑地址空间被分割为大小相等的页
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">页内偏移大小=帧内偏移大小</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">页号大小&lt;&gt;帧号大小</li>
+</ul>
+</li>
+</ul>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">一个逻辑地址是一个二元组（p,o）<br/>
+p 页号（P 位，共有 2^P 个页）<br/>
+o 页内偏移（S位，每页有2^S个字节）<br/>
+虚拟地址=(2^S) * p + o</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="8、非连续内存分配： 分页_files/Image [2].png" type="image/png" data-filename="Image.png"/></p>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">和分段机制不一样的地方</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">每页/帧大小是固定的</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">一般逻辑地址空间大于物理地址空间（不是所有的页都有对应的帧，可能用到虚拟内存）</li>
+</ul>
+</div><center style="display:none !important;visibility:collapse !important;height:0 !important;white-space:nowrap;width:100%;overflow:hidden">%23%20%E9%9D%9E%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%EF%BC%9A%20%E5%88%86%E9%A1%B5%0A%0A%23%23%23%20%E5%88%86%E9%A1%B5%0A*%20%E5%88%86%E9%A1%B5%E5%9C%B0%E5%9D%80%E6%96%B9%E6%A1%88%0A*%20%E9%A1%B5%E5%AF%BB%E5%9D%80%E6%96%B9%E6%A1%88%0A%0A%23%23%23%20%E5%88%86%E6%AE%B5%E5%92%8C%E5%88%86%E9%A1%B5%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8C%BA%E5%88%AB%EF%BC%9A%0A%E6%AE%B5%E7%9A%84%E5%B0%BA%E5%AF%B8%E5%9C%A8%E5%88%86%E6%AE%B5%E6%9C%BA%E5%88%B6%E9%87%8C%E6%98%AF%E5%8F%AF%E5%8F%98%E7%9A%84%EF%BC%8C%E8%80%8C%E9%A1%B5%E5%B8%A7%E6%88%96%E9%A1%B5%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%98%AF%E4%B8%8D%E5%8F%98%E7%9A%84%20%0A%0A*%20%23%23%23%23%20%E5%88%92%E5%88%86%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E8%87%B3%E5%9B%BA%E5%AE%9A%E5%A4%A7%E5%B0%8F%E7%9A%84%E5%B8%A7%0A%20%20%20%20*%20%E5%A4%A7%E5%B0%8F%E6%98%AF2%E7%9A%84%E5%B9%82%EF%BC%8Ce.g.%20512%2C1024%0A*%20%23%23%23%23%20%E9%80%BB%E8%BE%91%E7%9A%84%E9%A1%B5%E5%92%8C%E7%89%A9%E7%90%86%E7%9A%84%E9%A1%B5%E5%A4%A7%E5%B0%8F%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%0A%20%20%20%20*%20%E9%A1%B5%E5%B8%A7%EF%BC%88frame%EF%BC%89%E7%89%A9%E7%90%86%E9%A1%B5%0A%20%20%20%20*%20%E9%A1%B5%EF%BC%88page%EF%BC%89%E6%98%AF%E9%80%BB%E8%BE%91%E9%A1%B5%0A*%20%23%23%23%23%20%E5%BB%BA%E7%AB%8B%E6%96%B9%E6%A1%88%EF%BC%8C%E8%BD%AC%E6%8D%A2%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E4%B8%BA%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%EF%BC%88pages%20to%20frames%EF%BC%89%0A%20%20%20%20*%20MMU%2FTLB%0A%20%20%20%20*%20%E9%A1%B5%E8%A1%A8%0A%0A%0A%23%23%23%20%E5%B8%A7%0A*%20%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E8%A2%AB%E5%88%86%E5%89%B2%E4%B8%BA%E5%A4%A7%E5%B0%8F%E7%9B%B8%E7%AD%89%E7%9A%84%E5%B8%A7%0A%0A%0A%20%E4%B8%80%E4%B8%AA%E5%86%85%E5%AD%98%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E6%98%AF%E4%B8%80%E4%B8%AA%E4%BA%8C%E5%85%83%E7%BB%84%EF%BC%88f%2Co%EF%BC%89%0A%20f%20%E5%B8%A7%E5%8F%B7%EF%BC%88F%20%E4%BD%8D%EF%BC%8C%E5%85%B1%E6%9C%89%202%5EF%20%E4%B8%AA%E5%B8%A7%EF%BC%89%0A%20o%20%E5%B8%A7%E5%86%85%E5%81%8F%E7%A7%BB%EF%BC%88S%E4%BD%8D%EF%BC%8C%E6%AF%8F%E5%B8%A7%E6%9C%892%5ES%E4%B8%AA%E5%AD%97%E8%8A%82%EF%BC%89%0A%20%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%3D(2%5ES)%20*%20f%20%2B%20o%0A%20%0A%20!%5Bf268fd2b6aee443def9b417292d59051.png%5D(en-resource%3A%2F%2Fdatabase%2F1810%3A0)!%5B5965bfafc795795953178dcf7f01c45e.png%5D(en-resource%3A%2F%2Fdatabase%2F1812%3A0)%0A%20%0A%20%23%23%23%20%E9%A1%B5%0A*%20%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E7%9A%84%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E8%A2%AB%E5%88%86%E5%89%B2%E4%B8%BA%E5%A4%A7%E5%B0%8F%E7%9B%B8%E7%AD%89%E7%9A%84%E9%A1%B5%0A%20%20%20%20*%20%E9%A1%B5%E5%86%85%E5%81%8F%E7%A7%BB%E5%A4%A7%E5%B0%8F%3D%E5%B8%A7%E5%86%85%E5%81%8F%E7%A7%BB%E5%A4%A7%E5%B0%8F%0A%20%20%20%20*%20%E9%A1%B5%E5%8F%B7%E5%A4%A7%E5%B0%8F%3C%3E%E5%B8%A7%E5%8F%B7%E5%A4%A7%E5%B0%8F%0A%0A%0A%20%E4%B8%80%E4%B8%AA%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E6%98%AF%E4%B8%80%E4%B8%AA%E4%BA%8C%E5%85%83%E7%BB%84%EF%BC%88p%2Co%EF%BC%89%0A%20p%20%E9%A1%B5%E5%8F%B7%EF%BC%88P%20%E4%BD%8D%EF%BC%8C%E5%85%B1%E6%9C%89%202%5EP%20%E4%B8%AA%E9%A1%B5%EF%BC%89%0A%20o%20%E9%A1%B5%E5%86%85%E5%81%8F%E7%A7%BB%EF%BC%88S%E4%BD%8D%EF%BC%8C%E6%AF%8F%E9%A1%B5%E6%9C%892%5ES%E4%B8%AA%E5%AD%97%E8%8A%82%EF%BC%89%0A%20%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%3D(2%5ES)%20*%20p%20%2B%20o%0A%20%0A%20!%5B20b8cf7fa106222663ce6d8d46b54ddb.png%5D(en-resource%3A%2F%2Fdatabase%2F1814%3A0)%0A%20%0A%20%23%23%23%20%E5%92%8C%E5%88%86%E6%AE%B5%E6%9C%BA%E5%88%B6%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%E5%9C%B0%E6%96%B9%0A%20*%20%E6%AF%8F%E9%A1%B5%2F%E5%B8%A7%E5%A4%A7%E5%B0%8F%E6%98%AF%E5%9B%BA%E5%AE%9A%E7%9A%84%0A%20*%20%E4%B8%80%E8%88%AC%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%A4%A7%E4%BA%8E%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E4%B8%8D%E6%98%AF%E6%89%80%E6%9C%89%E7%9A%84%E9%A1%B5%E9%83%BD%E6%9C%89%E5%AF%B9%E5%BA%94%E7%9A%84%E5%B8%A7%EF%BC%8C%E5%8F%AF%E8%83%BD%E7%94%A8%E5%88%B0%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%EF%BC%89</center></span>
+</div></body></html> 

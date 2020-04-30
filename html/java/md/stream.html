@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>java8 stream的使用</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/4/9 19:11</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/4/9 22:04</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+<h1 id="java8-stream-">java8 stream的使用</h1>
+<p>(部分代码参考菜鸟教程)</p>
+<h2 id="-plmm-">蔡辑追plmm班长的故事</h2>
+<p>有一天，刚刚学完java的蔡辑同学遇到了他的plmm班长正在愁眉苦脸，一问才知道，原来他的班长现在遇到了难题：</p>
+<p>班长手上有一张名单，名单上记录着一个年级的同学的班级，姓名和成绩。老师让他把每个班同学都单独分组，而且还要用成绩来排序。这可难坏了用Excel都一知半解的班长。</p>
+<p>看着面前愁眉苦脸的plmm班长，刚刚学完for循环的蔡同学听后热血上头，立马帮班长揽下了这个活。他写了如下的java代码：</p>
+<pre><code class="lang-java">public class Stu {
+    String name;
+    int point;
+    Clz clz;
+
+    public static enum Clz{
+        RG171,RG181,JK171,JK172,JK181
+    }
+}
+</code></pre>
+<p>他使用这个类来定义了学生，出于方便考虑，他没有把属性封装起来。<br>然后呢，他就开始完成班长的工作了！</p>
+<p>他先写了如下十个测试数据：</p>
+<pre><code class="lang-java">      Stu[] stus = new Stu[10];
+    stus[0] = new Stu(&quot;stu1&quot;,98,Clz.JK171);
+    stus[1] = new Stu(&quot;stu2&quot;,99,Clz.JK172);
+    stus[2] = new Stu(&quot;stu3&quot;,39,Clz.JK171);
+    stus[3] = new Stu(&quot;stu4&quot;,59,Clz.RG181);
+    stus[4] = new Stu(&quot;stu5&quot;,89,Clz.JK171);
+    stus[5] = new Stu(&quot;stu6&quot;,91,Clz.RG171);
+    stus[6] = new Stu(&quot;stu7&quot;,97,Clz.RG181);
+    stus[7] = new Stu(&quot;stu8&quot;,66,Clz.JK181);
+    stus[8] = new Stu(&quot;stu9&quot;,77,Clz.JK181);
+    stus[9] = new Stu(&quot;stu10&quot;,88,Clz.RG181);
+</code></pre>
+<p>然后又写了五个ArrayList，分别用来存放五个班的数据。</p>
+<pre><code class="lang-java">List&lt;Stu&gt;[] stuList = new ArrayList[5];
+    for (int i = 0;i &lt; 5 ;i++){
+        stuList[i] = new ArrayList&lt;Stu&gt;();
+    }
+</code></pre>
+<p>然后！就到了万众瞩目的分组环节了！<br>他写了如下的代码：</p>
+<pre><code class="lang-java">for (Stu s:stus){
+    switch (s.clz){
+        case JK171:{
+            stuList[0].add(s);
+            break;
+        }
+        case JK172:{
+            stuList[1].add(s);
+            break;
+        }
+        case JK181:{
+            stuList[2].add(s);
+            break;
+        }
+        case RG171:{
+            stuList[3].add(s);
+            break;
+        }
+        case RG181:{
+            stuList[4].add(s);
+            break;
+        }
+    }
+}
+for(List&lt;Stu&gt; list:stuList){
+    Collections.sort(list);
+}
+</code></pre>
+<p>真是好长一大截！为了能使用<code>Collections.sort</code>，他还专门为Stu类实现了<code>Comparable</code>接口：</p>
+<pre><code class="lang-java">@Override
+public int compareTo(Object o) {
+    if(o instanceof Stu){
+        return this.point-((Stu) o).point;
+    }
+    return 0;
+}
+</code></pre>
+<p>真的是废了好大力气！<br>不过好在，最后检验，他写的代码是可以正常工作的。</p>
+<pre><code class="lang-java">for(List&lt;Stu&gt; list:stuList){
+    for(Stu stu:list){
+        System.out.println(stu);
+    }
+}
+output:
+stu3 39 JK171
+stu5 89 JK171
+stu1 98 JK171
+stu2 99 JK172
+stu8 66 JK181
+stu9 77 JK181
+stu6 91 RG171
+stu4 59 RG181
+stu10 88 RG181
+stu7 97 RG181
+</code></pre>
+<p>也算是成功完成了班长的任务，说不定可以就此脱单了呢！蔡辑如此想着。然而此时他的舍友鹊君路过他的电脑，看到傻笑的蔡辑，对他说：<br>“两个小时你就写了这？我五分钟就写好的东西。”<br>蔡辑听后很是不舒服，就这个代码他还是查了sort api，查询了list怎么使用，花费两个小时才写出来的，鹊君就算再牛逼，五分钟就能写完？蔡辑表示怀疑。<br>于是！此时的鹊君坐在蔡辑的电脑前，写下了如下的代码。</p>
+<pre><code class="lang-java">List&lt;List&lt;Stu&gt;&gt; lists = new ArrayList&lt;&gt;();
+Clz[] clzs = Clz.values();
+for(Clz nclz :clzs ){
+    lists.add(Arrays.stream(stus).
+            filter(x-&gt;x.clz.equals(nclz)).
+            sorted(Comparator.comparingInt(x -&gt; x.point)).
+            collect(Collectors.toList()));
+}
+</code></pre>
+<p>其中，数据初始化和数据输出用的测试代码鹊君没有改变，顺手还删掉了Stu类的comparable接口和对应的实现方法。<br>最后输出结果正确。<br>？？？？？？？？？看着鹊君两三行代码完成了自己写了那么久功能，蔡辑感到很不可思议。<br>鹊君看着蔡辑笑了笑：这就是java8 stream的厉害。<br>说完，鹊君就离开了，只留下蔡辑一个人怀疑人生。</p>
+<h2 id="stream">stream</h2>
+<h4 id="stream-">stream的概念</h4>
+<p>上面的故事是我编的，但是Stream就是这么牛逼。<br>那stream到底是个啥呢？</p>
+<p>用网上一位仁兄的话来讲：是这个东西：</p>
+<blockquote>
+<p>Stream流是一个集合元素的函数模型，它并不是集合，也不是数据结构，其本身并不存储任何元素（或其地址值），它只是在原数据集上定义了一组操作。</p>
+<p>Stream流不保存数据，Stream操作是尽可能惰性的，即每当访问到流中的一个元素，才会在此元素上执行这一系列操作。</p>
+<p>Stream流也不会改变原有数据。</p>
+</blockquote>
+<p>也就是说，stream，所谓的“流”，是把数据源拿来变成一个队列，并提供了对这个队列操作的一个东西。你可以把stream想成水流，它在管道里流动，每经过一个地方，对它进行一些处理，被处理过的水流还是继续向前。</p>
+<p>还是不够形象么？可以参考这个例子。</p>
+<pre><code class="lang-java">public class Number {
+    int val;
+    Number add(int v){
+        val+=v;
+        return this;
+    }
+}
+</code></pre>
+<p>一个Number对象调用add方法后，对this.val进行了处理，返回的还是自己，可以继续调用其他的实例方法。</p>
+<h4 id="-stream">创建stream</h4>
+<p>理解了这个之后，我们需要了解，如何创建一个流呢？<br>很简单，不论是数组，集合，不论是基本数据类型还是对象，都可以很方便的创建一个流。如下所示：</p>
+<pre><code class="lang-java">// 从数组创建
+    int [] source = {1,2,3,4,5,6};
+    IntStream s = Arrays.stream(source);
+// 从集合创建
+    List list = Arrays.asList(1,2,3,4,5);
+    Stream s2 = list.stream();
+    //并行流，多线程
+    Stream s2_2 = list.parallelStream();
+// 创建1到10的流
+    IntStream s3 = IntStream.range(1,10);
+//  直接创建
+    Stream s4 = Stream.of(&quot;wo&quot;, &quot;ai&quot;, &quot;?&quot;)
+</code></pre>
+<h4 id="stream-">stream的方法</h4>
+<p>stream为我们提供了很多的类似刚刚例子中add()的方法，以下几个很常用：</p>
+<h4 id="foreach">foreach</h4>
+<p>用于迭代整个流，下面的代码可以输出十个随机数<br>参数里传一个方法的引用，foreach将会调用这个方法。</p>
+<pre><code class="lang-java">Random random = new Random();
+random.ints().limit(10).forEach(System.out::println);
+</code></pre>
+<h4 id="map">map</h4>
+<p>map 方法用于映射每个元素到对应的结果<br>以下代码片段使用 map 输出了元素对应的平方数：</p>
+<pre><code class="lang-java">List&lt;Integer&gt; numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
+// 获取对应的平方数
+List&lt;Integer&gt; squaresList = numbers.stream().map( i -&gt; i*i).distinct().collect(Collectors.toList());
+</code></pre>
+<h4 id="filter">filter</h4>
+<p>filter 方法用于通过设置的条件过滤出元素。以下代码片段使用 filter 方法过滤出空字符串：</p>
+<pre><code class="lang-java">List&lt;String&gt;strings = Arrays.asList(&quot;abc&quot;, &quot;&quot;, &quot;bc&quot;, &quot;efg&quot;, &quot;abcd&quot;,&quot;&quot;, &quot;jkl&quot;);
+// 获取空字符串的数量
+long count = strings.stream().filter(string -&gt; string.isEmpty()).count();
+</code></pre>
+<h4 id="sorted">sorted</h4>
+<p>sorted 方法用于对流进行排序。以下代码片段使用 sorted 方法对输出的 10 个随机数进行排序：</p>
+<pre><code class="lang-java">Random random = new Random();
+random.ints().limit(10).sorted().forEach(System.out::println);
+</code></pre>
+<h4 id="limit">limit</h4>
+<p>limit 方法用于获取指定数量的流。 以下代码片段使用 limit 方法打印出 10 条数据：</p>
+<pre><code class="lang-java">Random random = new Random();
+random.ints().limit(10).forEach(System.out::println);
+</code></pre>
+<h4 id="collectors">Collectors</h4>
+<p>Collectors 类实现了很多归约操作，例如将流转换成集合和聚合元素。Collectors 可用于返回列表或字符串：</p>
+<pre><code class="lang-java">List&lt;String&gt;strings = Arrays.asList(&quot;abc&quot;, &quot;&quot;, &quot;bc&quot;, &quot;efg&quot;, &quot;abcd&quot;,&quot;&quot;, &quot;jkl&quot;);
+List&lt;String&gt; filtered = strings.stream().filter(string -&gt; !string.isEmpty()).collect(Collectors.toList());
+
+System.out.println(&quot;筛选列表: &quot; + filtered);
+String mergedString = strings.stream().filter(string -&gt; !string.isEmpty()).collect(Collectors.joining(&quot;, &quot;));
+System.out.println(&quot;合并字符串: &quot; + mergedString);
+</code></pre>
+<h4 id="peek">peek</h4>
+<p>挑出操作，如果想对数据进行某些操作，如：读取、编辑修改等。</p>
+<pre><code class="lang-java">User w = new User(&quot;w&quot;,10);
+    User x = new User(&quot;x&quot;,11);
+    User y = new User(&quot;y&quot;,12);
+
+    Stream.of(w,x,y)
+            .peek(e-&gt;{e.setName(e.getAge()+e.getName());}) //重新设置名字 变成 年龄+名字
+            .forEach(e-&gt;System.out.println(e.toString()));
+</code></pre>
+<h4 id="distinct">distinct</h4>
+<p>去重操作，内部调用equals方法</p>
+<pre><code class="lang-java">Stream.of(1,2,3,1,2,5,6,7,8,0,0,1,2,3,1)
+            .distinct() //去重
+            .forEach(e-&gt;System.out.println(e));
+</code></pre>
+<p>这里只列举了几个很常用的方法的基础用法，stream还有一些其他的方法，每个方法也有各自的重载，这里只做最基础的介绍。实践出真知，大家可以多多自己尝试一下，或者再阅读网上其他的讲解。</p>
+<h2 id="-">使用方法</h2>
+<p>在我上面这个例子中，类似这样的语句<code>x-&gt;x.clz.equals(nclz)</code>如果看不懂的同学可以好好补课了，这个是java8中新增的lambda表达式，可以把它当成内部类的简化实现方法，可以理解成语法糖。当然这个位置使用匿名内部类也是完全可以的。</p>
+<p><code>.filter(x-&gt;x.clz.equals(nclz))</code>这一步，是把该流中clz和nclz相等的元素留下来，其他的元素去掉。</p>
+<p><code>sorted(Comparator.comparingInt(x -&gt; x.point)).</code>这一步，是把刚刚筛选过的流进行排序。sorted方法依赖于对象实现了comparable接口，或者通过传参，传一个comparator对象，也可以对流内元素进行排序。</p>
+<p>以上的两个方法都是在过程中使用的，而流的操作最终一定会停止在一个终止方法上。在我的例子中使用的终止方法是collect，将数据收集起来。java为我们提供的collectors中有很多种收集器,可以有多种的收集方式。</p>
+<p>而收集完之后，这一长串的表达式最终的返回值就是你收集的数据类型。<br>完成收集后，这个流就不能再使用了。</p>
+<h2 id="-">总结</h2>
+<p>今天给大家稍微讲解了一下java8 stream的简单用法，更深层次的了解它，需要阅读更多的文档，另外stream和传统的for循环也有性能上的差异，推荐大家多查阅资料，毕竟学无止境。</p>
+<p>在这里给大家推荐一个api网站，是甲骨文官方的有关stream的api，大家可以阅读一下。<br><a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html">oracle提供的api文档</a><br>学无止境，一往无前！冲鸭！<br>（今天的leetcode还没刷，溜了溜了）</p>
+
+
+</body>
+</html>

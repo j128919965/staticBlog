@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>信号量的使用</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/4/12 14:36</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/4/12 14:36</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="-">信号量和管程</h1>
+<h4 id="-">并发问题：竞争条件（竞态条件）</h4>
+<p>多程序并发存在大的问题</p>
+<h4 id="-">同步</h4>
+<ul>
+<li>多线程共享公共数据的协调执行</li><li>包括互斥和条件同步</li><li>互斥：在同一时间只有一个线程可以执行临界区</li></ul>
+<h4 id="-">确保同步正确很难？</h4>
+<ul>
+<li>需要高层次的编程抽象（如锁）</li><li>从底层硬件支持编译</li></ul>
+<h2 id="-">信号量</h2>
+<ul>
+<li><h4 id="-">抽象数据类型</h4>
+<ul>
+<li>一个整形（sem），两个原子操作</li><li>P()：sem减一，如果sem&lt;0，等待，否则继续</li><li>V()：zem加一，如果sem&lt;=0，则唤醒一个等待的P</li></ul>
+</li></ul>
+<h3 id="-">信号量的使用</h3>
+<ul>
+<li>信号量是<strong>整数</strong></li><li>信号量是被保护的变量<ul>
+<li>初始化完成后，唯一改变一个信号量的值的办法是通过P() 和 V()</li><li>操作必须是原子</li></ul>
+</li><li>P()能够阻塞，V()不会阻塞</li><li>我们假设信号量是“公平的”<ul>
+<li>没有线程被阻塞在P()(仍然堵塞如果V()被无限频繁调用（在同一个信号量）</li><li>在实践中，fifo经常被使用 </li></ul>
+</li></ul>
+<h4 id="-">两种类型的信号量</h4>
+<pre><code>* 二进制信号量
+* 一般/计数信号量：可以取任何非负值
+* 两者相互表现（给定一个可以实现另一个）
+</code></pre><ul>
+<li><h4 id="-">信号量可以用在两个方面</h4>
+<ul>
+<li>互斥</li><li>条件同步（调度约束——一个线程等待另一个线程的事情发生）</li></ul>
+</li></ul>
+<h4 id="-">用二进制信号量实现的互斥</h4>
+<pre><code>mutex = new Semaphore(1);
+mutex-&gt;P();
+...
+Critical Section;
+...
+mutex-&gt;V();
+</code></pre><h4 id="-">用二进制信号量实现的调度约束</h4>
+<pre><code>conditin  = new Semaphore(0);
+//Thread A:
+...
+condition-&gt;P();
+...
+//Thread B:
+...
+condition-&gt;V();
+...
+</code></pre><p>P()等待，V()发出信号</p>
+<h4 id="-">一个线程等待另一个线程处理事情</h4>
+<ul>
+<li>比如生产东西或消费东西</li><li>互斥（锁机制）是不够的</li><li>例如：有界缓冲区的生产者——消费者问题<ul>
+<li>一个或多个生产者把数据放在一个缓冲区里</li><li>单个消费者每次从缓冲区取出数据</li><li>在任何一个时间只有一个生产者或消费者可以访问该缓冲区</li></ul>
+</li><li>正确性要求<ul>
+<li>在任何时间只能有一个线程操作缓冲区（互斥）</li><li>当缓冲区为空，消费者必须等待生产者（调度/同步约束）</li><li>当缓存区满，生产者必须等待消费者（调度/同步约束）</li><li><img src="32img/1.png" alt="3665b079f21476e0072eb8be9b0bacf8.png"></li></ul>
+</li></ul>
+
+
+</body>
+</html>
+
+

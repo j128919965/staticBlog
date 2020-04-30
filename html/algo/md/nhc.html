@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>拿火柴问题</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="..\..\css\md.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td><b>创建时间：</b></td>
+                <td><i>2020/4/6 10:01</i></td>
+            </tr>
+            <tr>
+                <td><b>更新时间：</b></td>
+                <td><i>2020/4/6 10:54</i></td>
+            </tr>
+            <tr>
+                <td><b>作者：</b></td>
+                <td><i>lzr</i></td>
+            </tr>
+        </table>
+    </div>
+<h1 id="-">拿火柴问题</h1>
+<blockquote>
+<p>现有21根火柴，两人轮流取，每次可以取走1-4根，不可多拿或少拿。<br>请编写一个程序进行人机对弈，要求人先，计算机后，拿走最后一根的人输。计算机为常胜将军。</p>
+</blockquote>
+<p>这道题考虑最少的情况。如果当前剩下1根，人先取，他只能拿一根，那这样他就输了。<br>也就是说，只要计算机给人留下一根，那人就必败了。<br>因为总数是21根，所以只要每一轮先手和后手拿到的总量是5，那么最后给先手剩下的就一定是1。<br>（人 类 一 败 涂 地）<br>（但是如果总量不是5<em>n+1，先手的一方就可以把当前总数变成5</em>n+1，这样后手就必败了。）<br>代码：</p>
+<pre><code>import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        int n = 21;
+        Scanner sc = new Scanner(System.in);
+        int p1takes=0;
+        int p2takes=0;
+        while(n&gt;0){
+            System.out.println(&quot;\n当前剩余火柴数量：&quot;+n);
+            while (p1takes&gt;n||p1takes&lt;1||p1takes&gt;4){
+                System.out.print(&quot;请玩家拿火柴，请输入您要拿的的数量(1-4)：&quot;);
+                p1takes = sc.nextInt();
+            }
+            System.out.println(&quot;您拿了&quot;+p1takes+&quot;根火柴！&quot;);
+            n-=p1takes;
+            if(n==0){
+                System.out.println(&quot;您失败了！&quot;);
+                return;
+            }
+            System.out.println(&quot;请计算机拿火柴&quot;);
+            p2takes = 5-p1takes;
+            System.out.println(&quot;计算机拿了&quot;+p2takes+&quot;根火柴！&quot;);
+            n-=p2takes;
+            if(n==0){
+                System.out.println(&quot;您胜利了！&quot;);
+                return;
+            }
+            p1takes=0;
+        }
+    }
+}
+</code></pre><p>部分输出结果：</p>
+<pre><code>当前剩余火柴数量：6
+请玩家拿火柴，请输入您要拿的的数量(1-4)：1
+您拿了1根火柴！
+请计算机拿火柴
+计算机拿了4根火柴！
+
+当前剩余火柴数量：1
+请玩家拿火柴，请输入您要拿的的数量(1-4)：1
+您拿了1根火柴！
+您失败了！
+
+Process finished with exit code 0
+</code></pre>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<html>
+<head>
+  <title>7、非连续内存分配： 分段</title>
+  <basefont face="微软雅黑" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="YXBJ Windows/601568 (zh-CN, DDL); Windows/10.0.0 (Win64); EDAMVersion=V2;"/>
+  <meta name="content-class" content="yinxiang.markdown"/>
+  <style>
+    body, td {
+      font-family: 微软雅黑;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="572"/>
+<h1>7、非连续内存分配： 分段</h1>
+<div>
+<table bgcolor="#D4DDE5" border="0">
+<tr><td><b>创建时间：</b></td><td><i>2020/2/17 14:19</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/2/19 14:38</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>188mkzgr086</i></td></tr>
+</table>
+</div>
+<br/>
+
+<div><span><div style="font-size: 14px; margin: 0; padding: 0; width: 100%;"><h1 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 41px; border-bottom: 3px double #999; color: #000; margin-top: 14px;">非连续内存分配： 分段</h1>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">非连续内存分配概述</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">为什么要进行非连续内存分配</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分段（Segmentation）</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分页（Paging）</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">页表（Page Table）
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">页表概览</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">块表（TLB）</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">二级/多级页表</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">为什么要选择非连续内存分配</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">优点
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">一个程序的物理地址空间是非连续的</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">连续内存分配容易产生内碎片和外碎片</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">改善碎片问题</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">有效的应用程序之间的隔离和管理</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">允许共享代码和数据</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">支持动态加载和动态链接</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">缺点
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">如何建立虚拟地址和物理地址之间的转换
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">软件方案（开销相当大）</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">硬件方案</li>
+</ul>
+</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">两种硬件方案
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分段</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">分页</li>
+</ul>
+</li>
+</ul>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">分段</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">程序的分段地址空间</h4>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">分段寻址方案</h4>
+</li>
+</ul>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="7、非连续内存分配： 分段_files/Image.png" type="image/png" data-filename="Image.png"/></p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">分段：更好的分离和共享，有助于管理应用程序</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="7、非连续内存分配： 分段_files/Image [1].png" type="image/png" data-filename="Image.png"/><br/>
+<img src="7、非连续内存分配： 分段_files/Image [2].png" type="image/png" data-filename="Image.png"/></p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;">将应用程序中的不同部分分离开，位于不同的区域<br/>
+通过分段机制，将逻辑地址空间中的不同块分配到物理地址空间的不同位置<br/>
+（逻辑地址是连续的，但在物理地址空间中不一定）</p>
+<h3 style="line-height: 160%; box-sizing: content-box; font-weight: 700; font-size: 27px; color: #333;">硬件支持分段寻址</h3>
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">
+<h4 style="line-height: 160%; box-sizing: content-box; font-size: 20px; color: #333;">分段寻址方案</h4>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">一个段：一个内存块
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">一个逻辑地址空间</li>
+</ul>
+</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">程序访问内存地址需要一个二元组（s，addr）
+<ul style="line-height: 160%; box-sizing: content-box; display: block; list-style-type: disc; padding-left: 30px; margin: 6px 0 10px; color: #333; margin-top: 0; margin-bottom: 0;">
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">s 段号</li>
+<li style="line-height: 160%; box-sizing: content-box; position: relative;">addr 段内偏移<br/>
+<img src="7、非连续内存分配： 分段_files/Image [3].png" type="image/png" data-filename="Image.png"/><br/>
+<img src="7、非连续内存分配： 分段_files/Image [4].png" type="image/png" data-filename="Image.png"/></li>
+</ul>
+</li>
+</ul>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><img src="7、非连续内存分配： 分段_files/Image [5].png" type="image/png" data-filename="Image.png"/><br/>
+一个可执行的应用程序通过cpu来执行每条指令<br/>
+cpu去寻址的时候，把一个逻辑地址分为两块，上面是<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">段号</code>，下面是<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">段内偏移</code><br/>
+通过段号希望找打物理内存的起始地址，这个信息保存在<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">段表</code>里（由<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">OS</code>负责建立）<br/>
+<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">段表</code>里存在一个映射关系，逻辑地址的<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">段号</code>和<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">物理地址</code>的对应关系，段表里还存放着<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">段的长度限制</code><br/>
+段表的索引是由段号决定的。<br/>
+然后检查该地址是否异常（产生异常）<br/>
+如果正常，则产生物理地址，从物理地址取数据交给cpu</p>
+<p style="line-height: 160%; box-sizing: content-box; margin: 10px 0; color: #333;"><code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">段表</code>需要在正式寻址之前就由<code style="line-height: 160%; box-sizing: content-box; border: 0; border-radius: 0; color: #c1788b; padding: 4px 4px 2px 0; letter-spacing: -.3px;">OS</code>建立好</p>
+</div><center style="display:none !important;visibility:collapse !important;height:0 !important;white-space:nowrap;width:100%;overflow:hidden">%23%20%E9%9D%9E%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%EF%BC%9A%20%E5%88%86%E6%AE%B5%0A%0A*%20%23%23%23%20%E9%9D%9E%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E6%A6%82%E8%BF%B0%0A%20%20%20%20*%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%9B%E8%A1%8C%E9%9D%9E%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%0A%20%20%20%20*%20%E5%88%86%E6%AE%B5%EF%BC%88Segmentation%EF%BC%89%0A%20%20%20%20*%20%E5%88%86%E9%A1%B5%EF%BC%88Paging%EF%BC%89%0A%20%20%20%20*%20%E9%A1%B5%E8%A1%A8%EF%BC%88Page%20Table%EF%BC%89%0A%20%20%20%20%20%20%20%20*%20%E9%A1%B5%E8%A1%A8%E6%A6%82%E8%A7%88%0A%20%20%20%20%20%20%20%20*%20%E5%9D%97%E8%A1%A8%EF%BC%88TLB%EF%BC%89%0A%20%20%20%20%20%20%20%20*%20%E4%BA%8C%E7%BA%A7%2F%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8%0A%20%20%20%20%20%20%20%20*%20%E5%8F%8D%E5%90%91%E9%A1%B5%E8%A1%A8%0A%0A%23%23%23%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%80%89%E6%8B%A9%E9%9D%9E%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%0A%0A*%20%E4%BC%98%E7%82%B9%0A%20%20%20%20*%20%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E6%98%AF%E9%9D%9E%E8%BF%9E%E7%BB%AD%E7%9A%84%0A%20%20%20%20*%20%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%AE%B9%E6%98%93%E4%BA%A7%E7%94%9F%E5%86%85%E7%A2%8E%E7%89%87%E5%92%8C%E5%A4%96%E7%A2%8E%E7%89%87%0A%20%20%20%20*%20%E6%94%B9%E5%96%84%E7%A2%8E%E7%89%87%E9%97%AE%E9%A2%98%0A%20%20%20%20*%20%E6%9C%89%E6%95%88%E7%9A%84%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B9%8B%E9%97%B4%E7%9A%84%E9%9A%94%E7%A6%BB%E5%92%8C%E7%AE%A1%E7%90%86%0A%20%20%20%20*%20%E5%85%81%E8%AE%B8%E5%85%B1%E4%BA%AB%E4%BB%A3%E7%A0%81%E5%92%8C%E6%95%B0%E6%8D%AE%0A%20%20%20%20*%20%E6%94%AF%E6%8C%81%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%0A*%20%E7%BC%BA%E7%82%B9%0A%20%20%20%20*%20%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E5%92%8C%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2%0A%20%20%20%20%20%20%20%20*%20%E8%BD%AF%E4%BB%B6%E6%96%B9%E6%A1%88%EF%BC%88%E5%BC%80%E9%94%80%E7%9B%B8%E5%BD%93%E5%A4%A7%EF%BC%89%0A%20%20%20%20%20%20%20%20*%20%E7%A1%AC%E4%BB%B6%E6%96%B9%E6%A1%88%0A*%20%E4%B8%A4%E7%A7%8D%E7%A1%AC%E4%BB%B6%E6%96%B9%E6%A1%88%0A%20%20%20%20*%20%E5%88%86%E6%AE%B5%0A%20%20%20%20*%20%E5%88%86%E9%A1%B5%0A%0A%23%23%23%20%E5%88%86%E6%AE%B5%0A%0A*%20%23%23%23%23%20%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%88%86%E6%AE%B5%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A*%20%23%23%23%23%20%E5%88%86%E6%AE%B5%E5%AF%BB%E5%9D%80%E6%96%B9%E6%A1%88%0A%0A!%5B1e55e49ff660f9f26abed840022edf40.png%5D(en-resource%3A%2F%2Fdatabase%2F1694%3A1)%0A%0A%E5%88%86%E6%AE%B5%EF%BC%9A%E6%9B%B4%E5%A5%BD%E7%9A%84%E5%88%86%E7%A6%BB%E5%92%8C%E5%85%B1%E4%BA%AB%EF%BC%8C%E6%9C%89%E5%8A%A9%E4%BA%8E%E7%AE%A1%E7%90%86%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%0A%0A!%5B38629419c009b86804b3ea6d53887c04.png%5D(en-resource%3A%2F%2Fdatabase%2F1696%3A1)%0A!%5B34b5922a172d1bd2d1bdfefe053cb088.png%5D(en-resource%3A%2F%2Fdatabase%2F1698%3A1)%0A%0A%E5%B0%86%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E4%B8%8D%E5%90%8C%E9%83%A8%E5%88%86%E5%88%86%E7%A6%BB%E5%BC%80%EF%BC%8C%E4%BD%8D%E4%BA%8E%E4%B8%8D%E5%90%8C%E7%9A%84%E5%8C%BA%E5%9F%9F%0A%E9%80%9A%E8%BF%87%E5%88%86%E6%AE%B5%E6%9C%BA%E5%88%B6%EF%BC%8C%E5%B0%86%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E4%B8%8D%E5%90%8C%E5%9D%97%E5%88%86%E9%85%8D%E5%88%B0%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E7%9A%84%E4%B8%8D%E5%90%8C%E4%BD%8D%E7%BD%AE%0A%EF%BC%88%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E6%98%AF%E8%BF%9E%E7%BB%AD%E7%9A%84%EF%BC%8C%E4%BD%86%E5%9C%A8%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E4%B8%AD%E4%B8%8D%E4%B8%80%E5%AE%9A%EF%BC%89%0A%0A%23%23%23%20%E7%A1%AC%E4%BB%B6%E6%94%AF%E6%8C%81%E5%88%86%E6%AE%B5%E5%AF%BB%E5%9D%80%0A%0A*%20%23%23%23%23%20%E5%88%86%E6%AE%B5%E5%AF%BB%E5%9D%80%E6%96%B9%E6%A1%88%0A*%20%E4%B8%80%E4%B8%AA%E6%AE%B5%EF%BC%9A%E4%B8%80%E4%B8%AA%E5%86%85%E5%AD%98%E5%9D%97%0A%20%20%20%20*%20%E4%B8%80%E4%B8%AA%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%0A*%20%E7%A8%8B%E5%BA%8F%E8%AE%BF%E9%97%AE%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA%E4%BA%8C%E5%85%83%E7%BB%84%EF%BC%88s%EF%BC%8Caddr%EF%BC%89%0A%20%20%20%20*%20s%20%E6%AE%B5%E5%8F%B7%0A%20%20%20%20*%20addr%20%E6%AE%B5%E5%86%85%E5%81%8F%E7%A7%BB%0A!%5B38a4b444f462be0e8580838291bd36f9.png%5D(en-resource%3A%2F%2Fdatabase%2F1702%3A1)%0A!%5B342b7c4b4b069ad7e3cd59cf23c6406b.png%5D(en-resource%3A%2F%2Fdatabase%2F1704%3A1)%0A%0A!%5Be778bfb4eaf5093a0f8e68155bf04aa8.png%5D(en-resource%3A%2F%2Fdatabase%2F1706%3A1)%0A%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%9A%84%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E9%80%9A%E8%BF%87cpu%E6%9D%A5%E6%89%A7%E8%A1%8C%E6%AF%8F%E6%9D%A1%E6%8C%87%E4%BB%A4%0Acpu%E5%8E%BB%E5%AF%BB%E5%9D%80%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E6%8A%8A%E4%B8%80%E4%B8%AA%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E5%88%86%E4%B8%BA%E4%B8%A4%E5%9D%97%EF%BC%8C%E4%B8%8A%E9%9D%A2%E6%98%AF%60%E6%AE%B5%E5%8F%B7%60%EF%BC%8C%E4%B8%8B%E9%9D%A2%E6%98%AF%60%E6%AE%B5%E5%86%85%E5%81%8F%E7%A7%BB%60%0A%E9%80%9A%E8%BF%87%E6%AE%B5%E5%8F%B7%E5%B8%8C%E6%9C%9B%E6%89%BE%E6%89%93%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%9A%84%E8%B5%B7%E5%A7%8B%E5%9C%B0%E5%9D%80%EF%BC%8C%E8%BF%99%E4%B8%AA%E4%BF%A1%E6%81%AF%E4%BF%9D%E5%AD%98%E5%9C%A8%60%E6%AE%B5%E8%A1%A8%60%E9%87%8C%EF%BC%88%E7%94%B1%60OS%60%E8%B4%9F%E8%B4%A3%E5%BB%BA%E7%AB%8B%EF%BC%89%0A%60%E6%AE%B5%E8%A1%A8%60%E9%87%8C%E5%AD%98%E5%9C%A8%E4%B8%80%E4%B8%AA%E6%98%A0%E5%B0%84%E5%85%B3%E7%B3%BB%EF%BC%8C%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%9A%84%60%E6%AE%B5%E5%8F%B7%60%E5%92%8C%60%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%60%E7%9A%84%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB%EF%BC%8C%E6%AE%B5%E8%A1%A8%E9%87%8C%E8%BF%98%E5%AD%98%E6%94%BE%E7%9D%80%60%E6%AE%B5%E7%9A%84%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6%60%0A%E6%AE%B5%E8%A1%A8%E7%9A%84%E7%B4%A2%E5%BC%95%E6%98%AF%E7%94%B1%E6%AE%B5%E5%8F%B7%E5%86%B3%E5%AE%9A%E7%9A%84%E3%80%82%0A%E7%84%B6%E5%90%8E%E6%A3%80%E6%9F%A5%E8%AF%A5%E5%9C%B0%E5%9D%80%E6%98%AF%E5%90%A6%E5%BC%82%E5%B8%B8%EF%BC%88%E4%BA%A7%E7%94%9F%E5%BC%82%E5%B8%B8%EF%BC%89%0A%E5%A6%82%E6%9E%9C%E6%AD%A3%E5%B8%B8%EF%BC%8C%E5%88%99%E4%BA%A7%E7%94%9F%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%EF%BC%8C%E4%BB%8E%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E5%8F%96%E6%95%B0%E6%8D%AE%E4%BA%A4%E7%BB%99cpu%0A%0A%60%E6%AE%B5%E8%A1%A8%60%E9%9C%80%E8%A6%81%E5%9C%A8%E6%AD%A3%E5%BC%8F%E5%AF%BB%E5%9D%80%E4%B9%8B%E5%89%8D%E5%B0%B1%E7%94%B1%60OS%60%E5%BB%BA%E7%AB%8B%E5%A5%BD</center></span>
+</div></body></html> 

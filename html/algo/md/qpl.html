@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>全排列问题</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="..\..\css\md.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td><b>创建时间：</b></td>
+                <td><i>2020/4/6 11:21</i></td>
+            </tr>
+            <tr>
+                <td><b>更新时间：</b></td>
+                <td><i>2020/4/6 12:13</i></td>
+            </tr>
+            <tr>
+                <td><b>作者：</b></td>
+                <td><i>lzr</i></td>
+            </tr>
+        </table>
+    </div>
+<h1 id="-">全排列问题</h1>
+<blockquote>
+<p>给一个任意长度的字符数组，输出它的全排列。<br>全排列的数量为 <code>N!</code> ,要求去重。</p>
+</blockquote>
+<p>这类问题可以直接不停地遍历，用标记来记录某个元素是否已经被访问过，但是这样会浪费大量的时间。<br>可以采用递归交换的方式来解决<br>比如说<code>{&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;4&#39;}</code>这样的一个数组<br>在第一次递归的时候，设置开头的索引<code>begin = 0;</code><br>分别用1，2，3，4来作为数组的开头，也就是分别将这几个字符与当前的开头交换。<br>对于第一次递归，就是这样的</p>
+<pre><code>
+  for(int i=begin;i&lt;chars.length;i++){
+    swap(chars[begin],chars[i]);
+    //然后在这个地方递归调用
+  }
+</code></pre><p>交换完后递归调用函数，调用的时候数组开头的索引就是begin+1；在调用后<br>当<code>begin = chars.length-1</code>的时候，证明已经遍历到结尾了。此时把当前数组输出就好了。<br>在遍历到结尾的时候，返回上一层调用，这时候要把刚刚交换过的字符交换回来，来保证本次函数执行中的下一个循环正确交换。<br>但是如果存在这样的情况：<br><code>{&#39;1&#39;,&#39;2&#39;,&#39;2&#39;,&#39;4&#39;}</code><br>就会输出多个重复的排列。这种情况下直接使用java类库中的<code>LinkedHashSet</code>，不但可以自动去重，而且还可以保持输入时候的顺序。妙啊。</p>
+<p>代码：</p>
+<pre><code>import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        char[] a = {&#39;1&#39;,&#39;2&#39;,&#39;2&#39;,&#39;4&#39;};
+        Set&lt;String&gt; set = allRange(a);
+        for (String s:set){
+            System.out.println(s);
+        }
+    }
+
+    public static Set&lt;String&gt; allRange(char[] chars){
+        //内部采用双向链表，可以自动去重，而且还可以保持输入时候的顺序
+        Set&lt;String&gt; set = new LinkedHashSet&lt;&gt;();
+        foo(set,chars,0,chars.length-1);
+        return set;
+    }
+
+    /**
+     *
+     * @param chars 原数组
+     * @param begin 当前排列到第几个数字
+     */
+    private static void foo(Set&lt;String&gt; set,char[] chars, int begin, int end){
+        if(begin==end){
+            set.add(new String(chars));
+            return;
+        }
+        char temp;
+        for(int i=begin;i&lt;=end;i++){
+            // swap char[i] and chars[begin]
+            // 使用数组中的每一个元素作为当前序列的开头
+            temp = chars[i];
+            chars[i] = chars[begin];
+            chars[begin] = temp;
+
+            //递归调用
+            foo(set,chars,begin+1,end);
+
+            //输出完后还原
+            temp = chars[i];
+            chars[i] = chars[begin];
+            chars[begin] = temp;
+        }
+    }
+}
+</code></pre><p>输出结果：</p>
+<pre><code>1224
+1242
+1422
+2124
+2142
+2214
+2241
+2421
+2412
+4221
+4212
+4122
+</code></pre>
+</body>
+</html>

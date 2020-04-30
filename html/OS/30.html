@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>30、有关同步的一些概念（1）</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/md.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    
+<div>
+    <table>
+    <tr><td><b>创建时间：</b></td><td><i>2020/4/6 17:20</i></td></tr>
+    <tr><td><b>更新时间：</b></td><td><i>2020/4/6 18:29</i></td></tr>
+    <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+    </table>
+    </div>
+<h1 id="-1-">一些概念（1）</h1>
+<h3 id="-race-condition-">（Race Condition）竞态调节</h3>
+<h4 id="-"><strong>系统缺陷</strong></h4>
+<ul>
+<li>结果依赖于并发执行的顺序/时间</li><li>不确定性，不可重现</li></ul>
+<h4 id="-">怎样避免竞态？</h4>
+<ul>
+<li>让指令不被打断</li></ul>
+<h3 id="-atomic-operation-">原子操作（Atomic Operation）</h3>
+<h4 id="-">原子操作是指一次不存在任何终端或者执行失败的指令</h4>
+<ul>
+<li>该执行成功结束</li><li>或者根本没有执行</li><li>并且不应该发现任何部分执行的状态</li></ul>
+<h4 id="-">实际上操作往往不是原子的</h4>
+<ul>
+<li>有些操作看上去是原子的，但实际上不是</li><li>例如：x=y++</li><li>甚至有时候连单条指令都不是原子的，例如page fault</li></ul>
+<blockquote>
+<p>例：<br><img src="30、有关同步的一些概念（1）_files/Image.png" alt="2607d200e90362330ff835dd94722e60.png"></p>
+</blockquote>
+<h3 id="-critical-section-">临界区（Critical section）</h3>
+<p>临界区是指进程中的一段需要访问共享资源<br>并且当另一个进程处于相应代码区域时<br>便不会被执行的代码区域</p>
+<ul>
+<li>互斥（Mutual exclusion）<br>当一个进程处于临界区并访问资源时，没有其他进程会处于临界区并且访问任何相同的资源</li></ul>
+<h3 id="-starvation-">饥饿（starvation）</h3>
+<p>一个可执行的进程，被调度器持续忽略，以至于虽然处于可执行状态却不被执行</p>
+<h3 id="-">锁</h3>
+<ul>
+<li>lock 锁：保护性装置，使得外人无法访问，需要开锁之后别人才能访问</li><li>unlock 解锁：拿到保护性装置，使得可以访问之前被锁保护的东西</li><li>deadlock 死锁：A拿到锁1，B拿到锁2，A想要锁2，B想要锁1。谁也不让谁，A和B都无法执行</li></ul>
+
+</body>
+</html>
+

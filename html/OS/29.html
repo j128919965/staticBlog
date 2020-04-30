@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>29、同步</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/md.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    
+<div>
+    <table>
+    <tr><td><b>创建时间：</b></td><td><i>2020/4/6 16:53</i></td></tr>
+    <tr><td><b>更新时间：</b></td><td><i>2020/4/6 17:19</i></td></tr>
+    <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+    </table>
+    </div>
+<h1 id="-">同步</h1>
+<h3 id="-">背景知识</h3>
+<ul>
+<li><p>到目前为止</p>
+<ul>
+<li>多道程序设计：现代操作系统的重要特性</li><li>并行很有用<ul>
+<li>提示：多个并发实体：CPU、IO、用户、、</li></ul>
+</li><li>进程/线程：操作系统抽象出来用于支持多道程序设计</li><li>CPU调度：实现多道程序设计的机制</li><li>调度算法：不同的策略</li></ul>
+</li><li><p>接下来：</p>
+<ul>
+<li>协同多道程序设计和并发问题</li></ul>
+</li></ul>
+<h4 id="-">独立的线程：</h4>
+<ul>
+<li>不和其他线程共享资源或状态</li><li><strong>确定性</strong>=&gt;输入状态决定结果</li><li><strong>可重现</strong>=&gt;能够重现起始条件</li><li>调度顺序不重要</li></ul>
+<h4 id="-">合作线程：</h4>
+<ul>
+<li>在多个线程中共享状态</li><li>不确定性</li><li>不可重现</li></ul>
+<h4 id="-bug-">不确定性和不可重现意味着bug可能是间歇性发生的</h4>
+<h3 id="-">进程/线程，计算机/设备需要合作</h3>
+<ul>
+<li>优点1：共享资源<ul>
+<li>一台电脑，多个用户</li><li>一个银行存款余额，多个atm</li><li>嵌入式系统（机器人控制，手臂和手的协调）</li></ul>
+</li><li>优点2：加速<ul>
+<li>IO操作和计算可以重叠</li><li>多处理器=&gt;将程序分成多个部分执行</li></ul>
+</li><li>优点3：模块化<ul>
+<li>将大程序分解成小程序<ul>
+<li>以编译为例，gcc会调用cpp，cc1，cc2，as</li></ul>
+</li><li>使系统容易扩展</li></ul>
+</li></ul>
+<blockquote>
+<p>例：<br><img src="29、同步_files/Image.png" alt="d1dd9dbfb9485ca245f817ef61eded82.png"><br>如果并发，则有可能会发生这样的情况：<br><img src="29、同步_files/Image [1].png" alt="a06d9d31598cfc7d9b771a94c4e46975.png"><br>这样的情况下两个process的pid一样了</p>
+</blockquote>
+<h3 id="-">无论多个线程的指令序列怎样交替进行，程序都必须正常工作</h3>
+<ul>
+<li>多线程程序具有不确定性和不可重现的特点</li><li>不经过专门设计，<strong>调试难度很高</strong></li></ul>
+<h3 id="-">不确定性要求并行程序的正确性</h3>
+<ul>
+<li>先思考清楚问题，把程序的行为搞清楚</li><li>切忌急于着手编码</li></ul>
+
+</body>
+</html>

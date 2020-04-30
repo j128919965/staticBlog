@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>接雨水问题</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="..\..\css\md.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div>
+        <table>
+            <tr>
+                <td><b>创建时间：</b></td>
+                <td><i>2020/4/4 22:45</i></td>
+            </tr>
+            <tr>
+                <td><b>更新时间：</b></td>
+                <td><i>2020/4/5 0:40</i></td>
+            </tr>
+            <tr>
+                <td><b>作者：</b></td>
+                <td><i>lzr</i></td>
+            </tr>
+        </table>
+    </div>
+    <h1 id="-">接雨水问题</h1>
+    <p><a href="https://leetcode-cn.com/problems/trapping-rain-water">leetcode链接</a></p>
+    <h2 id="-1-">解法1：暴力</h2>
+    <p>暴力解法有两种思路，一种是计算每个高度有多少水，一种是计算每列能存多少水</p>
+    <ul>
+        <li>
+            <h4 id="-">每个高度有多少水：</h4>
+            找出最高的柱子的高度之后，分别计算每一层能存多少水。<br> 找到第n层时，找到这一层的边界 i 和 j ，计算i和j中间有多少&gt;=n的柱子数量count。<br>
+            每一层的蓄水量就是<code>j-i-count-1</code><br> <a href="https://paste.ubuntu.com/p/ST2MdTqBrM/">代码链接</a><br>
+            时间O(n^2)<br> 空间O(n)<br> 遍历了好多次，开了很多数组，这就是本菜鸡想到的答案（笑着笑着就哭了）<ul>
+                <li>
+                    <h4 id="-">每一列有多少水</h4>
+                    对于数组中的每个元素，我们找出下雨后水能达到的最高位置，等于两边最大高度的较小值减去当前高度的值。<a
+                        href="https://paste.ubuntu.com/p/6GC3jDcPSF/">代码链接</a><br>时间O(n^2)，空间O(1)<br>相对第一种要好一些
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <h2 id="-2-">解法2：动态存储最高值</h2>
+    <p>在暴力解法2中，每遍历到一个柱子，都要去寻找最高值。<br>这里可以采用提前计算，然后保存这些值。<br>开两个最高值数组，分别是从左往右遍历，和 从右往左遍历。<br>如下图所示：<br><img src="jys/Image [1].png"
+            alt="pic"><br><img src="jys/Image.png" alt="pic"></p>
+    <p>找到数组中从下标 i 到最左端最高的条形块高度<code>left_max</code>。<br>找到数组中从下标 i 到最右端最高的条形块高度 <code>right_max</code>。<br>扫描数组 height
+        并更新答案：<br>累加 <code>min(max_left[i],max_right[i]) - height[i]</code>到<code>ans</code>上<br><img src="jys/Image [2].png"
+            alt="f4320427e9f369641871ee802a4bc78c.png"><br><a
+            href="https://paste.ubuntu.com/p/kpgRxgfNfz/">代码链接</a><br>时间：O(n) 遍历三次<br>空间：O(n)</p>
+    <h2 id="-3-">解法3：双指针解法</h2>
+    <p>这种解法也可以理解为木桶效应，举个例子：<br><img src="jys/Image [3].png" alt="pic"><br>C位置能蓄的水的量，取决于它两侧最低的那一个</p>
+    <p><img src="jys/Image [4].png" alt="pic"><br>对于C，它能存储的高度取决于它左右两侧最高值中低的那一个，也就是B和F中最低的B。</p>
+    <p>思路：我们维护两个指针，分别是从左到右遍历到的柱子<code>left</code> , 和从右到左遍历到的柱子<code>right</code>。<br>存两个变量，<code>max_left</code> 和
+        <code>max_right</code>；<br>如果当前的’<code>max_left &lt;  max_right</code>，则遍历到的点的高度取决于<code>max_left</code>。<br>如果当前点的值，如果它的值比当前决定它的方向的最大值小，则<code>ans+=max_left(或right)-height[left(或right)]</code>，如果比最大值大，就更新最大值。做完这些后把对应的指针往前推移。<br>伪代码：<br><img
+            src="jys/Image [5].png" alt="pic"><br>推荐自己画个图遍历一下就清楚了<br><a href="https://paste.ubuntu.com/p/yF7dRsbn6d/">代码链接</a></p>
+    <h2 id="-4-">解法4：单调栈</h2>
+    <p>解法2中多开了俩数组，浪费了一定的空间，可以使用一个单调栈来存储可能储水的柱子。这样使用栈就可以在一次遍历中完成。</p>
+    <p>思路：<br>如果当前的条形块小于或等于栈顶的条形块，我们将条形块的索引入栈，意思是当前的条形块被栈中的前一个条形块界定。如果我们发现一个条形块长于栈顶，我们可以确定栈顶的条形块被当前条形块和栈的前一个条形块界定，因此我们可以弹出栈顶元素并且累加答案到
+        ans 。<br>伪代码：<br><img src="jys/Image [6].png" alt="pic"><br><a href="https://paste.ubuntu.com/p/26Kx4CQK3W/">代码链接</a></p>
+
+</body>
+
+</html>

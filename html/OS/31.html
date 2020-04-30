@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>临界区和锁</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/4/8 18:00</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/4/3 20:06</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="-">临界区和锁</h1>
+<ul>
+<li>互斥：同一时间临界区中最多存在一个线程</li><li>process：如果一个线程想进入临界区，那么它最终一定会成功</li><li>有限等待：如果有个线程i处于入口处，那么在i的请求被接受之前，其他线程进入临界区的时间是有限制的</li><li><p>无忙等待（可选）：如果一个进程在等待进入临界区，那么在它可以进入之前会被挂起</p>
+<h3 id="-">三个方法：</h3>
+</li><li>禁用硬件中断</li><li>基于软件的解决办法</li><li><p>更高级别的抽象</p>
+<h2 id="-">禁用硬件中断</h2>
+<h4 id="-">做法</h4>
+</li><li>没有中断，没有上下文切换，因此没有并发<ul>
+<li>硬件将中断处理延迟到中断被启用之后</li><li>大多数现代计算机体系结构都通过提供指令来完成</li></ul>
+</li><li>进入临界区<ul>
+<li>禁用中断</li></ul>
+</li><li><p>离开临界区</p>
+<ul>
+<li>开启中断</li></ul>
+<h4 id="-">问题</h4>
+</li><li>一旦中断被禁用，线程就停不下来<ul>
+<li>整个系统都因为你停下来</li><li>其他线程可能饥饿</li></ul>
+</li><li>要是临界区可以任意长怎么办<ul>
+<li>无法限制响应中断所需的时间</li></ul>
+</li><li>对于多cpu的环境是不生效的，因为对于其他cpu不影响</li><li><p>要小心使用</p>
+<h2 id="-">基于软件的解决办法</h2>
+<p><img src="31img/Image.png" alt="1"><br><img src="31img/Image2.png" alt="2"><br>上面这个例子有个问题，那就是如果turn = 1执行完后，轮到turn = 2，turn 2 执行完后，turn 2就不可能再执行，只能等待turn = 1。<br>且不满足process</p>
+</li><li><p>共享变量 - 初始化</p>
+</li><li><pre><code>  int flag[2],flag[0] = flag[1]= 0;
+    Thread Ti
+    do{
+      while(flag[j]==1){
+          flag[i]=1;
+      critical section;
+      flag[i]=0;
+      remainder section
+      }while(1)
+</code></pre></li><li>这种方法无法满足互斥</li><li>如果换一种方法：<pre><code>  int flag[2],flag[0] = flag[1]= 0;
+    Thread Ti
+    do{
+    flag[i]=1;
+      while(flag[j]==1)；
+      critical section;
+      flag[i]=0;
+      remainder section
+    }while(1)
+</code></pre></li><li><p>这样又会导致死锁。</p>
+<h4 id="dekker-i-j-">dekker算法：满足进程i和j之间互斥的经典基于软件的解决办法</h4>
+</li><li>use two shared data items;</li><li><pre><code>int turn;
+boolean flag[];
+</code></pre></li><li>code for ENTER_CRITICAL_CECTION</li><li><pre><code>flag[i]=true;
+turn=j;
+while(flag[j]&amp;&amp;turn==j);
+</code></pre></li><li>code for ENTER_CRITICAL_CECTION</li><li><pre><code>flag[i] = false;
+</code></pre></li></ul>
+<h4 id="bakery-">bakery算法</h4>
+<p>N个进程的临界区</p>
+<ul>
+<li>进入临界区之前，进程接收一个数字</li><li>得到的数字的最小的进入临界区</li><li>如果进程pi和pj收到相同的数字，那么如果i&lt;j，pi先进入临界区，否则pj先进入临界区</li><li>编号方案总是按照枚举的增加顺序生成数字</li></ul>
+<h4 id="-">问题</h4>
+<ul>
+<li>复杂<ul>
+<li>需要两个进程间共享数据项</li></ul>
+</li><li>需要忙等待<ul>
+<li>浪费cpu时间</li></ul>
+</li><li>没有硬件保证的情况下没有真正的软件解决方案<ul>
+<li>peterson算法需要原子的load和store指令</li></ul>
+</li></ul>
+<h2 id="-">更高级的抽象</h2>
+<ul>
+<li>硬件提供了一些原语<ul>
+<li>像中断禁用，原子操作指令等</li><li>大多数现代体系结构都这样</li></ul>
+</li><li>操作系统提供更高级的编程抽象来简化并行编程<ul>
+<li>例如:锁，信号量</li><li>从硬件原话中构建</li></ul>
+</li></ul>
+<h4 id="-">锁</h4>
+<ul>
+<li>锁是一个抽象的数据结构<ul>
+<li>一个二进制状态（锁定/解锁），两种方法</li><li>locl::Acquire() - 锁被释放前一直等待，然后得到锁</li><li>lock::Release() - 释放锁，唤醒任何等待的进程</li></ul>
+</li><li>使用锁来编写临界区会很简单<ul>
+<li><pre><code>lock_next_pid-&gt;Acquire();
+new_pid = next_pid++;
+lock_next_pid-&gt;Release();
+</code></pre><h4 id="-">实现：</h4>
+</li></ul>
+</li><li>大多数现代体系结构都提供原子操作指令<ul>
+<li>通过特殊的内存访问电路</li><li>针对单处理器和多处理器</li></ul>
+</li><li>Test-and-Set 测试和置位<ul>
+<li>从内存中读值</li><li>测试该值是否为1（然后返回真假）</li><li>内存值设为1</li></ul>
+</li><li>交换<ul>
+<li>交换内存中的两个值</li></ul>
+</li></ul>
+<h4 id="-">忙等待编码</h4>
+<pre><code>class Lock{
+  int value;
+}
+Lock::Acquire(){
+  while(test-and-set(value));
+}
+Lock::Release(){
+  value=0;
+}
+</code></pre><h4 id="-">无忙等待代码</h4>
+<pre><code>class Lock{
+  int value = 0;
+  WaitQueue q;
+}
+Lock::Accuire(){
+  while(test-and-set(value)){
+    add this TCB to wait queue q;
+    schedule();
+  }
+}
+Lock::Release(){
+  value=0;
+  remove one thread t from q;
+  wakeup();
+}
+</code></pre><h4 id="-exchange-">使用exchange()交换实现</h4>
+<pre><code>// 共享数据（初始化为0）
+int lock = 0;
+// 线程Ti
+int key;
+do{
+    key=1;
+    while(k==1){
+        exchange(lock,key);
+    }
+    critical section;
+    lock = 0;
+    remainder section;
+}
+</code></pre><ul>
+<li><p>优点</p>
+<ul>
+<li>适用于单处理器或者共享主存的<strong>多处理器</strong>中<strong>任意数量的进程</strong></li><li>简单且容易证明</li><li>可以用于支持多临界区</li></ul>
+</li><li><p>缺点</p>
+<ul>
+<li>忙等待消耗处理器时间</li><li>当进程离开临界区并且多个进程在等待的时候可能导致饥饿</li><li>死锁<ul>
+<li>如果一个低优先级的进程拥有临界区并且一个高优先级进程也需求，那么高优先级进程会获得处理器并等待临界区</li></ul>
+</li></ul>
+</li></ul>
+<h2 id="-">总结：</h2>
+<ul>
+<li>锁是更高等级的编程抽象<ul>
+<li>互斥可以使用锁来实现</li><li>通常需要一定等级的硬件支持</li></ul>
+</li><li>常用的三种实现方法<ul>
+<li>禁用中断（仅限于单处理器）</li><li>软件方法（复杂）</li><li>原子操作指令（单处理器或多处理器均可）</li></ul>
+</li><li>可选实现内容：<ul>
+<li>有忙等待</li><li>无忙等待</li></ul>
+</li></ul>
+
+
+</body>
+</html>

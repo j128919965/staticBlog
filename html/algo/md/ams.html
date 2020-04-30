@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>李兆荣的学习笔记——算法</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="..\..\css\md.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div>
+        <table>
+            <tr>
+                <td><b>创建时间：</b></td>
+                <td><i>2020/3/24 20:01</i></td>
+            </tr>
+            <tr>
+                <td><b>更新时间：</b></td>
+                <td><i>2020/3/24 20:37</i></td>
+            </tr>
+            <tr>
+                <td><b>作者：</b></td>
+                <td><i>lzr</i></td>
+            </tr>
+        </table>
+    </div>
+    <h1 id="-">按摩师问题</h1>
+    <p><a href="https://leetcode-cn.com/problems/the-masseuse-lcci/%3C/a%3E">题目地址</a></p>
+    <p>一道简单的动态规划问题，解题点在于<br>在nums数组中<br>对于第n个点，dp[n]有两种情况。<br>选择这个点或者不选择。<br>则dp[n]=max(dp[n-1],dp[n-2]+nums[n]])<br>则有如下思路：
+    </p>
+    <pre><code class="lang-java">
+public int massage(int[] nums) {
+    //减少访问，略微增加性能，其实没必要
+    int n = nums.length;
+    //特判
+    if (n == 0) {
+        return 0;
+    }
+    if (n == 1) {
+        return nums[0];
+    } else if (n == 2) {
+        return Math.max(nums[0], nums[1]);
+    }
+    //创建一个用于存储到当前为止最大方案的数组
+    int[] dp = new int[n];
+    dp[0] = nums[0];
+    dp[1] = Math.max(nums[0], nums[1]);
+    for (int i = 2; i &lt; n; i++) {
+        //当前点的两种情况，取最大值
+        dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+    }
+    return dp[n - 1];
+}
+</code></pre>
+    <p>但是对于这道题，并没有必要把所有的数据都存下来，所以只需要两个变量来存储dp[i-1]和dp[i-2]的值就可以了，而且也不用像第一种解法那样的特判。</p>
+    <pre><code class="lang-java">
+public int massage(int[] nums) {
+    int a = 0, b = 0;
+    int n = nums.length, c;
+    for (int i = 0; i &lt; n; i++) {
+        c = Math.max(a + nums[i], b);
+        a = b;
+        b = c;
+    }
+    return b;
+}
+</code></pre>
+    <p>这样代码会简单一些，而且空间复杂度为O(1);</p>
+
+</body>
+
+</html>

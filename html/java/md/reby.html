@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>springmvc ResponseBody</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/4/21 12:00</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/4/21 12:04</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>网上的未知仁兄</i></td></tr>
+</table>
+</div>
+
+<h1>springmvc ResponseBody</h1>
+
+<p>昨天看到一小段文字，解答了我一个小疑问。在这里分享给大家。</p>
+
+<blockquote><p>在springMVC框架中,
+    当controller层方法返回String类型的时候默认是进行页面跳转,
+    这时候后台使用return时ajax接收到的并不是后台返回的某个字符串或状态码,而是整个html对象,
+    这时可以在后台的方法上添加注解 @ResponseBody,就可以直接使用return返回想要返回的字符串而不进行页面跳转,
+    而且ajax接收到的也是我们想要返回的字符串而不是整个html对象,然后再进行判断后用window.location.href进行页面跳转
+</p></blockquote>
+</body>
+</html>

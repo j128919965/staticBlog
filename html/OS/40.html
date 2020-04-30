@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>40、死锁检测和死锁恢复</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/md.css">
+    </head>
+
+    <body>
+    <div>
+    <table>
+    <tr><td><b>创建时间：</b></td><td><i>2020/04/27 14:49</i></td></tr>
+    <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+    </table>
+    </div>
+
+
+<h1 id="-">死锁检测和死锁恢复</h1>
+<h2 id="-">死锁检测</h2>
+<p>死锁检测比前面的两种思路更宽</p>
+<h4 id="-">特征：</h4>
+<ul>
+<li>允许系统进入死锁状态</li><li>死锁检测算法</li><li>恢复机制</li></ul>
+<h4 id="-">检测的两种办法</h4>
+<ul>
+<li>对资源图进行简化，把资源节点去掉，只留下进程节点<ul>
+<li>每个资源类型单一实例<ul>
+<li>节点是进程</li><li>Pi → Pj ： Pi等待Pj</li></ul>
+</li><li>定期调用检测算法来搜索图中是否存在循环</li><li>算法需要n^2次操作，n是图中节点的数目。</li><li><img src="40img/1.png" alt=""></li></ul>
+</li><li><p>基于安全状态判断算法</p>
+<ul>
+<li>数据结构<ul>
+<li><strong>Available:</strong>长度为M的向量表示每种类型可用资源的数量。</li><li><strong>Allocation:</strong>一个n*m矩阵定义了当前分配给各个进程每种类型资源的数量。如果Allocation[i][j] == k，进程Pi拥有资源Rj的k个实例。</li><li><strong>Request:</strong>一个n*m矩阵表示各进程的当前请求。如果Request[i][j] == k，表示进程Pi请求K个资源Rj的实例。</li></ul>
+</li><li>算法:死锁检测算法和安全状态判断的算法很类似<ol>
+<li>Work 和 Finish 分别是常务为m和n的向量（数组）<pre><code>初始化：
+//work为当前空闲资源量
+（a）Work = Available
+//finish为线程是否结束
+（b）For i = 1,2,3,....,n,if
+Allocation&gt;0 then Finish[i] = False;
+Otherwise,Finish[i] = true;
+</code></pre></li><li>找到这样的索引：<pre><code>//线程没有结束的线程，且此线程将需要的资源量小于当前空闲资源量
+(a)Finish[i] == false;
+(b)Request[i]&lt;= work;
+如果没有找到，转到4
+</code></pre></li><li>分配资源，并且等待他完成<pre><code>//把找到的线程拥有的资源释放会当前空闲资源中
+Work = Work + Allocation[i]
+Finish[i] = true;
+转步骤2
+</code></pre></li><li>最终状态，如果有Finish[i]等于false，这表示系统处于死锁状态<pre><code>if Finish[i] == false,for some i,1&lt;=i&lt;=n
+//系统处于死锁状态
+此外，if Finish[i] == false,Pi死锁。
+</code></pre></li></ol>
+</li><li><strong>算法需要O(m<em>n</em>n)</strong>操作检测是否处于死锁状态</li></ul>
+</li><li><p>死锁检测消耗很大，自己调试的时候可以用。商用还是算了</p>
+</li></ul>
+<h4 id="-">检测算法使用</h4>
+<ul>
+<li>何时、使用什么样的频率来检测依赖于：<ul>
+<li>死锁多久可能会发生？</li><li>多少进程需要被回滚？one for each disjoint cycle</li></ul>
+</li><li>如果检测算法被多次调用，可能是资源图有多个循环，所以我们无法分辨出多个可能死锁进程中的哪些进程造成了死锁。</li></ul>
+<h2 id="-">死锁恢复</h2>
+<h4 id="-">杀死进程的办法</h4>
+<ul>
+<li>终止所有死锁进程（好过分）</li><li>在一个时间内终止一个进程直达死锁消除</li><li>终止进程的顺序应该是<ul>
+<li>进程的优先级</li><li>进程运行了多久以及还需要多久</li><li>进程占用的资源</li><li>进程完成需要的资源</li><li>多少进程需要被终止</li><li>进程是交互还是批处理</li></ul>
+</li></ul>
+<h4 id="-">多种思路</h4>
+<ul>
+<li>选一个受害者 —— 最小的成本</li><li>回滚 —— 返回到一些安全状态</li><li>饥饿 —— 同一个进程可能一直被选作受害者，包括回滚的数量<br>·</li></ul>
+
+
+    </body>
+</html>

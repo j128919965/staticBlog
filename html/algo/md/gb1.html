@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>排序系列之归并排序（1）——链表归并</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../css/md.css">
+  </head>
+
+  <body>
+  <div>
+  <table>
+  <tr><td><b>创建时间：</b></td><td><i>2020/04/26 21:45</i></td></tr>
+  <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+  </table>
+  </div>
+
+
+  <h1 id="-1-">排序系列之归并排序（1）——链表归并</h1>
+  <blockquote>
+  <p>题目描述：<br>给一个链表数组，每个链表都是有序的。<br>把他们合并成一个有序链表。<br>示例：<br>输入:<br>[<br>  1-&gt;4-&gt;5,<br>  1-&gt;3-&gt;4,<br>  2-&gt;6<br>]<br>输出: 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</p>
+  </blockquote>
+  <p>链表结构如下：</p>
+  <pre><code>/**
+   * Definition for singly-linked list.
+   * struct ListNode {
+   *     int val;
+   *     ListNode *next;
+   *     ListNode(int x) : val(x), next(NULL) {}
+   * };
+   */
+  </code></pre><p>这道题很简单，很基础的归并排序，首先多个list的排序一定是基于两个list归并的基础算法来实现的。</p>
+  <p>两个list归并的解法：</p>
+  <pre><code class="lang-java">private ListNode merge(ListNode n1,ListNode n2){
+      //创建一个头，头节点的值无所谓
+      //反正最后返回的时候直接返回head.next
+      ListNode head=new ListNode(0);
+      ListNode p = head;
+      //如果两个指针都不是空的
+      while(n1!=null&amp;&amp;n2!=null){
+          //把其中小的那个给p赋值
+          //同时自身 = 自身.next
+          if(n1.val&lt;n2.val){
+              p.next = n1;
+              n1 = n1.next;
+          }else{
+              p.next = n2;
+              n2 = n2.next;
+          }
+          //p向后推
+          p=p.next;
+      }
+      //现在肯定有一个是空的
+      //把剩下的原封不动装在p后面就行了
+      p.next=n1==null?n2:n1;
+      return head.next;
+  }
+  </code></pre>
+  <p>这段代码相信学过归并排序的同学都可以写出来。</p>
+  <h4 id="-">简单解法</h4>
+  <p>那驱动程序就可以写成：</p>
+  <pre><code class="lang-java">public ListNode mergeKLists(ListNode[] lists) {
+      int len = lists.length;
+      if(len==0)return null;
+      ListNode p = lists[0];
+      for(int i = 1;i&lt;len;i++){
+          p = merge(p,lists[i]);
+      }
+      return p;
+  }
+  </code></pre>
+  <p>大概思路就是从lists[0]开始一路归并到最后一个。毫无疑问，这个是可以正常运行的。但是算法的效率并不是特别高。理所应当的，我们也得到了如下的“好成绩”</p>
+  <blockquote>
+  <p>131 / 131 个通过测试用例<br>状态：通过<br>执行用时：118 ms（战胜25.47%的java提交记录）<br>内存消耗：41.2 MB</p>
+  </blockquote>
+  <h4 id="-">优化方法</h4>
+  <p>那更优化的方法是什么呢？归并排序。</p>
+  <p>把大的数组拆成两半，左边和右边分别排序完成后，把左右两边的list归并。左右两边数组还按照这样的策略，直到左边和右边都只有一条链表为止。</p>
+  <p>很清晰的分治法思路，可以写下如下的代码：（两个链表归并没有改）</p>
+  <pre><code class="lang-java">private ListNode merge(ListNode[] lists, int lo, int hi) {
+      //如果左指针和右指针重合，
+      //那代表着某一边当前只剩下一个链表了
+      //直接返回这条链表
+      if (lo == hi) {
+          return lists[lo];
+      }
+      //找中间点
+      int mid = lo + (hi - lo) / 2;
+  
+      //因为l2的左指针和l1的右指针之间一定相差1
+      //所以不用担心两条链表重合。
+      ListNode l1 = merge(lists, lo, mid);
+      ListNode l2 = merge(lists, mid + 1, hi);
+  
+      //选到左右两边的链表后归并
+      return merge(l1, l2);
+  }
+  
+  
+  public ListNode mergeKLists(ListNode[] lists) {
+      int len = lists.length;
+      if(len==0)return null;
+      return merge(lists,0,len-1);
+  }
+  </code></pre>
+  <p>使用这种方法，我们再次尝试提交，得到了如下的好成绩：</p>
+  <blockquote>
+  <p>131 / 131 个通过测试用例<br>状态：通过<br>执行用时：1 ms（战胜100%的java提交记录）<br>内存消耗：41.7 MB</p>
+  </blockquote>
+  <p>归并排序是一种很好用的方式，它不仅仅可以用在排序上。后面的一个例子会再次用到归并排序。</p>
+  
+
+  </body>
+</html>
+

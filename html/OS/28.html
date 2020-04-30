@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>28、多处理器调度与优先级翻转</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../css/md.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    
+<div>
+    <table>
+    <tr><td><b>创建时间：</b></td><td><i>2020/4/6 16:35</i></td></tr>
+    <tr><td><b>更新时间：</b></td><td><i>2020/4/6 16:52</i></td></tr>
+    <tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+    </table>
+    </div>
+<h1 id="-">多处理器调度与优先级翻转</h1>
+<h3 id="-cpu-">多处理器的cpu调度更复杂</h3>
+<ul>
+<li>多个相同的单处理器组成一个多处理器</li><li>优点：负载共享<h3 id="-">对称多处理器</h3>
+</li><li>每个处理器运行自己的调度程序</li><li>需要在调度进程中同步</li><li><img src="28、多处理器调度与优先级翻转_files/Image.png" alt="216b37dd7f0a0ced6d87bbc0c4a6d7f9.png"></li></ul>
+<h3 id="-">优先级反转</h3>
+<ul>
+<li>优先级反转的持续时间取决于其他不相关任务的不可预测的行为<ul>
+<li>低优先级任务继承高优先级任务的优先级依赖于他们共享的资源</li><li>优先级天花板：“资源”的优先级和“所有可以锁定该资源的任务中优先级最高的那个任务”的优先级相同</li><li>除非优先级高于系统中所有被锁定的资源的优先级上限，否则任务尝试执行临界区的时候会被阻塞</li><li>只有最高优先级上限信号量锁的任务，会继承被该锁所阻塞的任务的优先级</li></ul>
+</li></ul>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>IPC进程间通信</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/04/27 15:36</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+<h1 id="ipc-">IPC进程间通信</h1>
+<blockquote>
+<p>inter process communication</p>
+</blockquote>
+<h2 id="-">概述</h2>
+<h4 id="-">为什么要进程间通信</h4>
+<ul>
+<li>虽然要保护进程的地址空间不会被其他不相关的进程访问</li><li>但是进程之间可能协作在一起完成更大的任务</li><li>沟通就需要通信</li></ul>
+<h4 id="-">通信操作</h4>
+<ul>
+<li>IPC facility提供两个操作<ul>
+<li>send(message) -消息大小固定或者可变</li><li>receive(message)</li></ul>
+</li><li>如果进程P和Q想要通信，那么需要<ul>
+<li>在他们之间建立数据链路</li><li>通过send/receive交换消息</li></ul>
+</li><li>通信链路的实现<ul>
+<li>物理（如 共享内存，硬件总线）</li><li>逻辑（如 逻辑属性）</li><li><img src="41img/1.png" alt="">（左侧为间接通讯，右侧为直接通信，类似打电话和直接面对面交流的区别）</li></ul>
+</li></ul>
+<h3 id="-">从直接和间接来分类</h3>
+<h4 id="-">直接通信</h4>
+<ul>
+<li>进程必须正确命名对方：<ul>
+<li>send(P,message) -发送信息到P</li><li>receive(Q,message) -从Q接收信息</li></ul>
+</li><li>通信链路的属性<ul>
+<li>自动建立链路</li><li>一条链路恰好对应一对通信进程</li><li>每对进程之间只有一个链接存在</li><li>链接可以是单向的，但通常为双向的</li></ul>
+</li></ul>
+<h4 id="-">间接通信</h4>
+<ul>
+<li>定向从消息队列接收消息<ul>
+<li>每个消息队列都有一个唯一的ID</li><li>只有它们共享了一个消息队列，进程才能够通信</li></ul>
+</li><li>通信链路的属性<ul>
+<li>只有进程共享一个共同的消息队列，才能建立链路</li><li>链接可以与许多进程相关联</li><li>每对进程可以共享多个数据链路</li><li>连接可以是单向或双向</li></ul>
+</li><li>操作<ul>
+<li>创建一个新的消息队列</li><li>通过消息队列发送和接收信息</li><li>销毁消息队列</li></ul>
+</li><li>原语的定义如下：<ul>
+<li>send(A,message) -发送信息到队列A</li><li>receive(A,message) -从队列A接收信息</li></ul>
+</li></ul>
+<h3 id="-">从阻塞和非阻塞来分类</h3>
+<ul>
+<li>消息传递可以是阻塞或非阻塞</li><li>阻塞被认为是同步的<ul>
+<li><strong>Blocking send</strong> has the sendert block until the message is received</li><li><strong>Blocking receive</strong> has the receiver block until a message is available</li></ul>
+</li><li>非阻塞被认为是异步的<ul>
+<li><strong>Non-blocking</strong> send has the sender send the message and continue;</li><li><strong>Non-blocking</strong> receive has the receiver receive a valid message or null;</li></ul>
+</li></ul>
+<p>它们有各自适合的场景，没有优劣之分。</p>
+</body>
+</html>

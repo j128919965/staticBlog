@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>岛屿数量</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/4/20 17:00</i></td></tr>
+<tr><td><b>更新时间：</b></td><td><i>2020/4/20 17:00</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+<h1>岛屿数量（dfs）</h1>
+
+<a href="https://leetcode-cn.com/problems/number-of-islands/">leetcode链接</a>
+
+<p>这道题和前几天的每日一题挺像的，这道题要更简单一些。</p>
+
+<p>这道题其实就是求联通域。每找到一个联通域就把计数器++。</p>
+
+<p>每遍历到一个&#39;1&#39;，就以这个字符为核心开始递归扩展联通域，把这个字符改成不是&#39;1&#39;的字符，防止扩展联通域的时候检查到它。</p>
+
+<p>还算是比较友好的一道题吧</p>
+
+<p>上代码：</p>
+
+<pre><code>
+public int numIslands(char[][] grid) {
+    int num = 0;
+    for (int i = 0; i &lt; grid.length; i++) {
+        for (int j = 0; j &lt; grid[i].length; j++) {
+            if(grid[i][j]==&#39;1&#39;){
+                //只要检测到一次1，那它所在的联通域就全都不是1了。
+                //所以在这个循环中只要找到1，就是新的联通域
+                expand(grid,i,j);
+                num++;
+            }
+        }
+    }
+    return num;
+}
+//扩展联通域
+private void expand(char[][] grid,int i,int j){
+    //超出界限，返回
+    if(i&lt;0||j&lt;0||i&gt;=grid.length||j&gt;=grid[i].length){
+        return;
+    }
+    //如果检测到的位置是0或遍历过的位置，返回
+    if(grid[i][j]!=&#39;1&#39;){
+        return;
+    }
+    //这个位置下次不再访问
+    grid[i][j] = &#39;a&#39;;
+    //dfs
+    expand(grid,i-1,j);
+    expand(grid,i+1,j);
+    expand(grid,i,j-1);
+    expand(grid,i,j+1);
+}
+</code></pre>
+</body>
+</html>
