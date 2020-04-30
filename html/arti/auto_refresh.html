@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>自动更新博客脚本</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/md.css">
+    </head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/04/30 23:23</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+<h1 id="-">自动更新脚本</h1>
+<h2 id="-">原始办法</h2>
+<p>也是因为技术太菜，外加不会写后端。平常写完博客需要把每个文档写成单独的html文件，然后挨个修改对应版块的index和总的index。</p>
+<p>之后再通过sftp连到服务器，把文件挨个更新。如果还更新了css或者js等多个文件，更新的过程就会很头疼，有时候会更新错或者遗漏。</p>
+<p>更可怕的是，有时候会发现更新完后有地方写错了。。想crtl+z也没办法。。所以今天痛下决心搞了一个自动更新的脚本。。</p>
+<h2 id="-git">基于git</h2>
+<p>思路是这样的，把我本地的代码设置成git本地代码仓库，负责推到github上。用git可以很方便的控制版本，妈妈再也不用担心我误删文件啦。</p>
+<p>服务器端先git clone下来，然后每次更新的时候git pull，再把更新后的文件复制到源文件应该在的文件夹下。</p>
+<p>总而言之就是俩脚本：<br>windows本机上的脚本：</p>
+<pre><code>git add html
+git commit
+git push
+ssh root@我的服务器地址 &quot;cd /home;./refresh.sh&quot;
+</code></pre><p>然后服务器上的脚本：</p>
+<pre><code>cd /home/static-blog
+git pull
+rm -rf /var/www/html
+cp -r html /var/www/html
+</code></pre><p>虽然实现方式可能还是有点蠢，但是对我目前来说在也算是极大的便捷了更新的工作。</p>
+<p>等过段时间把博客更新到动态版本，到时候直接在客户端更新就好了。。现在先这样混一下咯。</p>
+
+</body>
+</html>
