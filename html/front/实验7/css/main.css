@@ -1,0 +1,232 @@
+.icon{
+    display: inline-block;
+    margin: 0;
+    width: 1em;
+    height: 1em;
+}
+
+/*! block alice/grid/1.0.0/grid-debug.css */
+/* alice.grid 样式模块 */
+
+.ui-grid-1, .ui-grid-2, .ui-grid-3, .ui-grid-4, .ui-grid-5, .ui-grid-6, .ui-grid-7, .ui-grid-8, .ui-grid-9, .ui-grid-10, .ui-grid-11,.ui-grid-12, .ui-grid-13, .ui-grid-14, .ui-grid-15, .ui-grid-16, .ui-grid-17, .ui-grid-18, .ui-grid-19, .ui-grid-20, .ui-grid-21, .ui-grid-22, .ui-grid-23, .ui-grid-24, .ui-grid-25 {
+    margin: 0 5px 0 5px ;
+    float:left;
+    display:inline;  
+}
+
+.ui-grid-1 {width:30px;}
+.ui-grid-2 {width:70px;}
+.ui-grid-3 {width:110px;}
+.ui-grid-4 {width:150px;} /* 右侧推广位的宽度 */
+.ui-grid-5 {width:190px;} /* 左侧边栏的宽度 */
+.ui-grid-6 {width:230px;}
+.ui-grid-7 {width:270px;}
+.ui-grid-8 {width:310px;}
+.ui-grid-9 {width:350px;}
+.ui-grid-10 {width:390px;}
+.ui-grid-11 {width:430px;}
+.ui-grid-12 {width:470px;}
+.ui-grid-13 {width:510px;}
+.ui-grid-14 {width:550px;}
+.ui-grid-15 {width:590px;} /* 中央区域宽度 */
+.ui-grid-16 {width:630px;}
+.ui-grid-17 {width:670px;}
+.ui-grid-18 {width:710px;}
+.ui-grid-19 {width:750px;}
+.ui-grid-20 {width:790px;}
+.ui-grid-21 {width:830px;} /* 交易明细表区域的宽度 */
+.ui-grid-22 {width:870px;}
+.ui-grid-23 {width:910px;}
+.ui-grid-24 {width:950px;}
+.ui-grid-25 {width:990px;} /* 最大页面宽度 */
+ 
+.ui-grid-row {
+    margin-right: -10px;
+    zoom: 1;
+}
+.ui-grid-row:after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+body{
+    padding: 20px;
+    width: 1000px;
+    margin: auto;
+    letter-spacing: 1px;
+}
+
+.ui-tl{
+    border-bottom: 5px solid #006699;
+}
+
+header>.m-tl>.m-tab>span{
+    background: #006699;
+    color: #fff;
+    padding: 4px 10px 5px;
+    border-radius: 3px 3px 0 0 ;
+    display: block;
+    text-align: center;
+}
+
+header>.m-tl>.m-tip>span{
+    background: #ff6600;
+    color: #fff;
+    padding: 2px 4px;
+    font-size: 15px;
+    border-radius: 3px;
+    text-align: center;
+}
+
+header>.m-tl>.m-fun>span{
+    color: #666;
+    border: 1px solid #ccc;
+    background-color: #ededed;
+    padding: #666;
+    padding: 2px 4px;
+    font-size: 15px;
+    border-radius: 3px;
+    text-align: center;
+    margin-top: 2px;
+}
+.m-red{
+    color: red;
+}
+.m-weight{
+    font-weight: 1000;
+}
+.m-time{
+    color: #666;
+    border: 1px solid #ccc;
+    padding: #666;
+    padding: 2px 4px;
+    font-size: 15px;
+    background-color: #f3f3f3;
+}
+.m-header-but{
+    background-color: #fff9de;
+    border: 1px solid #ccc;
+}
+.m-header-but>img{
+    float: right;
+    display: inline;
+    margin: 5px;
+}
+.m-header-but>a{
+    float: right;
+}
+.clear{
+    clear: both;
+}
+.m-sec-head{
+    text-align: center;
+}
+.m-sec-head>span{
+    margin: 0 1px 0 0;
+    padding: 0 5px 0 4px;
+    background-color: #caddea;
+}
+.m-tbh{
+    width: 1000px;
+    text-align: center;
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+}
+.m-tbh-high{
+    height: 60px;
+    line-height: 60px;
+}
+.m-tbh-low{
+    height: 40px;
+    line-height: 40px;
+}
+.m-tbh-head{
+    width: 380px;
+    text-align: left;
+    padding-left: 50px;
+    font-size: 25px;
+}
+.m-tbh-time{
+    height: 30px;
+}
+.m-tbh-links-low>a{
+    margin-left:5px;
+    float: right;
+}
+.m-tbh-links-high{
+    height: 60px;
+    line-height: 30px;
+    margin-left:5px;
+    float: right;
+}
+.m-tbh-links-high>a{
+    height: 30px;
+    line-height: 30px;
+    text-decoration: underline;
+    margin-left:5px;
+    font-size: 15px;
+    float: right;
+}
+.m-tbp{
+    height: 60px;
+    line-height: 60px;
+}
+.m-tbp>div{
+    display: inline-block;
+    height: 60px;
+    margin: 0 1px 0 0;
+    padding: 0 5px 0 4px;
+    border-right: 1px solid #666;
+}
+div.m-tbp-time{
+    text-align: center;
+    border-right: 3px solid #7cc8da;
+    font-weight: 800;
+    padding-right: 0;
+    line-height: 30px;
+}
+div.m-tbp-method{
+    border-left: 3px solid #7cc8da;
+    padding-left: 0; 
+}
+div.m-tbp-money{
+    font-weight: 800;
+    font-size: 20px;
+    text-align: center;
+}
+.m-tbp-method>.type{
+    float: left;
+    height: 60px;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 25px;
+    width: 100px;
+}
+.m-tbp-method>.name{
+    float: left;
+    width: 250px;
+    color: #006699;
+    margin-left: 10px;
+    font-size: 18px;
+    height: 30px;
+    line-height: 29px;
+}
+.m-tbp-method>.name>.unknow{
+    height: 15px;
+    font-size: 12px;
+    display: inline;
+    padding: 5px;
+    background-color: #006699;
+    color: #caddea;
+    border-radius: 5px;
+}
+
+.m-tbp-zdx{
+    text-align: center;
+    font-size: 18px;
+    line-height: 30px;
+}

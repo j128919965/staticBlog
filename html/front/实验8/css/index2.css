@@ -1,0 +1,26 @@
+.img-container{
+    width: 500px;
+    height: 300px;
+    max-width: 0 auto;
+}
+.img-container>img{
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+.point-container{
+    margin-top: -30px;
+    width: 500px;
+    display: flex;
+    justify-content: space-around;
+}
+.point{
+    width: 10px;
+    height: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: aqua;
+}
+.light{
+    background-color: red;
+}

@@ -1,0 +1,169 @@
+.coutainer {
+  position: relative;
+  margin: auto;
+  width: 500px;
+  border: 1px solid black;
+  font-size: 0;
+}
+.head {
+  text-align: center;
+  font-size: 0px;
+}
+.head > .state {
+  position: relative;
+  top: 0px;
+  display: inline-block;
+  width: 15%;
+  height: 75px;
+  margin: 2% 5% 2% 5%;
+}
+.head > .state > .number {
+  font-weight: bold;
+  position: relative;
+  top: 10%;
+  font-size: 24px;
+  color: #fa4805;
+}
+.head > .state > .discrip {
+  position: relative;
+  font-size: 20px;
+  top: 8px;
+  color: black;
+}
+.call {
+  background-color: #ffe5dd;
+  height: 40px;
+  font-size: 18px;
+  color: #fa4805;
+  text-align: center;
+  line-height: 40px;
+}
+.tbh-notice {
+  padding: 10px;
+}
+.menu > ul {
+  list-style: none;
+  padding: 8px;
+  text-align: center;
+}
+.menu > ul > li {
+  display: inline-block;
+  font-size: 20px;
+  text-align: center;
+  /* width: 16%; */
+  margin: 0 5%;
+}
+.menu > ul > li.selected {
+  border-bottom: 2px solid #fa4805;
+}
+.cl2 {
+  list-style: none;
+  padding: 10px 0 5px 0;
+  margin: 0 5px;
+}
+.cl2 > li {
+  display: inline-block;
+  font-size: 20px;
+  width: 50%;
+  height: 40px;
+  line-height: 40px;
+}
+.cl2 > .org {
+  color: #fa4805;
+}
+.chf {
+  text-align: center;
+}
+.chfpic {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  width: 122px;
+  font-size: 20px;
+  height: 120px;
+  margin-right: -1px;
+  border: 2px solid gainsboro;
+  border-bottom: 0;
+  z-index: 1;
+}
+.chfpic > p {
+  vertical-align: bottom;
+  margin: 10px 0;
+}
+.checked {
+  border: 2px solid #fa4805;
+  border-bottom: 2px solid white;
+  z-index: 3;
+}
+.p1 {
+  background: url("../img/1.png") no-repeat;
+}
+.p2 {
+  background: url("../img/1.png") no-repeat;
+}
+.p3 {
+  background: url("../img/1.png") no-repeat;
+}
+.p4 {
+  background: url("../img/1.png") no-repeat;
+}
+.pic {
+  margin: 15px auto 0 auto;
+  height: 40px;
+  width: 40px;
+  background-size: 100% 100%;
+}
+.huafei {
+  border: 2px solid #fa4805;
+  padding: 10px 0;
+  margin-top: -2px;
+  z-index: 2;
+}
+.huafei > ul {
+  list-style: none;
+  padding: 20px 0 22px 0;
+  text-align: center;
+}
+.huafei > ul > li {
+  display: inline-block;
+  font-size: 20px;
+  text-align: center;
+  margin: 0 5%;
+}
+.con-input {
+  margin-top: -2px;
+  margin-left: 5%;
+  height: 40px;
+  font-size: 0px;
+  width: 65%;
+  border: 2px solid gainsboro;
+}
+.con-input > img {
+  position: relative;
+  float: right;
+  top: 10px;
+  right: 2%;
+}
+.con-input > input {
+  width: 90%;
+  height: 90%;
+  font-size: 25px;
+  line-height: 100%;
+  border: 0;
+}
+.money {
+  margin-left: 5%;
+  padding: 10px 0;
+  font-size: 27px;
+}
+.bt {
+  margin: 10px 5% 20px;
+  padding: 10px 0;
+  font-size: 24px;
+  border: 0;
+  width: 140px;
+  height: 55px;
+  border-radius: 10%;
+  background-color: #fa4805;
+  color: white;
+}

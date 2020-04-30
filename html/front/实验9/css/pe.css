@@ -1,0 +1,165 @@
+body{
+    background-color: #f1f0ed;
+    max-width: 500px;
+    margin: 0 auto;
+}
+header{
+    height: 50px;
+    background-color: #00c2af;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+.m-head-dropdown{
+    color: white;
+    background-color: rgba(0,0,0,0);
+    border: 0;
+}
+.m-head-in{
+    position: relative;
+    padding-left: 30px;
+    border-radius: 2px;
+    background-color: #00a595;
+    color: white;
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
+}
+.m-head-in>svg{
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+.m-head-in>input {
+    color: white;
+    height: 30px;
+    border: 0;
+    background-color: rgba(0,0,0,0);
+}
+.m-head-user{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 25px;
+    font-weight: bold;
+    justify-content: center;
+}
+.m-sec-blks{
+    background-color: white;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #eae6e0;
+}
+.m-sec-block{
+    padding:10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.m-sec-circle{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.m-sec-gc{
+    background-color: white;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #eae6e0;
+}
+.higher{
+    height: 160px;
+}
+.lower{
+    height: 80px;
+}
+.goods{
+    color: #666;
+    padding: 10px 20px;
+}
+.m-goodinfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 18px;
+    margin-bottom: 5px;
+}
+.m-square{
+    background-color: gray;
+}
+.s-1{
+    height: 85px;width: 85px;
+    position: relative;
+    margin-top: 10px;
+}
+.s-2{
+    height: 60px;width: 60px;
+    float: right;
+    margin-right: 20px;
+}
+.s-3{
+    height: 40px;width: 40px;
+    margin-left: 30px;
+}
+.m-goods-time{
+    background-color: #4b4b4b;
+    color: white;
+    border-radius: 3px;
+    padding: 0 3px;
+}
+.m-sail{
+    background-color: white;
+    padding-left: 10px;
+}
+.m-sail-title{
+    border-bottom: 1px solid gray;
+    font-size: 20px;
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+}
+.m-sail-block{
+    position: relative;
+    /*margin-left: 10px;*/
+    padding: 10px 0;
+    border-bottom: 1px solid gray;
+}
+.m-sail-info{
+    padding-left: 20px;
+    width: 250px;
+}
+.s-sail{
+    height: 80px;
+    width: 80px;
+}
+.m-tag{
+    position: absolute;
+    width: 50px;
+    height: 20px;
+    background-color: #00c2af;
+    color: white;
+}
+.m-sail-price{
+    color: #00c2af;
+    font-size: 12px;
+}
+.m-bigger{
+    font-size: 18px;
+}
+.m-onsail{
+    border: 1px solid #ff9a00;
+    border-radius: 2px;
+    color: #ff9a00;
+}
+.m-sold{
+    float: right;
+}
+.total{
+    background-color: #8fc6ea;
+    color: #00c2af;
+    height: 40px;
+    line-height: 30px;
+    font-size: 22px;
+    width: 100%;
+    padding: 0 20px;
+}

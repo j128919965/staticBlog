@@ -1,0 +1,11 @@
+.m-box {
+  width: 200px;
+  border: 1px solid black;
+}
+.fn-active {
+  border: 1px solid black;
+}
+
+.m-item {
+  width: 100px;
+}

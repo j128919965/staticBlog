@@ -1,0 +1,25 @@
+td{
+    padding: 5px;
+    border: 1px solid black;
+    margin: 0;
+}
+tr{
+    padding: 0;
+    border: 0;
+}
+.container{
+    font-size: 20px;
+    width: 200px;
+    padding: 20px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: end;
+    align-items: center;
+}
+#adder{
+    width: 100px;
+    height: 30px;
+    font-size: large;
+    margin: 30px 0 0 0;
+}

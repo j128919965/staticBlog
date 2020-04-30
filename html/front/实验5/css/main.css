@@ -1,0 +1,233 @@
+body > img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0 auto;
+    opacity: 0.5;
+    width: 100%;
+}
+
+.container {
+    margin: 0 auto;
+    width: 1800px;
+    padding-top: 1px;
+}
+
+
+.m-but {
+    margin: 0;
+    background-color: #0169b2;
+    border: #0169b2 1px solid;
+    border-radius: 5px;;
+}
+
+.m-but-h {
+    position: relative;
+    width: 45%;
+    height: 60px;
+}
+
+.m-but-i {
+    text-align: center;
+    float: right;
+    width: 15%;
+    height: 50px;
+}
+
+.m-but > div {
+    display: inline-block;
+    margin: 5% 8% 5% 8%;
+    font-size: 24px;
+    height: 100%;
+    color: white;
+}
+
+.m-but > .enter {
+    width: 10%;
+    float: right;
+}
+
+.header {
+    margin: 10px 5% 10px 5%;
+}
+
+.m-h-img {
+    float: left;
+    margin: 3% 0 0 2%;
+    width: 47%;
+}
+
+.m-h-text {
+    float: right;
+    margin: 3% 3% 0 0;
+    height: 80%;
+    width: 41%;
+    padding: 2%;
+}
+
+.m-h-text > h1 {
+    margin: 0;
+}
+
+.m-h-text > .odl {
+    width: 11%;
+    height: 0px;
+    margin: 5% 0 0 0;
+    border-top: 5px solid #0169b2;
+}
+
+.m-h-text > p {
+    margin: 7% 0 6% 0;
+    font-size: 24px;
+    line-height: 50px;
+    letter-spacing: 0.6px;
+}
+
+.inner {
+    margin: 30px 5% 20px 5%;
+    /*border: 1px solid black;*/
+}
+
+.m-i-head {
+    padding: 50px;
+    margin-bottom: 50px;
+}
+
+.m-i-title {
+    display: inline-block;
+    width: 50%;
+    font-size: 30px;
+    letter-spacing: 3px;
+
+}
+
+.m-i-blog {
+    display: inline;
+    font-size: 45px;
+    color: #0169b2;
+}
+
+.m-i-blog:after {
+    content: "";
+    display: inline-block;
+    position: relative;
+    right: -20px;
+    height: 20px;
+    width: 0px;
+    border: 3px solid #0169b2;
+    margin-right: 30px;
+}
+
+.m-i-news {
+    height: 50px;
+    margin: 40px 40px 80px 40px;
+    /*border: 1px solid black;*/
+}
+
+.m-i-time {
+    display: inline-block;
+    width: 160px;
+    font-size: 22px;
+    line-height: 50px;
+    padding-left: 10px;
+    color: #5b5b5b;
+}
+
+.m-i-type {
+    display: inline-block;
+    width: 170px;
+    background: #0169b2;
+    border: #0169b2;
+    border-radius: 25px;
+    font-size: 20px;
+    line-height: 40px;
+    text-align: center;
+    color: white;
+}
+
+.m-i-art {
+    display: inline-block;
+    margin-left: 30px;
+    font-size: 24px;
+    line-height: 50px;
+    letter-spacing: 2px;
+}
+
+.m-b-block {
+    display: inline-block;
+    width: 48.5%;
+}
+
+.m-b-title {
+    margin-top: 0;
+    color: #0169b2;
+    letter-spacing: 1px;
+}
+
+.m-b-title:before {
+    content: "";
+    float: left;
+    position: relative;
+    left: -10px;
+    top: 0;
+    height: 45px;
+    width: 0;
+    border: 5px solid #0169b2;
+    margin: 0 20px 0 35px;
+}
+
+.m-b-card {
+    margin: 40px;
+    border: 2px solid #e4e4e4;
+    /* border: 2px solid black; */
+    height: 400px;
+    text-align: center;
+    padding: 30px;
+}
+
+.m-tel{
+    margin: 20px auto;
+    font-size: 65px;
+    color: #0169b2;
+    letter-spacing: 1.5px;
+}
+
+.m-b-card>p{
+    width: 500px;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 45px;
+    margin: 0 auto 25px auto;
+}
+
+.m-b-dis{
+    width: 500px;
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: 2px;
+    line-height: 45px;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 25px;
+    border-top:2px solid #e4e4e4;
+}
+
+.m-but-b {
+    text-align: center;
+    width: 90%;
+    height: 100px;
+    margin: 80px auto 30px auto;
+}
+
+.m-but-b > div {
+    display: inline-block;
+    margin: 5% 8% 5% 8%;
+    font-size: 32px;
+    letter-spacing: 3px;
+    height: 100%;
+    color: white;
+}
+.m-but-b > .enter {
+    width: 1%;
+    float: right;
+}
