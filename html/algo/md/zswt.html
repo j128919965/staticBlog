@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>子树问题</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/07 17:40</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+<h1 id="-dfs-kmp-">子树问题（dfs/kmp）</h1>
+<blockquote>
+<p>题目链接：<a href="https://leetcode-cn.com/problems/subtree-of-another-tree/" title="leetcode">leetcode</a></p>
+</blockquote>
+<p>这道题可以有三种思路，让我来一一分析。</p>
+<h3 id="dfs">dfs</h3>
+<p>首先呢，根据题目要求，子串必须完全一样才行。那么在树 s 中，通过任意一种遍历，先找到一个值和 t 的根节点相同的节点，然后再比较这两个节点对应的那棵树是否相同，就可以得到答案。</p>
+<p>代码：</p>
+<pre><code class="lang-java">public boolean isSubtree(TreeNode s, TreeNode t) {
+        if (t == null) return true;
+        if (s == null) return false;
+        return isSubtree(s.left, t) || isSubtree(s.right, t) || equals(s,t);
+    }
+
+    /**
+        * 判断两个树是否一样
+        */
+    private boolean equals(TreeNode s,TreeNode t){
+        if(s==null&amp;&amp;t==null)return true;
+        if(s==null||t==null)return false;
+        if(s.val!=t.val)return false;
+        return equals(s.left,t.left)&amp;&amp;equals(s.right,t.right);
+    }
+</code></pre>
+<blockquote>
+<p>执行用时：4ms<br>内存消耗：39.2mb</p>
+</blockquote>
+<h3 id="kmp">kmp</h3>
+<p>(有关kmp算法在其他的博客里有)</p>
+<p>我们知道，二叉树可以表达成一个字符序列，比如说用井号#代表null。<br>而且，结构相同的树，他们用先序遍历转化成字符串后也一定相同。</p>
+<p>这里要注意的点是，转化为字符串的时候一定不能忽略null，一定要把null也保存出来。否则就会出现题目样例2中的情况。</p>
+<p>（借用一下官方题解的图片）<br><img src="zswtimg/1.png" alt=""></p>
+<p>先来个java的正常代码：</p>
+<pre><code class="lang-java">class Solution {
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        treeToString(s,sb1);
+        treeToString(t,sb2);
+        return sb1.indexOf(sb2.toString())&gt;-1;
+    }
+
+        private void treeToString(TreeNode t,StringBuilder sb){
+        if(t==null)return;
+        sb.append((char)t.val);
+        if(t.left==null)sb.append(&#39;l&#39;);
+        else treeToString(t.left,sb);
+        if(t.right==null)sb.append(&#39;r&#39;);
+        else treeToString(t.right,sb);
+    }
+}
+</code></pre>
+<p>这里KMP没有自己写，利用了java的库函数，也算是懒省事了。</p>
+<blockquote>
+<p>执行用时 :5 ms<br>内存消耗 :39.4 MB</p>
+</blockquote>
+<p>可以看到其实这种方法并没有比第一种方法快。但毕竟是一种思路。</p>
+<p>再放一个js黑科技(一行代码)</p>
+<pre><code class="lang-javascript">var isSubtree = (s, t) =&gt; (JSON.stringify(s).indexOf(JSON.stringify(t)))&gt;-1;
+</code></pre>
+<h3 id="hash">hash</h3>
+<p>哈希，其实思路很简单，把每个子节点都hash了，然后比较有没有一样的。感觉对于这道题来说完全没有什么意义。。</p>
+<h3 id="dfs-">dfs优化</h3>
+<p>对于两棵树，如果左右子树的大小相同，才有比较的意义。也就是说，增加一个判断条件，可以对第一种思路进行优化。这里借用网上那位老哥的代码。</p>
+<pre><code class="lang-java">
+class Solution {
+    // 判断两棵二叉树是否相等
+    private boolean isSame(TreeNode root1, TreeNode root2) {
+        if (root1 == null) {
+            return root2 == null;
+        }
+
+        if (root2 == null) {
+            return false;
+        }
+
+        return root1.val == root2.val &amp;&amp; isSame(root1.left, root2.left) &amp;&amp; isSame(root1.right, root2.right);
+    }
+
+    private boolean isFoundSame = false;
+    private int tCount;
+
+    // 递归计算二叉树s每棵子树的节点数，并同时寻找是否有子树与t相等
+    private int calcCount(TreeNode root, TreeNode t) {
+        if (isFoundSame) {
+            return 0;
+        }
+
+        if (root == null) {
+            return 0;
+        }
+
+        int count = calcCount(root.left, t) + calcCount(root.right, t) + 1;
+        if (count == tCount &amp;&amp; isSame(root, t)) {
+            isFoundSame = true;
+            return 0;
+        }
+        return count;
+    }
+
+    // 计算二叉树t的节点个数
+    private int calcTCount(TreeNode root) {
+        return root == null ? 0 : calcTCount(root.left) + calcTCount(root.right) + 1;
+    }
+
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        tCount = calcTCount(t);
+        calcCount(s, t);
+        return isFoundSame;
+    }
+}
+</code></pre>
+
+
+</body>
+</html>
