@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>分治法求最近点对</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/11 01:31</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="-">分治法求最近点对</h1>
+<blockquote>
+<p>随机生成若干二维点对，用分治法求最近点对。</p>
+<p>在本问题中，需要求得最近两点之间的距离，整个问题的规模为 n 个点，可以将这 n 个点一分为二，就变成两个求解 n ／2 个点规模下最近点对的距离问题， 如此不断缩小规模，当变成两个点的规模下求解最近点对问题时，显而易见，即为这两个点的距离，这样随着问题规模的缩小解决的难易程度逐渐降低的特征正是可以用分治法解答的问题所具备的特征。</p>
+</blockquote>
+<p>按横坐标排序，将n个点分为两部分后，最近的两个点可能有三种情况：</p>
+<ul>
+<li>都在左边</li><li>都在右边</li><li>一个在左边，一个在右边</li></ul>
+<p>前两张情况都好说，直接递归调用就可以，关键是第三种情况。在两个点分别属于两部分的时候，范围太大了，算起来也很麻烦。</p>
+<p>这时候我们假设从两部分分别求出的最近距离为 dis1 和 dis2 ，</p>
+<p> dis ＝ min（ dis1， dis2 ），再假设分属两部分的情况下，A ( x1 , y1 ) 属于第一部分 ,B ( x2 , y2 )属于第二部分，且以 x 轴作为分割的量，我们可以断定 如果存在解 ，A 、B 两点一定处在中心分割线两侧 2＊dis 长度之内的区间内，（考虑到极端情况下有一点处在分割线上的情况，因此不能选择 dis 长度区间）。</p>
+<p>中心分割线x=mid，mid+dis和mid-dis为寻找范围。在寻找的时候可以先把这个范围内的点按y轴排序，可以加快寻找速度。</p>
+<p>核心代码：</p>
+<pre><code class="lang-java">private double min_distance(int left,int right){
+        //点集中只有两个点
+        if(left+1==right){
+            return distance(left,right);
+        }
+
+        //点集中有三个点
+        if (left+2==right){
+            dis1 = distance(left,left+1);
+            dis2 = distance(left,right);
+            dis3 = distance(left+1,right);
+            return Math.min(dis1,Math.min(dis2,dis3));
+        }
+
+        int mid = (left+right)/2;
+        //递归求解左半部分最近点对
+        dis1 = min_distance(left,mid);
+        //递归求解右半部分最近点对
+        dis2 = min_distance(mid+1,right);
+        dis = Math.min(dis1,dis2);
+        //求解中间那部分的最近点对
+        List&lt;Integer&gt; vec = new ArrayList&lt;&gt;();
+        for(int i = left; i&lt;= right; i++){
+            if(p[i].x&gt;=p[mid].x-dis&amp;&amp;p[i].x&lt;=p[mid].x+dis)vec.add(i);
+        }
+        //按纵坐标升序排序
+        vec.sort(this::compare_y);
+        for (int i = 0; i &lt; vec.size(); i++) {
+            for (int j = i+1; j &lt; vec.size(); j++) {
+                if(p[vec.get(j)].y-p[vec.get(i)].y&gt;dis)break;
+                dis = Math.min(dis,distance(vec.get(i),vec.get(j)));
+            }
+        }
+        return dis;
+
+    }
+</code></pre>
+<p>完整代码：</p>
+<pre><code class="lang-java">package lzr;
+
+import java.util.*;
+
+public class Solution {
+
+    private Point[] p;
+    private double dis1,dis2,dis3,dis;
+
+    private static class Point{
+        int x;
+        int y;
+        static Random random = new Random();
+        Point(){
+            x = random.nextInt(2000);
+            y = random.nextInt(2000);
+        }
+    }
+
+    private int compare_y(int a,int b){
+        return p[a].y&gt;p[b].y?1:-1;
+    }
+
+    private int compare_x(int a,int b){
+        return p[a].x&gt;p[b].x?1:-1;
+    }
+
+    private double distance(int l, int r){
+        return Math.sqrt(Math.pow((p[l].x-p[r].x),2)+Math.pow((p[l].y-p[r].y),2));
+    }
+
+    private double min_distance(int left,int right){
+        //点集中只有两个点
+        if(left+1==right){
+            return distance(left,right);
+        }
+
+        //点集中有三个点
+        if (left+2==right){
+            dis1 = distance(left,left+1);
+            dis2 = distance(left,right);
+            dis3 = distance(left+1,right);
+            return Math.min(dis1,Math.min(dis2,dis3));
+        }
+
+        int mid = (left+right)/2;
+        //递归求解左半部分最近点对
+        dis1 = min_distance(left,mid);
+        //递归求解右半部分最近点对
+        dis2 = min_distance(mid+1,right);
+        dis = Math.min(dis1,dis2);
+        //求解中间那部分的最近点对
+        List&lt;Integer&gt; vec = new ArrayList&lt;&gt;();
+        for(int i = left; i&lt;= right; i++){
+            if(p[i].x&gt;=p[mid].x-dis&amp;&amp;p[i].x&lt;=p[mid].x+dis)vec.add(i);
+        }
+        //按纵坐标升序排序
+        vec.sort(this::compare_y);
+        for (int i = 0; i &lt; vec.size(); i++) {
+            for (int j = i+1; j &lt; vec.size(); j++) {
+                if(p[vec.get(j)].y-p[vec.get(i)].y&gt;dis)break;
+                dis = Math.min(dis,distance(vec.get(i),vec.get(j)));
+            }
+        }
+        return dis;
+
+    }
+
+    public double min_distance(int size){
+        this.p = new Point[size];
+        for (int i = 0; i &lt; p.length; i++) {
+            p[i] = new Point();
+        }
+        Arrays.sort(p,Comparator.comparingInt((a)-&gt;a.x));
+        return min_distance(0,size-1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Solution().min_distance(1000));
+    }
+}
+</code></pre>
+<p>运行结果：</p>
+<pre><code>3.1622776601683795
+</code></pre>
+
+</body>
+</html>
