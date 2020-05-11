@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>高斯消元</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/11 15:28</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="-">求解线性方程组</h1>
+<blockquote>
+<p><strong>题目描述</strong><br>给定一个线性方程组，对其求解<br><strong>输入输出格式</strong><br>输入格式：<br>第一行，一个正整数n<br>第二行至n+1行，每行n+1个整数，为a1,a2,a3...an和b，代表一组方程<br>输出格式：<br>共n行。每行一个数，第i行为xi（保留两位小数）<br>如果不存在唯一解，在第一行输出“No Solution”.</p>
+</blockquote>
+<h2 id="-">高斯消元法</h2>
+<p>在使用高斯消元法的时候，有可能会出现分母为0的情况，或者因为精度问题而造成较大的误差。</p>
+<p>使用高斯消元法的步骤：</p>
+<ol>
+<li>选择主元；即选择对角元素，保证其为所在列中最大的一个（防止分母为0）</li><li>当前主不为最大值，则交换两行；</li><li>判断主元是否为0，若是，则该方程组没有唯一解；</li><li>逐行消元；</li><li>对角线元素归一化；</li><li>回归消除对角线上的元素</li></ol>
+<p>代码：</p>
+<p>
+（代码来源：<a href="https://blog.csdn.net/u013869488/article/details/50471115">https://blog.csdn.net/u013869488/article/details/50471115</a>,个人增加了测试代码和一些注释。原作者讲的很清晰，膜拜大佬  ）
+</p>
+<pre><code>package lzr;
+
+import java.util.*;
+
+public class Solution {
+
+    /**
+        *
+        * @param array 系数矩阵 增广矩阵
+        * @param colNum 列向量个数（从第0列开始）
+        * @return boolean 是否得出结果
+        */
+    public  boolean Resolve(float[] array, int colNum){
+        //行数
+        int rows = array.length / colNum ;
+        //逐行选择主元              第 i 行 ，第i列  的元素（i，i）
+        for (int i = 0; i &lt; rows; i++) {
+            //按列选择主元
+            int pivotRow = SelectPivotalElement(array,colNum,i);
+            //如果主元不是目前所在的i列，则交换
+            if(pivotRow!=i){
+                swapCol(array,pivotRow,i,colNum);
+            }
+            //如果最大值为0，就得不到唯一解。
+            if(array[i*colNum+i]==0){
+                System.out.println(&quot;No Solution&quot;);
+                return false ;
+            }
+            //消元得到右上三角
+            for (int j = 0; j &lt; colNum; j++) {
+                emissElement(array,j,colNum);
+            }
+        }
+        //主元素归一化
+        for (int i = 0; i &lt; rows; i++) {
+            ElementBack(array,i,colNum);
+        }
+        //回代消元，从最后一行开始
+        for (int i = rows-1; i &gt; 0; i--) {
+            backEmiss(array,i,colNum);
+        }
+        return true ;
+
+    }
+
+    /**
+        *
+        * @param i  第i行的主元
+        * @return 主元所在的行
+        */
+    private static int SelectPivotalElement(float[] array,int colNum,int i) {
+        //返回的所选择的主元所在列的索引
+        int pivotColIndex = 0 ;
+        float max = 0 ;
+        for (int j = i*colNum + i; j &lt; array.length; j+=colNum) {
+            //这个位置要比较绝对值
+            if(Math.abs(max)&lt;Math.abs(array[j])){
+                max = array[j];
+                pivotColIndex = j ;
+            }
+        }
+        //返回主元所在的行
+        return pivotColIndex/colNum;
+    }
+
+    /**
+        * 交换两行
+        * @param dist 目标行
+        * @param src  原来的行
+        * @param colNum 行向量的长度
+        */
+    private static void swapCol(float[] array, int dist, int src,int colNum) {
+        //因为使用的一维数组，所以可以直接使用距离
+        int distance = (dist - src)*colNum ;
+        //挨个交换
+        for (int j = src*colNum; j &lt; (src+1)*colNum; j++) {
+            float temp = array[j] ;
+            array[j] = array[j+distance] ;
+            array[j+distance] = temp ;
+        }
+    }
+
+    /**
+        * 逐行消元
+        * @param array
+        * @param i 标示第 i 行的主元
+        * @param colNum
+        */
+    private static void emissElement(float[] array, int i, int colNum) {
+        //矩阵行数
+        int len = array.length / colNum ;
+        //第i+1行开始消元
+        for (int j = (i+1); j &lt;len; j++) {
+            //int j = 1 ;
+            //消元系数，此时已经保证第i行的第i个元素是所有行中最大的
+            float index = array[j*colNum+i] / array[i * colNum + i] ;
+            int ii = i * colNum + i ;
+            for (int k = j*colNum + i; k &lt; (j+1)*colNum  ; k++,ii++) {
+                array[k] = array[k] - array[ii]*index ;
+            }
+        }
+    }
+
+    /**
+        * 元素归一化处理
+        * @param i 第 i 行 归一化处理
+        * @param colNum 矩阵列数 ，每行元素个数
+        */
+    private static void ElementBack(float[] array, int i, int colNum) {
+        //每行的长度
+        int len = array.length / colNum ;
+        //第i行第i个元素变为1，也就是该行所有元素都除以它
+        float factor = array[i * colNum + i] ;
+        for (int j = i * colNum + i; j &lt; (i+1)*colNum; j++) {
+            array[j] = array[j] / factor ;
+        }
+    }
+
+    /**
+        * 回代消元
+        * @param i 第i行之上的开始消除
+        * @param colNum 矩阵每一行的个数
+        */
+    private static void backEmiss(float[] array, int i, int colNum) {
+        for (int j = i; j &gt; 0; j--) {
+            float factor = array[(j - 1) * colNum + i];
+            array[(j - 1) * colNum + i] = 0;
+            array[j * colNum - 1] = array[j * colNum - 1] - array[(i + 1) * colNum - 1] * factor;
+        }
+    }
+
+    public static void main(String[] args) {
+        int n;
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        float[] array = new float[n*(n+1)];
+        for(int i = 0;i&lt;n;i++){
+            for (int j = 0; j &lt; n + 1; j++) {
+                array[i*(n+1)+j] = sc.nextFloat();
+            }
+        }
+        if(new Solution().Resolve(array,n+1)){
+            for (int i = n; i &lt; array.length; i+=n+1) {
+                System.out.printf(&quot;%.2f &quot;,array[i]);
+
+            }
+        }
+    }
+}
+</code></pre><p>运行结果：</p>
+<pre><code>输入：
+4
+2 3 11 5 2
+1 1 5 2 1
+2 1 3 2 -3
+1 1 3 4 -3
+输出：
+-2.00 0.00 1.00 -1.00
+</code></pre>
+
+</body>
+</html>
