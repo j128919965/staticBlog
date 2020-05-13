@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>最小栈</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/12 18:49</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+<h1 id="-">最小栈</h1>
+<p><a href="https://leetcode-cn.com/problems/min-stack/">题目链接</a></p>
+<p>题解里面大多数都用了语言自带的stack，我想说，用原生数组不香么？</p>
+<p>这里放一个用java 原生数组的简单实现,可以动态扩容。（辅助栈没有动态扩容）</p>
+<pre><code class="lang-java">class MinStack {
+
+    //只用数组，不用栈
+    private int[] data;
+    private MS ms;
+    private int size;
+    private int max_size;
+
+    public MinStack() {
+        max_size = 64;
+        size = 0;
+        data = new int[64];
+        ms = new MS();
+    }
+    //动态扩容
+    private void resize(){
+        max_size&lt;&lt;=1;
+        int[] n = new int[max_size];
+        System.arraycopy(data, 0, n, 0, data.length);
+        data = n;
+    }
+
+    public void push(int x) {
+        if(size==max_size){
+            resize();
+        }
+        int m_index = ms.top();
+        //初始化的时候没有辅助栈为空
+        if(m_index==-1){
+            ms.push(size);
+        }else{
+            //更新辅助栈
+            if(data[m_index]&gt;x){
+                ms.push(size);
+            }
+        }
+        data[size++] = x;
+    }
+
+    public void pop() {
+        //如果辅助栈的栈顶是当前要pop的元素，那么辅助栈也要相应的pop掉
+        int mi = ms.top();
+        if(size-1==mi)
+            ms.pop();
+        size--;
+    }
+
+    public int top() {
+        return data[size-1];
+    }
+
+    public int getMin() {
+        return data[ms.top()];
+    }
+}
+
+//辅助栈，用来保存最小值所在的索引
+class MS{
+    private final int[] mins;
+    private int size;
+    public MS(){
+        //128位足够用，如果严谨一点实际上还是要加个动态扩容的功能
+        mins = new int[128];
+        size = 0;
+    }
+    public void push(int i){
+        mins[size++] = i;
+    }
+
+    public void pop(){
+        size--;
+    }
+
+    public int top(){
+        //栈空的时候返回-1
+        if(size==0)return -1;
+        return mins[size-1];
+    }
+
+}
+
+作者：bqbqb
+链接：https://leetcode-cn.com/problems/min-stack/solution/fu-zhu-zhan-javazhi-yong-shu-zu-by-bqbqb/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+</code></pre>
+
+
+</body>
+</html>

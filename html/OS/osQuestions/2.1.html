@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>os错题2.1</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/13 10:46</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+<h2 id="os-2-1">OS错题2.1</h2>
+<ul>
+<li><h4 id="-1us-t-3-p1-p2-p3-cpu-">若系统采用基于优先权的非抢占式进程调度策略，完成一次进程调度和进程切换的系统时间开销为1us。在T时刻就绪队列中有3个进程P1,P2和P3，他们在就绪队列中的等待时间、需要的CPU时间和优先权如下表所示</h4>
+</li></ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">进程</th>
+<th style="text-align:center">等待时间</th>
+<th style="text-align:center">需要的CPU时间</th>
+<th style="text-align:center">优先权</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">P1</td>
+<td style="text-align:center">30us</td>
+<td style="text-align:center">12us</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td style="text-align:center">P2</td>
+<td style="text-align:center">15us</td>
+<td style="text-align:center">24us</td>
+<td style="text-align:center">30</td>
+</tr>
+<tr>
+<td style="text-align:center">P3</td>
+<td style="text-align:center">18us</td>
+<td style="text-align:center">36us</td>
+<td style="text-align:center">20</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><h4 id="-cpu-t-">若优先权大的进程优先获得CPU，从T时刻开始，系统开始调度，则系统的平均周转时间为：</h4>
+<ul>
+<li>答案 75us</li><li><strong>解析</strong><ul>
+<li>周转时间 = 等待时间+调度和切换时间+需要的CPU时间</li><li>p2：15+1+24 = 40</li><li>p3：18+25+1+36 = 43+1+36 = 80</li><li>p1:20+25+37+1+12 = 92+1+12 = 105</li><li>平均 75</li></ul>
+</li></ul>
+</li></ul>
+<ul>
+<li><h4 id="-p-">下列选项中，不会导致当前进程P阻塞的事件是（）</h4>
+<ul>
+<li>答案 c<ul>
+<li>进程P申请临界资源</li><li>进程P从磁盘读取数据</li><li>系统将CPU分配给高优先级的进程</li></ul>
+</li><li><strong>解析</strong><ul>
+<li>CPU调度会导致进程进入就绪态，而不是阻塞</li></ul>
+</li></ul>
+</li><li><h4 id="-x-x-wait-">若x是管程内的条件变量，则当进程执行x.wait()时所做的工作是（）</h4>
+<ul>
+<li>答案 d<ul>
+<li>实现对变量x的互斥访问</li><li>唤醒一个在x上阻塞的进程</li><li>根据x的值判断该进程是否进入阻塞状态</li><li>阻塞该进程，并将之插入x的阻塞队列中</li></ul>
+</li><li><strong>解析</strong><ul>
+<li>管程内的条件变量类似于信号量机制中的信号量，用于实现进程同步。当进程执行x.wait()时，该进程因为x条件需要被阻塞，并插入x的阻塞队列中，释放管程，直到x条件发生变化</li></ul>
+</li></ul>
+</li><li><h4 id="-">在下列同步机制中，可以实现让权等待的是：</h4>
+<ul>
+<li>答案 c<ul>
+<li>Peterson方法</li><li>swap指令</li><li>信号量方法</li><li>TestAndSet指令</li></ul>
+</li><li><strong>解析</strong><ul>
+<li>让权等待是指当一个进程由于某些原因不能进入自己的临界区时，应立即释放处理机，以免进程陷入“忙等”状态。Peterson方法实现了进程的有限等待，但不能实现进程的让权等待；swap指令和TestAndSet指令都属于硬件指令，能有效地实现进程互斥，但均不能实现进程的让权等待；在信号量方法里，记录型信号量实现了进程的让权等待。</li></ul>
+</li></ul>
+</li><li><h4 id="-s1-s2-">若系统s1采用死锁避免方法，s2采用死锁检测方法。下列叙述错误的是</h4>
+<ul>
+<li>答案 a<ul>
+<li>s1会限制用户申请资源的顺序，s2不会</li><li>s1需要进程运行所需的资源总量信息，s2不需要</li><li>s1不会给可能导致死锁的进程分配资源，而s2会</li></ul>
+</li><li><strong>解析</strong><ul>
+<li>限制用户资源申请顺序是为了破坏循环与等待的条件，属于死锁预防，并不属于死锁避免。</li></ul>
+</li></ul>
+</li><li><h4 id="-pipe-">下列关于管道（pipe）通信的叙述中，正确的是（）</h4>
+<ul>
+<li>答案 c<ul>
+<li>一个管道可以实现双向数据传输</li><li>管道的容量仅受磁盘容量大小限制</li><li>进程对管道进行读操作和写操作都有可能被阻塞</li><li>一个管道只能有一个读进程或一个写进程对其进行操作</li></ul>
+</li><li><strong>解析</strong><ul>
+<li>管道采取互斥机制，当一个进程正在对管道执行读或写操作时，其他进程必须等待，因此一个管道上不能双向传输。管道的大小一般是内存上的一页，不受磁盘容量大小控制。管道空的时候读可能被阻塞，满的时候写可能被阻塞。一个管道可能同时存在读写。</li></ul>
+</li></ul>
+</li><li><h4 id="-">若某单处理机多进程系统中有多个就绪态进程，则下列关于处理机调度的叙述中，错误的是</h4>
+<ul>
+<li>答案 c<ul>
+<li>在进程结束时可以调度</li><li>在进程创建时可以调度</li><li>在进程处于临界区时不可以调度</li><li>在系统调用完成并返回用户态时可以调度</li></ul>
+</li><li><strong>解析</strong><ul>
+<li>进程处于临界区时占用处理机，除非破坏临界资源的使用规则，否则不会影响处理机调度</li></ul>
+</li></ul>
+</li></ul>
+
+</body>
+</html>
