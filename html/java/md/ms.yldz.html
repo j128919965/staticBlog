@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>依赖倒置原则</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/14 00:00</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="-">设计模式之依赖倒置原则</h1>
+<p>今天和舍友聊起来设计模式，给他讲依赖倒置原则，讨论了半天，觉得自己对它的理解更深了。</p>
+<p>首先，我问他，枪能用来干嘛呢？<br>他回答：开枪。<br>我问：还能干嘛？<br>他回答：砸核桃。</p>
+<p>我语塞。但是突然想到这样确实也可以。</p>
+<h3 id="-">砸核桃的枪</h3>
+<p>我们设计一个枪类：</p>
+<pre><code class="lang-java">class Gun{
+    void 开枪(){...}
+    void 砸核桃(核桃 t){...}
+}
+</code></pre>
+<p>可是，水枪可以开枪，但是它不能用来砸核桃。因为水枪是塑料的，它一砸就碎了。<br>那就只有：</p>
+<pre><code class="lang-java">class WaterGun{
+    void 开枪(){...}
+}
+</code></pre>
+<p>可是，水枪明明是枪，两者之间应该是有继承关系的。但是水枪却没有砸核桃的功能。所以按照如上的方法，另外设计了一个类。</p>
+<h3 id="-">基于接口拆分枪功能</h3>
+<p>根据两者的功能，有很明确的继承关系，但却不能直接使用继承。因此我们考虑把功能细化，也更符合单一职责原则。</p>
+<p>我们发现，总共可以拆分成两种接口：</p>
+<ul>
+<li>可以开枪的东西</li><li>可以用来砸的东西</li></ul>
+<pre><code class="lang-java">interface Shootable{
+    开枪();
+}
+interface Bitable{
+    砸核桃(核桃 t);
+}
+</code></pre>
+<p>比如说AK47，可以实现 Shootable接口，也可以实现bitable接口，因为它可以开枪，也可以用来砸核桃。<br>那就可以用如下的设计方法：</p>
+<pre><code class="lang-java">class AK47 implements Shootable,Bitable{
+    void 开枪(){...}
+    void 砸核桃(核桃 t){...}
+}
+class WaterGun implements Shootable{
+    void 开枪(){...}
+}
+</code></pre>
+<p>那这样，就可以简单的使用两个接口来将这两个东西拆分开了。</p>
+<h3 id="-">场景中使用</h3>
+<p>接下来我们设计了Person类，Person可以射击别人，也可以砸核桃。</p>
+<pre><code class="lang-java">class Person{
+    void shoot(WaterGun gun){gun.开枪();}
+    void bit(AK47 gun,核桃 t){gun.砸核桃(t);}
+}
+</code></pre>
+<p>接下来我舍友提出一个问题，我多加一些枪呢？或者我要用锤子砸核桃，而不是用枪呢？那是不是要重载很多种方法？</p>
+<p>于是受到这个问题启发，我们把Person类中两个方法的依赖全都改成了接口。</p>
+<pre><code class="lang-java">class Person{
+    void shoot(Shootable gun){gun.开枪();}
+    void bit(Bitable gun,核桃 t){gun.砸核桃(t);}
+}
+</code></pre>
+<p>这样，我们的Person就可以直接依赖一个接口，而非一个实现类。</p>
+<p>这样的好处有啥呢？</p>
+<ul>
+<li>接口的方法是固定的，不依赖底层实现，相对更安全</li><li>可以很方便的进行扩展，而不用多次重载</li></ul>
+<p>到这里，我又想到，可以砸的不仅仅是核桃，很多坚果也可以砸。<br>那为何不设计一个Nut接口呢？</p>
+<p>于是，这里的bit方法、砸核桃方法的参数依赖，都可以直接替换为Nut接口。</p>
+<p>看到这里，我想大概大家已经发现了。这样的一个简单小系统，只有Person类一个类是实现类，而其他的东西都是接口。我们通过接口之间的调用，完全可以实现最开始设想的功能，还拥有着上述的两个优点。</p>
+<h3 id="-">依赖倒置原则</h3>
+<p>这样的设计理念叫做依赖倒置原则，它的官方定义为：</p>
+<ul>
+<li>高层模块不应该依赖低层模块，两者都应该依赖其抽象</li><li>抽象不应该依赖其细节</li><li>细节应该依赖其抽象。</li></ul>
+<p>说的简单点，就是一句话：“<strong>面向接口编程</strong>”。</p>
+<p>除了上面的两个优点外，还有别的优点：<br>依赖接口的情况下，如果实现类并没有开发完成，在开发有依赖这个接口的模块时，可以先写一个“假的”实现类（mock类），这样不需要依赖其他人的代码，可以更好地配合开发，也能大幅度降低耦合。</p>
+<p>今天就先聊到这，毕竟我是初学者，理解不到位的地方欢迎加我微信讨论，一起学习，一起进步。如果有错误的地方也欢迎您来指正。<br>加油！</p>
+
+
+</body>
+</html>
