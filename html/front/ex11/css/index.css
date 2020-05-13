@@ -1,0 +1,229 @@
+html{
+    font-size: 20px;
+    min-width: 320px;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+@media screen and (max-width:640px){
+    html{
+        font-size: 16px;
+    }
+    .sec-container{
+        width: 100%;
+    }
+    .m-sec-title{
+        display: none;
+    }
+    .m-sec-top{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .m-hs-words{
+        margin-top: 0;
+        background-color: black;
+        color: white;
+    }
+
+    .m-foot-block{
+        margin: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        border-bottom: 1px solid white  ;
+    }
+    .m-fblk-dis{
+        display: none;
+    }
+}
+
+@media (min-width:640px) and (max-width:980px){
+    html{
+        font-size: 20px;
+    }
+    .sec-container{
+        width: 80%;
+        margin: auto;
+    }
+    .m-head-pic{
+        display: none;
+    }
+    .m-sec-top{
+        min-height: 545px;
+        background-image: url(../imgs/1.jpg);
+        background-position: center;
+        background-size: auto 545px;
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: start;
+    }
+    .m-hs-words{
+        padding: 0 5rem;
+    }
+    .m-hs-words{
+        color: white;
+    }
+
+    .m-foot-block{
+        margin: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        border-bottom: 0.5px solid white  ;
+    }
+    .m-fblk-dis{
+        display: none;
+    }
+
+   
+}
+
+@media (min-width:980px){
+    html{
+        font-size: 18px;
+    }
+    body{
+        background-image: url(../imgs/1.jpg);
+        background-position: left;
+        background-size: auto 100%;
+    }
+    .container{
+        background-color: rgba(0, 0, 0, 0.5 );
+    }
+    .m-head-pic{
+        display: none;
+    }
+    .m-sec-top{
+        padding: 5rem;
+        display: flex;
+        justify-content: center;
+    }
+    .sec-container{
+        display: flex;
+        margin: 3rem 5rem 10rem 5rem;
+        background-color: white;
+        padding: 1rem;
+    }
+    .m-hs-words{
+        color: white;
+        width: 30rem;
+    }
+    .m-sec{
+        margin: 10px;
+        width: 33%;
+    }
+
+    .m-f-inner{
+        display: flex;
+
+    }
+
+    .m-foot-block{
+        width: 25%;
+        margin: 0.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+    }
+    .m-fblk-clk{
+        display: none;
+    }
+
+    .m-fblk-dis{
+        font-size: 0.6rem;
+        color: #aaa;
+        list-style: none;
+        padding: 0;
+    }
+} 
+
+.news{
+    text-align: center;
+    background-color: blue;
+    color: white;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.menu{
+    box-sizing: border-box;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between ;
+    align-items: center;
+    width: 100%;
+    background-color: white;
+}
+
+
+.m-sec-top>img{
+    width: 100%;
+}
+
+.m-hs-words{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1rem;
+    padding:0 3rem;
+}
+
+.m-sec{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.m-sec-words{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.m-sec>img{
+    width: 100%;
+}
+
+.m-head-but{
+    border-color: blue;
+    color: white;
+    font-size: 0.7rem;
+    background-color: blue;
+}
+
+.m-sec-title{
+    width: 100%;
+    text-align: start;
+    margin: 0.8rem 0;
+}
+
+.m-sec-head{
+    font-size: 1.8rem;
+    margin: 1.8rem 0 0 0.5rem;
+}
+
+.m-sec-but{
+    border-color: black;
+    color: black;
+    font-size: 0.7rem;
+    background-color: white;
+}
+
+.m-foot{
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+.m-f-inner{
+    max-width: 1300px;
+    margin: auto;
+}
