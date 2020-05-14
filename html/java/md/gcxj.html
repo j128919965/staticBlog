@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>javaGC陷阱
+</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/14 13:26</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+<h1 id="javagc-">javaGC小陷阱</h1>
+<p>前两天刷算法题的时候做了一道最小栈的问题，今天复习javaGC的知识的时候，突然想到一个问题，我设计的栈可以正常被GC嘛？</p>
+<p>先看下我设计的栈：</p>
+<pre><code>class MS{
+    private final int[] mins;
+    private int size;
+    public MS(){
+        //128位足够用，如果严谨一点实际上还是要加个动态扩容的功能
+        mins = new int[128];
+        size = 0;
+    }
+    public void push(int i){
+        mins[size++] = i;
+    }
+
+    public void pop(){
+        size--;
+    }
+
+    public int top(){
+        //栈空的时候返回-1
+        if(size==0)return -1;
+        return mins[size-1];
+    }
+
+}
+</code></pre><p>这个栈有个特点，pop的时候只是把指针往下移动，实际上栈底层的数组里，还维护着对对象的<strong>过期引用</strong>。不管是采用哪种垃圾回收判断的方法，这些过期引用都是<strong>存活着的对象</strong>。垃圾回收器并不会把这些过期了的对象清除掉。也就是说，这里是发生了内存泄漏的。</p>
+<p>通过这个例子，我们可以看到，对于这种类自己管理内存的情况，就要警惕是否会发生内存泄漏。必要的时候（比如现在），需要手动释放过期引用。</p>
+<p>同样容易发生内存泄漏的地方，还有缓存，回调注册或者监听器。</p>
+<p>一旦把一个对象释放到缓存中，就很容易忘记把它释放。回调注册之后，很有可能忘记把注册取消掉，那这些情况，都是过期引用。</p>
+<p>这些可以适当采用弱引用，让它有可能会自动过期释放。关于弱引用，在我前面的随笔中有提到过。</p>
+
+</body>
+</html>
