@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>电池容量问题</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/18 15:37</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+<h1 id="-">电池时间问题</h1>
+<blockquote>
+<p>题目大意：小明有很多电池，电池有新有旧，可以使用的时间不一样。如果只有两个电池一个能用5小时一个能用3小时，那么他只能用3个小时的电，有一个电池剩下的电量无法使用，但是如果他有更多的电池，就可以更加充分地利用它们，比如他有三个电池分别能用3、3、5小时，他可以使用两节能用3个小时的电池，使用半个小时后再把其中一个换成能使用5个小时的电池，两个半小时后再把剩下的一节电池换成刚才换下的电池（那个电池还能用2.5个小时），这样总共就可以使用5.5个小时，没有一点浪费。</p>
+<p>现在已知电池的数量和电池能够使用的时间，请你找一种方案使得使用时间尽可能的长。<br>输入：电池的数目和每个电池的使用时间。<br>输出：最长使用时间。</p>
+</blockquote>
+<p>思路：如果各个电池时间相差不大的情况下，总是可以找出一种分时间片的方法，把所有电池的剩余时间都使用上。<br>但是如果有一颗电池的剩余时间远远超过别的电池，甚至所有电池的剩余时间加起来还没有它一个人的时间长，那么它必然会浪费掉一小部分。</p>
+<p>我们根据这个思路，贪心的找出剩余时间最长的电池。如果它的剩余时间长于剩下所有电池的时间和，那总可用时间就是其他电池的时间和。如果它的剩余时间小于剩下所有电池的时间和，那总可用时间就是所有电池的时间和的一半。</p>
+<p>代码：</p>
+<pre><code class="lang-java">package sb;
+
+public class Solution {
+
+    public double howLong(double[] times){
+        int size = times.length;
+        if(size == 0 || size == 1){
+            return 0;
+        }
+        double sum = 0;
+        double max = Double.MIN_VALUE;
+        for (double time : times) {
+            sum+=time;
+            max = Math.max(max,time);
+        }
+        if(max&gt;sum-max){
+            return sum-max;
+        }else{
+            return sum/2;
+        }
+    }
+
+
+}
+</code></pre>
+<p>运行结果：</p>
+<pre><code>in
+{3,5}
+out
+3.0
+
+in
+{3,3,5}
+out
+5.5
+</code></pre>
+
+</body>
+</html>
