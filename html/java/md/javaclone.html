@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>java clone</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/20 15:36</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h1 id="java-clone">java clone</h1>
+<p>今天学设计模式了解到了原型模式，在使用的时候依赖于将<strong>原型</strong>进行复制。今天就来简单聊一下在java中的clone完成复制。</p>
+<h3 id="clone-object-">clone是Object类自带的方法</h3>
+<p>我们翻阅Object类的方法，可以找到一个native方法clone，它会返回对象的逐域拷贝。<br><img src="javacloneimg/1.png" alt=""><br>对于普通对象来说，是不可以直接使用继承自Object的clone方法的。可以看到clone方法是一个protected方法。普通对象想使用clone方法，就一定要实现cloneable接口。</p>
+<h3 id="clone-">clone方法的约定</h3>
+<p>clone方法目的在于创建一个对象的拷贝，这个“拷贝”的准确含义不同的类不同。一般含义下，遵守下面三条表达式：</p>
+<pre><code class="lang-java">x.clone()!=x;
+x.clone().getClass()==x.getClass();
+x.clone().equals(x);
+</code></pre>
+<p>注意，这不是规范，而是一种约定，编写代码时最好遵守这样的约定。</p>
+<h3 id="clone-">clone方法简单使用</h3>
+<p>看下面这个类：</p>
+<pre><code class="lang-java">public class Solution implements Cloneable{
+    String name;
+
+    @Override
+    protected Solution clone() throws CloneNotSupportedException {
+        return (Solution) super.clone();
+    }
+}
+</code></pre>
+<p>很简单，实现了Cloneable接口后，重写继承自父类的clone方法，并在方法体内调用原生的clone方法。这样，就实现了最简单的拷贝。</p>
+<h3 id="clone-">clone方法的特点</h3>
+<p>clone方法从底层看，它直接把原对象的数据复制一份。也就是说，如果原对象的数据域包含对其他对象的引用，复制的时候，也会同样复制相同的引用。如果数据域的对象是不可变的，那这样本身就很好，可以节省空间。<br>但是如果该对象是可变对象，那么这次的clone完成的就是一个<strong>浅拷贝</strong>。源对象和复制过的对象</p>
+<p>看代码：</p>
+<pre><code class="lang-java">
+class MyString{
+    String val;
+
+    void setVal(String s){
+        val =s ;
+    }
+
+    public String getVal() {
+        return val;
+    }
+
+    void show(){
+        System.out.println(val);
+    }
+
+}
+public class Solution implements Cloneable{
+    MyString ms;
+
+    Solution(String s){
+        ms = new MyString();
+        ms.setVal(s);
+    }
+
+    void show(){
+        ms.show();
+    }
+
+    void setS(String s){
+        ms.setVal(s);
+    }
+
+    @Override
+    protected Solution clone() throws CloneNotSupportedException {
+        return (Solution) super.clone();
+    }
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Solution so = new Solution(&quot;lzr&quot;);
+        so.show();
+
+        Solution s2 = so.clone();
+        s2.setS(&quot;nbnb&quot;);
+
+        s2.show();
+        so.show();
+
+    }
+
+}
+</code></pre>
+<p>在这个例子中，最后的两个输出，本希望一个输出&quot;lzr&quot;，另外一个输出&quot;nbnb&quot;。但是让人难过的是，这两个对象引用的是同一个MyString。这个问题怎么解决呢？</p>
+<p>其实很简单，让MyString也可以clone，然后将Solution的clone返回的对象中，ms变成ms.clone();</p>
+<p>看代码：</p>
+<pre><code class="lang-java">class MyString implements Cloneable{
+    String val;
+
+    void setVal(String s){
+        val =s ;
+    }
+
+    public String getVal() {
+        return val;
+    }
+
+    void show(){
+        System.out.println(val);
+    }
+
+    @Override
+    protected MyString clone() throws CloneNotSupportedException {
+        return (MyString) super.clone();
+    }
+}
+</code></pre>
+<p>在Solution类中，</p>
+<pre><code class="lang-java">@Override
+protected Solution clone() throws CloneNotSupportedException {
+    Solution s = (Solution)super.clone();
+    s.ms = s.ms.clone();
+    return s;
+}
+</code></pre>
+<p>这样，就可以实现深拷贝了！</p>
+<h3 id="-clone-">数据域没有clone方法时</h3>
+<p>当数据域没有实现Cloneable接口时，是不可以访问它的clone方法的。那我们此时可以考虑不使用clone，而参考c++，实现一个“拷贝构造器”</p>
+<p>例如这种：</p>
+<pre><code class="lang-java">Solution(Solution s){
+    this.ms = new MyString();
+    ms.setVal(s.ms.getVal());
+}
+</code></pre>
+<p>简简单单，一个拷贝就好了。</p>
+<h3 id="-">总结</h3>
+<p>clone方法的设计其实很难用，如果使用clone方法，记得要考虑周全。</p>
+
+</body>
+</html>
