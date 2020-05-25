@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>LRUCache</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/05/25 09:35</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+<h1 id="lrucache">LRUCache</h1>
+<p><a href="https://leetcode-cn.com/problems/lru-cache/" title="leetcode">题目链接</a></p>
+<blockquote>
+<p>运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制。它应该支持以下操作： 获取数据 get 和 写入数据 put 。</p>
+<p>获取数据 get(key) - 如果密钥 (key) 存在于缓存中，则获取密钥的值（总是正数），否则返回 -1。<br>写入数据 put(key, value) - 如果密钥已经存在，则变更其数据值；如果密钥不存在，则插入该组「密钥/数据值」。当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。</p>
+</blockquote>
+<p>需要记录缓存使用的顺序，那该数据结构一定是有序的，不能单纯的使用<code>HashMap</code>。这道题可以直接采用<code>LinkedHashMap</code>，它是<code>HashMap</code>的子类。调api没意思，今天我们来尝试自己写一个。</p>
+<h3 id="-">采用双向链表</h3>
+<p>首先，在这个需要不断调整顺序的数据结构中，链表无疑是比较适合的，双端链表的效率会非常高。我们在此先设计如下的<code>Node</code>内部类。</p>
+<pre><code class="lang-java">/**
+    * 双向链表节点类
+    */
+private static class Node{
+    int key;
+    int val;
+    Node pre;
+    Node next;
+    Node(int k,int v){
+        key = k;
+        val = v;
+    }
+    Node(){}
+}
+</code></pre>
+<p>然后，在外部类中定义这些变量：</p>
+<pre><code>/**
+    * 每put一次，如果增加了新的node，则size++；
+    * 如果超过最大值，那么将会移除链表中的最后一个项
+    */
+private int size;
+/**
+    * 最大值
+    */
+private final int capacity;
+/**
+    * 两个空节点，只为定位使用
+    */
+private final Node head;
+private final Node tail;
+</code></pre><h3 id="-">整体思路</h3>
+<ul>
+<li>当get时，从head开始遍历链表，直到找到key对应的节点。</li><li>put时，先找有没有当前key对于的节点<ul>
+<li>如果有，直接修改当前节点的值。</li><li>如果没有，那新建一个节点，将它插入链表的头部。<ul>
+<li>插入完成后，如果size超过了最大值，则把链表的尾部去除。</li></ul>
+</li></ul>
+</li></ul>
+<p>下面是对链表的几个操作，没有get和put操作（在更后面）。</p>
+<pre><code class="lang-java">/**
+    * 将一个节点加入到链表头部
+    * @param n 新节点
+    */
+private void add(Node n){
+    n.pre = head;
+    n.next = head.next;
+    head.next.pre = n;
+    head.next = n;
+}
+
+/**
+    * 将一个节点从链表中移除
+    * @param n 要移除的节点
+    */
+private void remove(Node n){
+    n.pre.next = n.next;
+    n.next.pre = n.pre;
+}
+
+/**
+    * 将一个节点浮动到链表头部
+    * @param n 要浮动的节点
+    */
+private void floating(Node n){
+    //先将它移除
+    remove(n);
+    //再把它移到头部
+    add(n);
+}
+
+/**
+    * 缩小链表，将链表尾部的元素去除
+    * @return 被去除元素的key，用于清理hashmap
+    */
+private Integer smaller(){
+    Node n = tail.pre;
+    remove(n);
+    return n.key;
+}
+</code></pre>
+<h3 id="-">优化时间复杂度</h3>
+<p>在上面的思路中，想找到一个节点，一定要从头开始遍历链表。<br>我们可以采用一个<code>HashMap</code>来将我们的节点全都保存起来，可以借此加速搜索。java中的<code>LinkedHashMap</code>也是这样的思路。</p>
+<p>那接下来看一下优化后的全部代码：</p>
+<pre><code class="lang-java">/**
+    * LRUCache
+    * 内部采用LinkedHashMap
+    * @author lzr
+    */
+class LRUCache {
+
+    /**
+        * 双向链表节点类
+        */
+    private static class Node{
+        int key;
+        int val;
+        Node pre;
+        Node next;
+        Node(int k,int v){
+            key = k;
+            val = v;
+        }
+        Node(){}
+    }
+
+    /**
+        * 每put一次，如果增加了新的node，则size++；
+        * 如果超过最大值，那么将会移除链表中的最后一个项
+        */
+    private int size;
+    /**
+        * 最大值
+        */
+    private final int capacity;
+    /**
+        * 两个空节点，只为定位使用
+        */
+    private final Node head;
+    private final Node tail;
+    /**
+        * 使用hashmap，查找迅速，虽然会浪费一点空间
+        */
+    private final Map&lt;Integer,Node&gt; map = new HashMap&lt;&gt;();
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        this.size = 0;
+        head = new Node();
+        tail = new Node();
+        head.next = tail;
+        tail.pre = head;
+    }
+
+    public int get(int key) {
+        Node n = map.get(key);
+        if(n==null)return -1;
+        floating(n);
+        return n.val;
+    }
+
+    public void put(int key, int value) {
+        Node n = map.get(key);
+        if(n==null){
+            size++;
+            n = new Node(key,value);
+            add(n);
+            map.put(key,n);
+            if(size&gt;capacity){
+                Integer k = smaller();
+                map.remove(k);
+                size--;
+            }
+        }
+        else{
+            n.val = value;
+            floating(n);
+        }
+    }
+
+    /**
+        * 将一个节点加入到链表头部
+        * @param n 新节点
+        */
+    private void add(Node n){
+        n.pre = head;
+        n.next = head.next;
+        head.next.pre = n;
+        head.next = n;
+    }
+
+    /**
+        * 将一个节点从链表中移除
+        * @param n 要移除的节点
+        */
+    private void remove(Node n){
+        n.pre.next = n.next;
+        n.next.pre = n.pre;
+    }
+
+    /**
+        * 将一个节点浮动到链表头部
+        * @param n 要浮动的节点
+        */
+    private void floating(Node n){
+        //先将它移除
+        remove(n);
+        //再把它移到头部
+        add(n);
+    }
+
+    /**
+        * 缩小链表，将链表尾部的元素去除
+        * @return 被去除元素的key，用于清理hashmap
+        */
+    private Integer smaller(){
+        Node n = tail.pre;
+        remove(n);
+        return n.key;
+    }
+
+}
+</code></pre>
+
+</body>
+</html>
