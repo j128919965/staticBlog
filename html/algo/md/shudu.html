@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>数独问题</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../css/md.css">
+</head>
+
+<body>
+<div>
+<table>
+<tr><td><b>创建时间：</b></td><td><i>2020/06/16 02:34</i></td></tr>
+<tr><td><b>作者：</b></td><td><i>lzr</i></td></tr>
+</table>
+</div>
+
+
+<h2 id="-">算法大作业期末实验报告</h2>
+<ul>
+<li>选题：3、数独游戏</li></ul>
+<h4 id="-">题意分析</h4>
+<p>该题主要目的是设计一个解决数独问题的算法。输入一个可解的数独问题，输出一个解完的数独矩阵。</p>
+<h3 id="-">思路</h3>
+<p>这道题主要采用的思路是回溯法。需要用栈来记录搜索的过程。<br>从矩阵的最左上角开始遍历，如果发现空格，就尝试填一个数字进去。这个数字必须满足条件：</p>
+<ul>
+<li>同一行不能有一样的数组</li><li>同一列不能有一样的数字</li><li>自己所在的小数独（3*3）不能有一样的数字</li></ul>
+<p>计算出这个位置可以填哪些数字之后，默认取最小的那一个填进去。并且把当前位置的信息压入栈中。<br>如果这个位置没有数字可以填了，在已知数独可解的情况下，一定是前面的某个位置填错了。</p>
+<p>于是这时候就需要弹栈，找到上一个更新的位置，将这个位置的数值替换为比当前数字大的可以填的数字。如果成功填了，就继续填其他的空。</p>
+<p>如果它也没法填了，那就还是重复刚刚的步骤，通过栈来回溯即可。</p>
+<p>当所有的空格都被填好之后，整个数独也就计算完毕了。</p>
+<h3 id="-">代码实现</h3>
+<pre><code class="lang-java">package lzr;
+
+import java.util.Stack;
+
+public class Main {
+    public static void main(String[] args) {
+        int[][] sudoku = {
+            {0,4,2,0,6,3,0,0,9},
+            {6,0,0,0,1,0,0,0,5},
+            {3,0,0,0,2,0,4,8,0},
+            {1,0,0,5,0,2,6,0,8},
+            {4,0,0,0,0,7,0,0,1},
+            {9,0,5,6,0,0,0,0,7},
+            {0,3,6,0,5,0,0,0,2},
+            {2,0,0,0,7,0,0,0,4},
+            {7,0,0,2,9,0,8,5,0}};
+        Solution s = new Solution(sudoku);
+        s.make();
+    }
+}
+
+class Solution{
+    private int[][] arr;
+    private boolean[][] sb;
+    //用栈存储更新过的位置，不用递归，方便回溯。
+    Stack&lt;Point&gt; stack;
+    //globle i，globle i，全局位置信息
+    private int gi = 0,gj = 0;
+    private boolean flag = true;
+
+    static private class Point{
+        int x,y;
+        Point(int x,int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    public Solution(int[][] arr){
+        this.arr = arr;
+        stack = new Stack&lt;&gt;();
+        sb = new boolean[9][9];
+
+        //初始化可修改数组位置
+        for (int i = 0; i &lt; 9; i++) {
+            for (int j = 0; j &lt; 9; j++) {
+                if(arr[i][j]==0){
+                    sb[i][j] = true;
+                }else{
+                    sb[i][j] = false;
+                }
+            }
+        }
+
+
+    }
+
+    //计算数独
+    public void make() {
+        //从头开始遍历，发现为0的点则需要更新该点的数字。
+        for (gi = 0; gi &lt; 9; gi++) {
+            for (gj = 0; gj &lt; 9; gj++) {
+                if(sb[gi][gj]){
+                    dfs(gi,gj);
+                }
+            }
+        }
+        //不存在解的情况
+        if(!flag){
+            System.out.println(&quot;不存在解&quot;);
+            return;
+        }
+        //输出结果
+        for (gi = 0; gi &lt; 9; gi++) {
+            for (gj = 0; gj &lt; 9; gj++) {
+                System.out.print(arr[gi][gj]+&quot; &quot;);
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+        * 计算当前位置可能的数字
+        * @param x 横坐标
+        * @param y 纵坐标
+        */
+    private void dfs(int x,int y){
+
+        //防止越界，特判
+        if(arr[x][y]==9){
+            //如果栈是空的，代表没有解了
+            if(stack.empty()){
+                gi=8;
+                gj=8;
+                flag = false;
+            }else{
+                Point p = stack.pop();
+                arr[x][y] = 0;
+                gi = p.x;
+                //因为执行完本函数后，gj会+1，因此提前-1，来保证位置正确
+                gj = p.y-1;
+
+            }
+            return;
+        }
+
+        //可更新数组，元素变为-1即代表这个数字不符合要求
+        int[] can = {0,0,0,0,0,0,0,0,0};
+        //row
+        for(int j = 0 ; j &lt; 9 ; j++){
+            if((arr[x][j]-1)&lt;0)continue;
+            can[(arr[x][j]-1)]=-1;
+        }
+        //column
+        for (int i = 0; i &lt; 9; i++) {
+            if((arr[i][y]-1)&lt;0)continue;
+            can[arr[i][y]-1]=-1;
+        }
+        //small nine
+        int xs = ((x)/3)*3;
+        int ys = ((y)/3)*3;
+        for (int i = 0; i &lt; 3; i++) {
+            for (int j = 0; j &lt; 3; j++) {
+                if(arr[xs+i][ys+i]!=0){
+                    can[arr[xs+i][ys+i]-1]=-1;
+                }
+            }
+        }
+
+        //将下一个可行的状态加入栈
+        //int v = arr[x][y]为当前位置上的数字
+        //在刚刚遍历的过程中，can[v-1]必然为-1
+        //也就是从can[v-1+1]即can[v]开始检查有没有能用的数字
+        for(int i = arr[x][y];i&lt;9;i++){
+            if(can[i]!=-1){
+                arr[x][y] = i+1;
+                //将当前此状态入栈，记录此时的位置
+                stack.add(new Point(x,y));
+                break;
+            }
+            //如果没有可行状态，弹栈，并更新全局遍历位置
+            if(i==8){
+                //如果栈是空的，代表没有解了
+                if(stack.empty()){
+                    gi=8;
+                    gj=8;
+                    flag = false;
+                }else{
+                    Point p = stack.pop();
+                    gi = p.x;
+                    //因为执行完本函数后，gj会+1，因此提前-1，来保证位置正确
+                    gj = p.y-1;
+                    //回溯到前面的状态，要把当前值设为0，不然会对回溯之后的计算产生影响
+                    arr[x][y] = 0;
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<h3 id="-">复杂度分析</h3>
+<ul>
+<li>时间复杂度：<ul>
+<li>因为这道题是采用的回溯算法，因此不方便计算时间复杂度。</li><li>但是可以通过空格规模来考虑，当有k个空格时，最差情况应该是Ω(9^k)(最坏复杂度)</li></ul>
+</li><li>时间复杂度：<ul>
+<li>采用了额外的数组，但是大小固定，为常数大小。</li><li>因此空间复杂度为O（1）</li></ul>
+</li></ul>
+
+</body>
+</html>
